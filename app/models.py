@@ -5,7 +5,7 @@ import uuid
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from uloahia.utils.validators import phone_number_validator
+from deliveet.utils.validators import phone_number_validator
 
 
 # Create your models here.
