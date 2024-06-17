@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
     'accounts.apps.AccountsConfig',
     'phonenumber_field',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

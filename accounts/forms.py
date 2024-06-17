@@ -2,11 +2,12 @@
 This module provides forms for creating and updating accounts.
 """
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from accounts.models import UserAccount, Customer, Courier
+from app.forms import BaseForm
 
 
 class SignUpForm(UserCreationForm):
@@ -18,20 +19,6 @@ class SignUpForm(UserCreationForm):
         model = UserAccount
         fields = ("email", "first_name", "last_name", "account_type",)
 
-    def __init__(self, *args, **kwargs):
-        """
-        Initializes a new user.
-        :param args:
-        :param kwargs:
-        """
-        super(SignUpForm, self).__init__(*args, **kwargs)
-        self.fields['account_type'].widget.attrs.update({'class': 'form-control'})
-        self.fields['email'].widget.attrs.update({'class': 'form-control'})
-        self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['password1'].widget.attrs.update({'class': 'form-control'})
-        self.fields['password2'].widget.attrs.update({'class': 'form-control'})
-
     def clean_email(self):
         """
         This validates that the email address is unique.
@@ -39,7 +26,7 @@ class SignUpForm(UserCreationForm):
         """
         email = self.cleaned_data.get("email")
         if UserAccount.objects.filter(email__iexact=email).exists():
-            raise ValidationError("A user with this email already exists.")
+            raise ValidationError("A user with this email already exists. Try with another email.")
         return email
 
     def clean_password2(self):
@@ -51,7 +38,7 @@ class SignUpForm(UserCreationForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise ValidationError("Passwords don't match")
+            raise ValidationError("The two passwords entered are not the same. Try again!")
         return password2
 
     @transaction.atomic
@@ -88,13 +75,3 @@ class SignInForm(forms.Form):
     """
     email = forms.EmailField(widget=forms.EmailInput)
     password = forms.CharField(widget=forms.PasswordInput)
-
-    def __init__(self, *args, **kwargs):
-        """
-        Initializes a new user for login
-        :param args:
-        :param kwargs:
-        """
-        super(SignInForm, self).__init__(*args, **kwargs)
-        self.fields['email'].widget.attrs.update({'class': 'form-control'})
-        self.fields['password'].widget.attrs.update({'class': 'form-control'})
