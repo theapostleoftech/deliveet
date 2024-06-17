@@ -16,7 +16,7 @@ class SignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = UserAccount
-        fields = ("email", "first_name", "last_name", "phone_number", "account_type",)
+        fields = ("email", "first_name", "last_name", "account_type",)
 
     def __init__(self, *args, **kwargs):
         """
