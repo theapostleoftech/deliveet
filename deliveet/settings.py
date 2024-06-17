@@ -23,6 +23,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'accounts.UserAccount'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -34,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'compressor',
     'app.apps.AppConfig',
+    'accounts.apps.AccountsConfig',
     'phonenumber_field',
 ]
 

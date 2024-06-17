@@ -80,3 +80,21 @@ class SignUpForm(UserCreationForm):
         return user
 
     pass
+
+
+class SignInForm(forms.Form):
+    """
+    This form is used to login a user.
+    """
+    email = forms.EmailField(widget=forms.EmailInput)
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    def __init__(self, *args, **kwargs):
+        """
+        Initializes a new user for login
+        :param args:
+        :param kwargs:
+        """
+        super(SignInForm, self).__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password'].widget.attrs.update({'class': 'form-control'})
