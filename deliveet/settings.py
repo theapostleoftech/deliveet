@@ -4,6 +4,7 @@ Django settings for deliveet project.
 import os
 from urllib.parse import urlparse
 
+from django.contrib import messages
 from environ import Env
 from pathlib import Path
 
@@ -152,3 +153,11 @@ STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'amber',
+    messages.INFO: 'blue',
+    messages.SUCCESS: 'green',
+    messages.WARNING: 'yellow',
+    messages.ERROR: 'red',
+}

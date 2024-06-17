@@ -749,7 +749,7 @@
                     >
                         <li>
                             <a
-                                    href="#"
+                                    href="{% url 'accounts:signout' %}"
                                     class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                             >Sign out</a
                             >
@@ -1342,6 +1342,8 @@
     </aside>
 
     <main class="p-4 md:ml-64 h-auto pt-20">
+
+        {% include 'layouts/snippets/messages.html' %}
 
         {% block content %}
         {% endblock content %}
