@@ -3,16 +3,19 @@ This contains views for the accounts app.
 """
 
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.sites import requests
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, View, DetailView
+from django.views.generic import CreateView, View, DetailView, UpdateView
 
 from accounts.forms import SignUpForm, SignInForm
+from accounts.models import UserAccount
+
+UserModel = get_user_model()
 
 
 class SignUpView(CreateView):
@@ -105,3 +108,21 @@ class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
         """
         messages.error(self.request, "There was an error changing your password. Please try again.")
         return super().form_invalid(form)
+
+
+class UserAccountUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    This view is used to update the user account.
+    """
+    model = UserModel
+    fields = ['first_name', 'last_name', 'email']
+    template_name = 'accounts/update_user_account.html'
+    success_url = reverse_lazy('customers:customer_dashboard')
+    success_message = 'Your profile has been updated successfully.'
+
+    def get_object(self, queryset=None):
+        """
+        This function returns the user account object
+        for the currently logged-in user.
+        """
+        return self.request.user
