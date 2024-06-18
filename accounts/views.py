@@ -110,6 +110,22 @@ class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
         return super().form_invalid(form)
 
 
+class UserAccountDetailView(LoginRequiredMixin, DetailView):
+    """
+    This view displays the details of the user account.
+    """
+    model = UserModel
+    template_name = 'accounts/user_account_details.html'
+    context_object_name = 'user_account'
+
+    def get_object(self, queryset=None):
+        """
+        This function returns the user account
+        object for the currently logged-in user.
+        """
+        return self.request.user
+
+
 class UserAccountUpdateView(LoginRequiredMixin, UpdateView):
     """
     This view is used to update the user account.
