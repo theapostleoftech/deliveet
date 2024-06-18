@@ -5,9 +5,10 @@ This contains views for the accounts app.
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites import requests
 from django.shortcuts import redirect, render
-from django.views.generic import CreateView, View
+from django.views.generic import CreateView, View, DetailView
 
 from accounts.forms import SignUpForm, SignInForm
 
@@ -76,3 +77,4 @@ class SignInView(View):
             else:
                 message = 'Your email or password is incorrect. Please try again.'
                 return render(request, self.template_name, context={'form': form, 'message': message})
+
