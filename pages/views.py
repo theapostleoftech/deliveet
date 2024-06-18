@@ -12,3 +12,9 @@ class IndexView(TemplateView):
     """
     template_name = 'pages/index.html'
     pass
+
+
+class DashboardView(TemplateView):
+    """
+    This is the view for customer dashboards
+    """
