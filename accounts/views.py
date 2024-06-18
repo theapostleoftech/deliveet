@@ -86,7 +86,7 @@ class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
     This view is used to change the password.
     """
     template_name = 'accounts/password/password_change.html'
-    success_url = reverse_lazy('accounts:customer_dashboard')
+    success_url = reverse_lazy('customers:customer_dashboard')
 
     def form_valid(self, form):
         """
