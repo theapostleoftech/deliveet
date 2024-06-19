@@ -16,7 +16,7 @@
 					     viewBox="0 0 24 24">
 						<path d="M5 3a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5Zm14 18a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4ZM5 11a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H5Zm14 2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h4Z"></path>
 					</svg>
-					
+
 					<span class="ml-3">Dashboard</span>
 				</a>
 			</li>
@@ -172,28 +172,22 @@
 				</a>
 			</li>
 			<li>
-				<button
-						type="button"
-						class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-						aria-controls="dropdown-authentication"
-						data-collapse-toggle="dropdown-authentication"
-				>
-					<svg
-							aria-hidden="true"
-							class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-							fill="currentColor"
-							viewBox="0 0 20 20"
-							xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-								fill-rule="evenodd"
-								d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-								clip-rule="evenodd"
-						></path>
+				<button type="button"
+				        class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg 
+						transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+				        aria-controls="dropdown-authentication" data-collapse-toggle="dropdown-authentication">
+					<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+					     viewBox="0 0 24 24">
+						<path fill-rule="evenodd"
+						      d="M12 14a3 3 0 0 1 3-3h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4a3 3 0 0 1-3-3Zm3-1a1 1 0 1 0 0 2h4v-2h-4Z"
+						      clip-rule="evenodd"></path>
+						<path fill-rule="evenodd"
+						      d="M12.293 3.293a1 1 0 0 1 1.414 0L16.414 6h-2.828l-1.293-1.293a1 1 0 0 1 0-1.414ZM12.414 6 9.707 3.293a1 1 0 0 0-1.414 0L5.586 6h6.828ZM4.586 7l-.056.055A2 2 0 0 0 3 9v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2h-4a5 5 0 0 1 0-10h4a2 2 0 0 0-1.53-1.945L17.414 7H4.586Z"
+						      clip-rule="evenodd"></path>
 					</svg>
-					<span class="flex-1 ml-3 text-left whitespace-nowrap"
-					>Authentication</span
-					>
+
+					<span class="flex-1 ml-3 text-left whitespace-nowrap">Finance</span>
 					<svg
 							aria-hidden="true"
 							class="w-6 h-6"
@@ -208,38 +202,29 @@
 						></path>
 					</svg>
 				</button>
-				<ul id="dropdown-authentication"
-				    class="hidden py-2 space-y-2">
+				<ul id="dropdown-authentication" class="hidden py-2 space-y-2">
 					<li>
-						<a
-								href="#"
-								class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-						>Sign In</a
-						>
+						<a href="{% url 'profiles:customer_details' user.pk %}" class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 
+						rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white 
+						dark:hover:bg-gray-700">Sign In</a>
 					</li>
 					<li>
-						<a
-								href="#"
-								class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-						>Sign Up</a
-						>
+						<a href="#" class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 
+						rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white d
+						ark:hover:bg-gray-700">Sign Up</a>
 					</li>
 					<li>
-						<a
-								href="#"
-								class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-						>Forgot Password</a
-						>
+						<a href="#" class="flex items-center p-2 pl-11 w-full text-base font-medium 
+						text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 
+						dark:text-white dark:hover:bg-gray-700">Forgot Password</a>
 					</li>
 				</ul>
 			</li>
 		</ul>
-		<ul
-				class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700"
-		>
+		<ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
 			<li>
 				<a
-						href="{% url 'accounts:user_account_details' %}"
+						href="{% url 'profiles:customer_details' user.pk %}"
 						class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
 				>
 					<svg class="w-6 h-6 text-gray-800 dark:text-white"
@@ -251,9 +236,9 @@
 					     viewBox="0 0 24 24">
 						<path fill-rule="evenodd"
 						      d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
-						      clip-rule="evenodd"/>
+						      clip-rule="evenodd"></path>
 					</svg>
-					
+
 					<span class="ml-3">My Account</span>
 				</a>
 			</li>
@@ -272,8 +257,8 @@
 						      d="M17 10v1.126c.367.095.714.24 1.032.428l.796-.797 1.415 1.415-.797.796c.188.318.333.665.428 1.032H21v2h-1.126c-.095.367-.24.714-.428 1.032l.797.796-1.415 1.415-.796-.797a3.979 3.979 0 0 1-1.032.428V20h-2v-1.126a3.977 3.977 0 0 1-1.032-.428l-.796.797-1.415-1.415.797-.796A3.975 3.975 0 0 1 12.126 16H11v-2h1.126c.095-.367.24-.714.428-1.032l-.797-.796 1.415-1.415.796.797A3.977 3.977 0 0 1 15 11.126V10h2Zm.406 3.578.016.016c.354.358.574.85.578 1.392v.028a2 2 0 0 1-3.409 1.406l-.01-.012a2 2 0 0 1 2.826-2.83ZM5 8a4 4 0 1 1 7.938.703 7.029 7.029 0 0 0-3.235 3.235A4 4 0 0 1 5 8Zm4.29 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h6.101A6.979 6.979 0 0 1 9 15c0-.695.101-1.366.29-2Z"
 						      clip-rule="evenodd"></path>
 					</svg>
-					
-					
+
+
 					<span class="ml-3">Settings</span>
 				</a>
 			</li>

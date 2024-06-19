@@ -1,0 +1,43 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Update {{ user.first_name }}{% endblock %}
+{% block content %}
+	<section class="bg-white dark:bg-gray-900 mb-5">
+		<div class="max-w-2xl px-4 py-8 mx-auto lg:py-16">
+			<h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Update product</h2>
+			<form class="space-y-4 md:space-y-6" method="POST">
+				{% csrf_token %}
+				{% if request.user.account_type == 'customer' %}
+					{% with customer_form=form.instance.customer_account %}
+						{% for hidden in user_form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+
+						{% for field in customer_form.visible_fields %}
+							<div class="form-group">
+								<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+								{{ field|add_class:'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' }}
+								{% for error in field.errors %}
+									<span class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500">{{ error|add_error_class:'mt-2 text-sm text-red-600 dark:text-red-500' }}</span>
+								{% endfor %}
+							</div>
+						{% endfor %}
+					{% endwith %}
+				{% elif request.user.account_type == 'courier' %}
+					{% with courier_form=form.instance.courier_account %}
+						<!-- Render courier profile fields here -->
+					{% endwith %}
+				{% endif %}
+				<div class="flex items-center space-x-4">
+					<input type="hidden" name="action" value="update_user_details">
+					<button type="submit"
+					        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+						Save Changes
+					</button>
+				</div>
+			</form>
+		</div>
+	</section>
+
+{% endblock content %}
