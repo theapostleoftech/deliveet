@@ -11,7 +11,7 @@ from django.contrib.auth.views import PasswordChangeView, PasswordResetDoneView,
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites import requests
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, View, DetailView, UpdateView, FormView
 
 from accounts.forms import SignUpForm, SignInForm, ChangePasswordForm, UserAccountUpdateForm
@@ -128,126 +128,6 @@ class UserAccountDetailView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-# class UserAccountUpdateView(LoginRequiredMixin, UpdateView):
-#     """
-#     This view is used to update the user account.
-#     """
-#     model = UserModel
-#     fields = ['first_name', 'last_name', 'email']
-#     template_name = 'accounts/update_user_account.html'
-#     success_url = reverse_lazy('customers:customer_dashboard')
-#     success_message = 'Your profile has been updated successfully.'
-#
-#     def get_object(self, queryset=None):
-#         """
-#         This function returns the user account object
-#         for the currently logged-in user.
-#         """
-#         return self.request.user
-
-#
-# class ChangePasswordViews(LoginRequiredMixin, FormView):
-#     template_name = 'accounts/password/password_change.html'
-#     form_class = ChangePasswordForm
-#     success_url = reverse_lazy('accounts:password_change_done')
-#
-#     def get_form_kwargs(self):
-#         kwargs = super().get_form_kwargs()
-#         kwargs['user'] = self.request.user
-#         return kwargs
-#
-#     def form_valid(self, form):
-#         user = self.request.user
-#         new_password = form.cleaned_data['new_password']
-#         user.set_password(new_password)
-#         user.save()
-#         update_session_auth_hash(self.request, user)
-#         messages.success(self.request, 'Your password has been changed successfully.')
-#         return super().form_valid(form)
-#
-#     def form_invalid(self, form):
-#         messages.error(self.request, 'There was an error changing your password. Please try again.')
-#         return super().form_invalid(form)
-#
-#
-# class UserAccountUpdateView(LoginRequiredMixin, FormView):
-#     """
-#     This view updates the user account records
-#     It updates the user password and the user details
-#     """
-#     template_name = 'accounts/update_user_account.html'
-#     form_class = None
-#     success_url = reverse_lazy('customers:customer_dashboard')
-#
-#     def get_form_class(self):
-#         """
-#         This function retrieves the various forms for the user account.
-#         :return:
-#         """
-#         if self.request.POST.get('action') == 'update_user_details':
-#             return UserAccountUpdateForm
-#         elif self.request.POST.get('action') == 'update_user_password':
-#             return ChangePasswordForm
-#         return None
-#
-#     def get_form_kwargs(self):
-#         kwargs = super().get_form_kwargs()
-#         form_class = self.get_form_class()
-#
-#         if form_class is None:
-#             return kwargs
-#
-#         if self.request.POST.get('action') == 'update_user_details':
-#             kwargs['instance'] = {
-#                 'user_form': self.request.user,
-#                 # 'customer_form': self.request.user.customer,
-#             }
-#         elif self.request.POST.get('action') == 'update_user_password':
-#             kwargs['user'] = self.request.user
-#         return kwargs
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['user_form'] = UserAccountUpdateForm(instance=self.request.user)
-#         # context['customer_form'] = BasicCustomerForm(instance=self.request.user.customer)
-#         context['password_form'] = ChangePasswordForm(self.request.user)
-#         return context
-#
-#     def form_valid(self, form):
-#         if self.request.POST.get('action') == 'update_user_details':
-#             user_form = form[0]
-#             customer_form = form[1]
-#             user_form.save()
-#             customer_form.save()
-#             messages.success(self.request, 'Your profile has been updated')
-#         elif self.request.POST.get('action') == 'update_user_password':
-#             user = form.save()
-#             update_session_auth_hash(self.request, user)
-#             messages.success(self.request, 'Your password has been updated')
-#         elif self.request.method == 'GET':
-#             return UserAccountUpdateForm
-#             pass
-#         # elif self.request.POST.get('action') == 'update_phone':
-#         #     # Get Firebase user data
-#         #     firebase_user = auth.verify_id_token(self.request.POST.get('id_token'))
-#         #     self.request.user.customer.phone_number = firebase_user['phone_number']
-#         #     self.request.user.customer.save()
-#         return super().form_valid(form)
-#
-#     def post(self, request, *args, **kwargs):
-#         self.object = None
-#         form_class = self.get_form_class()
-#         form_kwargs = self.get_form_kwargs()
-#         if form_class:
-#             if isinstance(form_class, tuple):
-#                 form = [form_class[0](**form_kwargs['instance']), form_class[1](**form_kwargs['instance'])]
-#             else:
-#                 form = form_class(**form_kwargs)
-#             if form.is_valid():
-#                 return self.form_valid(form)
-#         return self.form_invalid(form)
-
-
 class UserAccountUpdateView(LoginRequiredMixin, FormView):
     """
     This view updates the user account records
@@ -270,14 +150,14 @@ class UserAccountUpdateView(LoginRequiredMixin, FormView):
             if user_form.is_valid():
                 user_form.save()
                 messages.success(request, 'Your profile has been updated')
-                return redirect(self.success_url)
+                return redirect(reverse('customers:customer_dashboard'))
         elif request.POST.get('action') == 'update_user_password':
             password_form = ChangePasswordForm(request.user, request.POST)
             if password_form.is_valid():
-                user = password_form.save()
-                update_session_auth_hash(request, user)
+                password_form.save()
+                update_session_auth_hash(request, password_form.user)
                 messages.success(request, 'Your password has been updated')
-                return redirect(self.success_url)
+                return redirect(reverse('customers:customer_dashboard'))
         return redirect(self.success_url)
 
 
