@@ -1,15 +1,16 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load widget_tweaks %}
-{% block title %}Update {{ user.first_name }}{% endblock %}
+{% block title %}Update Profile{% endblock %}
 {% block content %}
 	<section class="bg-white dark:bg-gray-900 mb-5">
 		<div class="max-w-2xl px-4 py-8 mx-auto lg:py-16">
-			<h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Update product</h2>
+			<h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Update Your Profile</h2>
 			<form class="space-y-4 md:space-y-6" method="POST">
 				{% csrf_token %}
 				{% if request.user.account_type == 'customer' %}
 					{% with customer_form=form.instance.customer_account %}
+						{{ form }}
 						{% for hidden in user_form.hidden_fields %}
 							{{ hidden }}
 						{% endfor %}
