@@ -7,6 +7,7 @@ from django.db import models
 
 from accounts.models import UserAccount
 from app.models import BaseModel
+from finance.wallets import Paystack
 
 
 class Wallet(BaseModel):
@@ -99,5 +100,16 @@ class WalletTransaction(BaseModel):
         """
         one_naira = 100
         return int(self.amount) * one_naira
+
+    def verify_transaction(self):
+        paystack = Paystack()
+        status, result = paystack.verify_transaction(self.transaction_reference, self.amount)
+        if status:
+            if result['amount'] / 100 == self.amount:
+                self.verified = True
+            self.save()
+        if self.verified:
+            return True
+        return False
 
     pass

@@ -11,6 +11,8 @@ urlpatterns = [
     path('', include('pages.urls', namespace='pages')),
     path('', include('accounts.urls', namespace='accounts')),
     path('', include('customers.urls', namespace='customers')),
-    path('profiles/', include('profiles.urls', namespace='profiles')),
+    path('', include('profiles.urls', namespace='profiles')),
+
+    path('', include('finance.urls', namespace='finance')),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
