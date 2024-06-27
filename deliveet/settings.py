@@ -22,7 +22,7 @@ SECRET_KEY = 'django-insecure-)3+6e6rw^tw^h2cnp*cfps-(175+wzi=@sqlp-r_dp^y*1erq6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'compressor',
     'app.apps.AppConfig',
     'accounts.apps.AccountsConfig',
+    'finance',
     'phonenumber_field',
     'widget_tweaks',
 ]
