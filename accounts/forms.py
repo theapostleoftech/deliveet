@@ -2,7 +2,7 @@
 This module provides forms for creating and updating accounts.
 """
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
@@ -75,3 +75,50 @@ class SignInForm(forms.Form):
     """
     email = forms.EmailField(widget=forms.EmailInput)
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+class ChangePasswordForm(SetPasswordForm):
+    old_password = forms.CharField(
+        label="Old Password",
+        widget=forms.PasswordInput(),
+        required=True
+    )
+
+    new_password1 = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(),
+        required=True
+    )
+
+    new_password2 = forms.CharField(
+        label="Confirm New Password",
+        widget=forms.PasswordInput(),
+        required=True
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(user, *args, **kwargs)
+
+    def clean_old_password(self):
+        old_password = self.cleaned_data.get("old_password")
+        if not self.user.check_password(old_password):
+            raise forms.ValidationError("Sorry, your old password is incorrect.")
+        return old_password
+
+    def save(self, commit=True):
+        password = self.cleaned_data["new_password1"]
+        self.user.set_password(password)
+        if commit:
+            self.user.save()
+        return self.user
+
+
+class UserAccountUpdateForm(forms.ModelForm):
+    """
+    This form is used to update a user.
+    """
+
+    class Meta:
+        model = UserAccount
+        fields = ("email", "first_name", "last_name",)

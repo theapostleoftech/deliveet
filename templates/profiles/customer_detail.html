@@ -1,0 +1,43 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}My Account{% endblock %}
+{% block content %}
+
+	<section class="bg-white dark:bg-gray-900 mb-5">
+		<div class="max-w-2xl px-4 py-8 mx-auto lg:py-16">
+			<div class="px-4 sm:px-0">
+				<h3 class="text-base font-semibold leading-7 text-gray-900">Account Information</h3>
+				<p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Personal details.</p>
+			</div>
+			<div class="mt-6 border-t border-gray-100">
+				<dl class="divide-y divide-gray-100">
+					<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+						<dt class="text-sm font-medium leading-6 text-gray-900">Full name</dt>
+						<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ user_account.get_full_name }}</dd>
+					</div>
+					<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+						<dt class="text-sm font-medium leading-6 text-gray-900">Gender</dt>
+						<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ customer.gender }}</dd>
+					</div>
+					<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+						<dt class="text-sm font-medium leading-6 text-gray-900">Email address</dt>
+						<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+							{{ user_account.email }}
+						</dd>
+					</div>
+					<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+						<dt class="text-sm font-medium leading-6 text-gray-900">Phone</dt>
+						{% if customer.phone %}
+							<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ customer.phone }}</dd>
+						{% else %}
+							<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><a
+									href="{% url 'profiles:customer_update' user.pk %}">Add and verify your phone
+							                                                            here</a></dd>
+						{% endif %}
+					</div>
+				</dl>
+			</div>
+		</div>
+	</section>
+{% endblock content %}
