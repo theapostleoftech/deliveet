@@ -25,16 +25,26 @@
 
 <body class="bg-[#F4F9FF]">
 
-{% include 'snippets/header.html' %}
+<div class="flex flex-col lg:pt-0 sticky top-0">
+	{% include 'snippets/dashboard_header.html' %}
+{% include 'snippets/nav.html' %}
+	<div class="flex flex-1">
+		<div class="flex flex-col xl:ml-80 flex-1 overflow-x-hidden lg:pb-0">
+			<main class="overflow-y-auto relative">
+				{% block content %}
 
 
-{% block content %}
+				{% endblock content %}
+			</main>
+		</div>
+	</div>
 
-{% endblock content %}
 
-{% include 'snippets/footer.html' %}
+</div>
+
+
 <script src="{% static 'static_src/node_modules/flowbite/dist/flowbite.min.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>#}
 </body>
 </html>
 

@@ -1,4 +1,4 @@
-{% extends 'bases/_base.html' %}
+{% extends 'bases/base.html' %}
 {% load static %}
 {% load widget_tweaks %}
 {% block title %}Sign Up{% endblock title %}
@@ -6,48 +6,36 @@
 {% block content %}
 	<div class="w-full">
 		<div class="w-full m-auto max-w-screen-xl px-4">
-			<section class="flex items-center justify-center h-screen">
-				<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-					<h4 class="text-3xl font-bold text-black">
-						Hi there! 👋
-					</h4>
-					<p class="text-sm text-gray-700 font-medium pt-4">
-						We're glad to serve you. To create your account, please provide the information below. Already
-						have
-						an account? Sign in
-					</p>
-					<div class="w-full rounded-full dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-						<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-							<h1 class="flex items-center justify-center text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-								Create an account
-							</h1>
+			<section class="flex items-center justify-center h-screen ">
+				<div class="col-span-1 ">
+					<div class="w-full max-w-md m-auto flex flex-col justify-start items-start  ">
+						<div class="w-full space-y-16 flex flex-col justify-start items-start">
+							<div>
+								<h4 class="text-3xl font-bold text-black">
+									Hi there!<span class="pl-1">👋</span>
+								</h4>
+								<p class="text-sm text-gray-500 font-medium pt-4">
+									We're glad to serve you. To create your account, please provide the information
+									below. Already have an account? <a title=""
+									                                   class="font-bold text-primary hover:underline"
+									                                   href="/signin/">Sign in</a>
+								</p>
+							</div>
 							<form class="w-full" method="POST">
-								<div class="w-full space-y-4 md:space-y-4">
+								<div class="space-y-4 w-full flex flex-col">
 									{% csrf_token %}
 									{% include 'bases/../snippets/base_form.html' %}
-									<div class="flex items-start">
-										<div class="ml-3 text-sm">
-											<label for="terms" class="font-light text-gray-500 dark:text-gray-300">By
-											                                                                       signing
-											                                                                       up
-											                                                                       you
-											                                                                       agree
-											                                                                       to
-											                                                                       Deliveet's
-												<a
-														class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-														href="#">Terms and Conditions</a></label>
-										</div>
-									</div>
 									<button type="submit"
 									        class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-										Create an account
+										SIGN UP
 									</button>
-									<p class="flex justify-center text-sm font-light text-gray-500 dark:text-gray-400">
-										Already have an account? <a href="{% url 'accounts:signin' %}"
-										                            class="font-medium text-primary-600
-                                                        hover:underline dark:text-primary-500">Sign in here</a>
+									<p class="text-xs my-2 text-slate-400">
+										By continuing, I represent that I have read, understand, and fully agree to Delivit's
+										<a class="font-medium underline text-primary-500"
+										   href="">Terms</a> and <a class="font-medium underline text-primary-500"
+										   href="">Policy</a>
 									</p>
+
 								</div>
 							</form>
 						</div>

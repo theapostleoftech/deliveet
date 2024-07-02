@@ -49,7 +49,7 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                secondary: {
+                primary: {
                     "50": "#fff3e6",
                     "100": "#ffe7cc",
                     "200": "#ffcf99",
@@ -62,7 +62,7 @@ module.exports = {
                     "900": "#2f1500",
                     "950": "#180b00"
                 },
-                tertiary: {
+                secondary: {
                     "50": "#fbeee9",
                     "100": "#f7ddd3",
                     "200": "#eebba7",
@@ -75,7 +75,7 @@ module.exports = {
                     "900": "#221009",
                     "950": "#110804"
                 },
-                primary: {
+                tertiary: {
                     "50": "#e6e7f1",
                     "100": "#cdd0e3",
                     "200": "#9ba0c7",
