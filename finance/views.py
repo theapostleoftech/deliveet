@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
+from finance.forms import TransactionForm
 from finance.models import WalletTransaction, Wallet
 
 # Paystack Variables
@@ -24,27 +25,36 @@ def initiate_transaction(request):
     This view is used to initiate a transaction.
     """
     if request.method == 'POST':
-        amount = request.POST['amount']
+        form = TransactionForm(request.POST)
+        # amount = request.POST['amount']
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
 
-        transaction = WalletTransaction.objects.create(
-            amount=amount,
-            user=request.user,
-            email=request.user.email,
-        )
-        transaction.save()
+            # wallet, created = Wallet.objects.get_or_create(user=request.user)
 
-        context = {
-            'transaction': transaction,
-            'field_values': request.POST,
-            'paystack_pub_key': _public_key,
-            'amount_value': transaction.amount_value(),
-        }
-        return render(
-            request,
-            'finance/initiate_transaction.html',
-            context
-        )
-    return render(request, 'finance/transaction.html')
+            transaction = WalletTransaction.objects.create(
+                amount=amount,
+                # wallet=wallet,
+                transaction_type='Deposit',
+            )
+            transaction.save()
+
+            context = {
+                'transaction': transaction,
+                'field_values': request.POST,
+                'paystack_pub_key': _public_key,
+                'amount_value': transaction.amount_value(),
+            }
+
+            return render(
+                request,
+                'finance/initiate_transaction.html',
+                context
+            )
+    else:
+        form = TransactionForm()
+
+    return render(request, 'finance/transaction.html', {'form': form})
 
 
 def verify_transaction(request, transaction_reference):

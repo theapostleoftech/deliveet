@@ -47,7 +47,8 @@ class WalletTransaction(BaseModel):
     wallet = models.ForeignKey(
         Wallet,
         null=True,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='user_wallet_transactions'
     )
     transaction_type = models.CharField(
         max_length=50,
