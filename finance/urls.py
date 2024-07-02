@@ -9,5 +9,5 @@ app_name = 'finance'
 urlpatterns = [
     path('wallet/', views.WalletView.as_view(), name='wallet'),
     path('transaction/', views.initiate_transaction, name='initiate_transaction'),
-    # path('verify-payment/<str:ref>/', views.verify_payment, name='verify_payment'),
+    path('verify-transaction/<str:transaction_reference>/', views.verify_transaction, name='verify_payment'),
 ]

@@ -21,30 +21,71 @@
 	<meta name="theme-color" content="#f4f9ff">
 	{% tailwind_preload_css %}
 	{% tailwind_css %}
+
+	{% block head_js %}
+	{% endblock head_js %}
 </head>
 
 <body class="bg-[#F4F9FF]">
 
 <div class="flex flex-col lg:pt-0 sticky top-0">
 	{% include 'snippets/dashboard_header.html' %}
-{% include 'snippets/nav.html' %}
+	{% include 'snippets/nav.html' %}
 	<div class="flex flex-1">
 		<div class="flex flex-col xl:ml-80 flex-1 overflow-x-hidden lg:pb-0">
-			<main class="overflow-y-auto relative">
-				{% block content %}
-
-
-				{% endblock content %}
+			<main class="overflow-y-auto ">
+				<div class="">
+					<div class="flex flex-col px-4 md:px-8 pb-4">
+						<div class="relative grid grid-cols-1 lg:grid-cols-7 gap-4 lg:overflow-y-hidden">
+							<div class="col-span-1 lg:col-span-7  lg:overflow-y-auto py-4 lg:py-8">
+								<div class="w-full max-w-2xl m-auto">
+									<div class="space-x-1 flex items-start pb-4">
+										<div class="w-full hidden lg:flex pb-6 items-center justify-between">
+											<div class="flex">
+												<div class="">
+													<div class="">
+														<div class="py-5 mx-auto sticky top-0 flex flex-col lg:hidden
+											lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0">
+															<div class="space-y-0.5 mr-4">
+																<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+																     viewBox="0 0 24 24" stroke-width="2"
+																     stroke="currentColor"
+																     aria-hidden="true" data-slot="icon"
+																     class="cursor-pointer h-6 w-6">
+																	<path stroke-linecap="round" stroke-linejoin="round"
+																	      d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"></path>
+																</svg>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="flex flex-col justify-start items-start">
+													<h1 class="text-3xl font-extrabold tracking-tight text-black capitalize">
+														{% include 'snippets/greeting.html' %}
+													</h1>
+													<p class="text-slate-400 font-normal tracking-tight">
+														We're here to assist you with your deliveries.
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									{% block content %}
+									{% endblock content %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</main>
 		</div>
 	</div>
-
-
 </div>
-
 
 <script src="{% static 'static_src/node_modules/flowbite/dist/flowbite.min.js' %}"></script>
 {#<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>#}
+{% block js %}
+{% endblock js %}
 </body>
 </html>
 

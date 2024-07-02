@@ -3,9 +3,14 @@ This contains form for the finance app
 """
 from django import forms
 
+from finance.models import WalletTransaction
 
-class TransactionForm(forms.Form):
+
+class TransactionForm(forms.ModelForm):
     """
     This is the form for the transaction model
     """
-    amount = forms.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        model = WalletTransaction
+        fields = ('amount',)

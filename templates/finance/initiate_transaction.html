@@ -1,19 +1,81 @@
-{% extends 'bases/base.html' %}
+{% extends 'bases/_base.html' %}
 {% load static %}
 {% load widget_tweaks %}
 {% block title %}Fund Wallet{% endblock %}
+{% block head_js %}
+	<script src="https://js.paystack.co/v1/inline.js"></script>
+{% endblock head_js %}
 {% block content %}
 
-	<section class="dark:bg-gray-900 mb-5">
-		<div class="max-w-2xl px-4 py-8 mx-auto lg:py-16">
-
-
+	<div class="mt-4 space-y-4 pb-4 w-full ">
+		<div class="bg-tertiary-700 w-full flex flex-col justify-between items-start space-y-12 p-6
+				border border-gray-200 rounded-lg shadow">
+			<div class="w-full space-y-2">
+				<p class="mt-0 max-w-2xl text-sm leading-6 text-gray-300">{{ transaction.email }}</p>
+				<p class="text-lg tracking-wide font-normal text-gray-400">You are about to fund your wallet with</p>
+				<p class="text-3xl lg:text-6xl md:text-5xl sm:text-3xl text-white
+				 font-normal tracking-tight mb-4">
+					₦ {{ transaction.amount }}
+				</p>
+			</div>
+			<div class="flex flex-row justify-start items-start space-x-2">
+				<button type="button" onclick="payWithPaystack()" id="django-paystack-button">
+						<span class=" text-white border-primary rounded
+							ring-transparent focus:outline-none hover:ring-2 hover:ring-offset-1 hover:ring-primary
+							hover:border-primary hover:text-white whitespace-nowrap border cursor-pointer inline-flex
+							items-center justify-center w-full px-3.5 py-3
+							uppercase text-xs tracking-wide font-bold
+							transition-all duration-200 !bg-white !border-opacity-10 !bg-opacity-20">Proceed to Funding
+						</span>
+				</button>
+				<div class="flex flex-row justify-start items-start space-x-2">
+					<a href="{{ transaction.get_delete_url }}" id="delete-payment">
+						<span class="bg-red-600 text-white border-primary rounded
+							ring-transparent focus:outline-none hover:ring-2 hover:ring-offset-1 hover:ring-primary
+							hover:border-primary hover:text-white whitespace-nowrap border cursor-pointer inline-flex
+							items-center justify-center w-full px-3.5 py-3 uppercase text-xs tracking-wide font-bold
+							transition-all duration-200 !border-opacity-10 !hover:bg-black
+							!hover:text-white">Cancel Funding
+						</span>
+					</a>
+				</div>
+			</div>
 		</div>
+	</div>
 
+	<script>
+        document.getElementById("delete-payment").addEventListener('click', (e) => {
+            if (!confirm("Are you sure you want to cancel the funding of ₦{{ transaction.amount }} to your wallet?")) {
+                e.preventDefault();
+            }
+        });
+	</script>
+	<script>
+        function payWithPaystack() {
+            let currency = "NGN"
+            let plan = ""
+            let ref = "{{ transaction.transaction_reference }}"
+            let obj = {
+                key: '{{ paystack_pub_key }}',
+                email: '{{ transaction.email }}',
+                amount: {{ transaction.amount_value }},
+                ref: ref,
+                callback: function (response) {
+                    window.location.href = "{% url 'finance:verify_payment' transaction.transaction_reference %}";
+                }
+            };
+            if (Boolean(currency)) {
+                obj.currency = currency.toUpperCase();
+            }
+            if (Boolean(plan)) {
+                obj.plan = plan;
+            }
 
-	</section>
-
-
-
+            var handler;
+            handler = PaystackPop.setup(obj);
+            handler.openIframe();
+            console.log({currency, plan, ref})
+        }
+	</script>
 
 {% endblock content %}

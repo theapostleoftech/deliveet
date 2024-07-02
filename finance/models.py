@@ -1,6 +1,7 @@
 """
 This contains all the models for the finance app.
 """
+import secrets
 import uuid
 
 from django.db import models
@@ -84,14 +85,12 @@ class WalletTransaction(BaseModel):
         This is the save method for the wallet transaction
         """
         while not self.transaction_reference:
-            transaction_reference = self.uuid
-            try:
-                WalletTransaction.objects.filter(
-                    transaction_reference=transaction_reference
-                )
-            except transaction_reference.DoesNotExist:
+            transaction_reference = secrets.token_urlsafe(16)
+            existing_transaction_reference = WalletTransaction.objects.filter(
+                transaction_reference=transaction_reference
+            ).first()
+            if not existing_transaction_reference:
                 self.transaction_reference = transaction_reference
-
         super().save(*args, **kwargs)
 
     def amount_value(self):

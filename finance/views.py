@@ -3,6 +3,9 @@ This contains all the views related to finance.
 """
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -13,14 +16,15 @@ from finance.models import WalletTransaction, Wallet
 _public_key = settings.PAYSTACK_PUBLIC_KEY
 
 
-class WalletView(TemplateView):
+class WalletView(LoginRequiredMixin, TemplateView):
     """
     This view displays the wallet info and transactions.
     """
     template_name = 'finance/wallet.html'
 
 
-def initiate_transaction(request):
+@login_required
+def initiate_transaction(request: HttpRequest) -> HttpResponse:
     """
     This view is used to initiate a transaction.
     """
@@ -28,16 +32,19 @@ def initiate_transaction(request):
         form = TransactionForm(request.POST)
         # amount = request.POST['amount']
         if form.is_valid():
-            amount = form.cleaned_data['amount']
+            transaction = form.save(commit=False)
+            transaction.email = request.user.email
+            transaction.save()
+            # amount = form.cleaned_data['amount']
 
             # wallet, created = Wallet.objects.get_or_create(user=request.user)
 
-            transaction = WalletTransaction.objects.create(
-                amount=amount,
-                # wallet=wallet,
-                transaction_type='Deposit',
-            )
-            transaction.save()
+            # transaction = WalletTransaction.objects.create(
+            #     amount=amount,
+            #     # wallet=wallet,
+            #     transaction_type='Deposit',
+            # )
+            # transaction: WalletTransaction = form.save()
 
             context = {
                 'transaction': transaction,
@@ -52,11 +59,12 @@ def initiate_transaction(request):
                 context
             )
     else:
-        form = TransactionForm()
+        form = TransactionForm(initial={'email': request.user.email})
 
     return render(request, 'finance/transaction.html', {'form': form})
 
 
+@login_required
 def verify_transaction(request, transaction_reference):
     """
     This view is used to verify a transaction.
