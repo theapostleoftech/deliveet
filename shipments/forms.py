@@ -23,7 +23,7 @@ class DeliveryPickupForm(forms.ModelForm):
 
     class Meta:
         model = Delivery
-        fields = ('pickup_address', 'pickup_latitude', 'pickup_longitude', 'sender_name', 'sender_phone',)
+        fields = ['pickup_address', 'pickup_latitude', 'pickup_longitude', 'sender_name', 'sender_phone', ]
 
 
 class DeliveryRecipientForm(forms.ModelForm):
@@ -33,7 +33,7 @@ class DeliveryRecipientForm(forms.ModelForm):
 
     class Meta:
         model = Delivery
-        fields = ('delivery_address', 'delivery_latitude', 'delivery_longitude', 'recipient_name', 'recipient_phone',)
+        fields = ['delivery_address', 'delivery_latitude', 'delivery_longitude', 'recipient_name', 'recipient_phone', ]
 
 
 class TransactionMethodForm(forms.ModelForm):
@@ -43,4 +43,4 @@ class TransactionMethodForm(forms.ModelForm):
 
     class Meta:
         model = TransactionMethod
-        fields = ('transaction_method',)
+        fields = ['payment_method', ]

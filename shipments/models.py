@@ -44,10 +44,10 @@ class Delivery(BaseModel):
         """
         This defines the items to be delivered
         """
-        SMALL = 'creating', 'Creating'
-        MEDIUM = 'processing', 'Processing'
-        LARGE = 'pickup_in_progress', 'Pickup in progress'
-        EXTRA_LARGE = 'in-progress', 'Delivery In Progress'
+        SMALL = 'small', 'Small'
+        MEDIUM = 'medium', 'Medium'
+        LARGE = 'large', 'Large'
+        EXTRA_LARGE = 'extra_large', 'Extra Large'
 
     id = models.UUIDField(
         primary_key=True,

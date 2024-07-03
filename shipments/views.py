@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, ListView
 
 from finance.forms import TransactionForm
 from shipments.forms import DeliveryItemForm, DeliveryPickupForm, DeliveryRecipientForm
@@ -12,11 +12,11 @@ from shipments.models import Delivery, TransactionMethod, DeliveryTransaction
 # Create your views here.
 
 
-class ShipmentView(LoginRequiredMixin, TemplateView):
-    """
-    This class shows the shipping dashboard`
-    """
-    template_name = 'shipments/shipment.html'
+# class ShipmentView(LoginRequiredMixin, TemplateView):
+#     """
+#     This class shows the shipping dashboard`
+#     """
+#     template_name = 'shipments/shipment.html'
 
 
 class ChooseTransactionMethodView(LoginRequiredMixin, FormView):
@@ -52,11 +52,55 @@ class ChooseTransactionMethodView(LoginRequiredMixin, FormView):
         return context
 
 
+class ShipmentView(LoginRequiredMixin, ListView):
+    """
+    This lists the ongoing delivery of the user
+    """
+    template_name = 'shipments/shipment.html'
+    context_object_name = 'deliveries'
+    model = Delivery
+
+    def get_queryset(self):
+        return Delivery.objects.filter(
+            customer=self.request.user.customer_account,
+            status__in=[
+                Delivery.StatusChoices.PROCESSING,
+                Delivery.StatusChoices.PICKUP_IN_PROGRESS,
+                Delivery.StatusChoices.DELIVERY_IN_PROGRESS,
+            ]
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        total_deliveries = Delivery.objects.filter(customer=self.request.user.customer_account).count()
+
+        deliveries_completed = Delivery.objects.filter(
+            customer=self.request.user.customer_account,
+            status=Delivery.StatusChoices.COMPLETED
+        ).count()
+
+        deliveries_in_progress = Delivery.objects.filter(
+            customer=self.request.user.customer_account,
+            status__in=[
+                Delivery.StatusChoices.PROCESSING,
+                Delivery.StatusChoices.PICKUP_IN_PROGRESS,
+                Delivery.StatusChoices.DELIVERY_IN_PROGRESS,
+            ]
+        ).count()
+
+        context['total_deliveries'] = total_deliveries
+        context['deliveries_completed'] = deliveries_completed
+        context['deliveries_in_progress'] = deliveries_in_progress
+
+        return context
+
+
 def create_delivery_view(request):
     """
     This handles view for creation of delivery tasks
     """
-    task_owner = request.user.customer
+    task_owner = request.user.customer_account
 
     existing_delivery_task = Delivery.objects.filter(
         customer=task_owner,
@@ -68,7 +112,7 @@ def create_delivery_view(request):
     ).exists()
     if existing_delivery_task:
         messages.info(request, 'You currently have an ongoing delivery request.')
-        return redirect(reverse(''))
+        return redirect(reverse('shipments:shipment_index'))
 
     creating_delivery_task = Delivery.objects.filter(
         customer=task_owner,
@@ -80,8 +124,20 @@ def create_delivery_view(request):
     delivery_form = DeliveryRecipientForm(instance=creating_delivery_task)
 
     if request.method == 'POST':
-        if item_form.is_valid():
-            creating_delivery_task = item_form.save(commit=False)
-            creating_delivery_task.customer = task_owner
-            creating_delivery_task.save()
-            return redirect(reverse('shipments:delivery'))
+        if request.POST.get('step') == '1':
+            item_form = DeliveryItemForm(request.POST, instance=creating_delivery_task)
+            if item_form.is_valid():
+                creating_delivery_task = item_form.save(commit=False)
+                creating_delivery_task.customer = task_owner
+                creating_delivery_task.save()
+                return redirect(reverse('shipments:create_delivery'))
+
+    if not creating_delivery_task:
+        progress = 1
+
+    return render(request, 'shipments/create_delivery.html',
+                  {
+                      'delivery_task': creating_delivery_task,
+                      'step': progress,
+                      'item_form': item_form,
+                  })
