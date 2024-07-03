@@ -72,53 +72,6 @@ def initiate_transaction(request: HttpRequest) -> HttpResponse:
     return render(request, 'finance/transaction.html', {'form': form})
 
 
-# @login_required
-# def verify_transaction(request, transaction_reference):
-#     """
-#     This view is used to verify a transaction.
-#     """
-#     transaction = WalletTransaction.objects.get(transaction_reference=transaction_reference)
-#     verified = transaction.verify_transaction()
-#
-#     if verified:
-#         user_wallet = Wallet.objects.get(user=request.user)
-#         user_wallet.balance += transaction.amount
-#         user_wallet.save()
-#         messages.success(request, f'Your Wallet has been funded with {transaction.amount} successful')
-#         return render(request, "finance/success.html")
-#     else:
-#         messages.error(request, f'Sorry, we are unable to complete your wallet funding')
-#
-#     return redirect('finance:initiate_transaction',)
-
-#
-# def verify_transaction(request, transaction_reference):
-#     """
-#     This view is used to verify a transaction.
-#     """
-#     transaction = get_object_or_404(WalletTransaction, transaction_reference=transaction_reference)
-#     verified = transaction.verify_transaction()
-#
-#     if verified:
-#         user_wallet = Wallet.objects.get(user=request.user)
-#         user_wallet.balance += transaction.amount
-#         user_wallet.save()
-#         messages.success(request, f'Your Wallet has been funded with {transaction.amount} successful')
-#
-#         context = {
-#             'transaction_reference': transaction.transaction_reference,
-#             'amount': transaction.amount,
-#             'currency': user_wallet.currency,
-#             'new_balance': user_wallet.balance,
-#         }
-#
-#         return render(request, "finance/success.html", context)
-#
-#     # If not verified, you might want to show an error message
-#     messages.error(request, 'Transaction verification failed')
-#     return render(request, "finance/failure.html")
-
-
 def verify_transaction(request, transaction_reference):
     """
     This view is used to verify a transaction.

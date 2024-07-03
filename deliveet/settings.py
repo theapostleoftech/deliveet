@@ -189,3 +189,6 @@ PHONENUMBER_DB_FORMAT = 'NATIONAL'
 
 LOGIN_URL = 'accounts:signin'
 LOGOUT_REDIRECT_URL = 'accounts:signout'
+
+# Google Map
+GOOGLE_MAP_API_KEY = env('GOOGLE_MAP_API_KEY')

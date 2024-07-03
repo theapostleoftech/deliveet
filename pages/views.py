@@ -26,3 +26,7 @@ class SampleView(TemplateView):
     """
     template_name = 'finance/sample.html'
     pass
+
+
+class LandingPageView(TemplateView):
+    template_name = 'pages/landing_page.html'

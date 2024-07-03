@@ -49,6 +49,13 @@ class Delivery(BaseModel):
         LARGE = 'large', 'Large'
         EXTRA_LARGE = 'extra_large', 'Extra Large'
 
+    class PaymentMethodChoices(models.TextChoices):
+        """"
+        This is the various choices for payment
+        """
+        CARD = 'card', 'Card Payment'
+        COD = 'cod', 'Cash on Delivery'
+
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -70,10 +77,6 @@ class Delivery(BaseModel):
         help_text='Name of item to be delivered',
         verbose_name='Item Name',
         max_length=255
-    )
-    description = models.TextField(
-        max_length=255,
-        help_text='Description of item to be delivered',
     )
     item_type = models.CharField(
         max_length=50,
@@ -157,10 +160,15 @@ class Delivery(BaseModel):
         blank=True
     )
     tracking_number = models.CharField(
-        max_length=8,
+        max_length=255,
         default='',
         blank=True,
         null=True
+    )
+    payment_method = models.CharField(
+        max_length=50,
+        choices=PaymentMethodChoices.choices,
+        default=PaymentMethodChoices.CARD
     )
 
     class Meta:
@@ -177,12 +185,18 @@ class Delivery(BaseModel):
         """
         return self.item_name
 
+    # def __str__(self):
+    #     """
+    #     This returns a string representation of the model
+    #     """
+    #     return f"{self.get_payment_method_display()}"
+
     def save(self, *args, **kwargs):
         """
         This is the save method for the delivery model
         """
         while not self.tracking_number:
-            tracking_number = secrets.token_urlsafe(8)
+            tracking_number = secrets.token_urlsafe(16)
             existing_tracking_number = Delivery.objects.filter(
                 tracking_number=tracking_number
             ).first()
@@ -191,35 +205,36 @@ class Delivery(BaseModel):
         super().save(*args, **kwargs)
 
 
-class TransactionMethod(BaseModel):
-    """
-    This defines the payment method
-    """
-    delivery = models.ForeignKey(
-        Delivery,
-        on_delete=models.CASCADE,
-        related_name='transaction_methods',
-        null=True,
-    )
-
-    class MethodChoices(models.TextChoices):
-        """"
-        This is the various choices for payment
-        """
-        CARD = 'card', 'Card'
-        COD = 'cod', 'Cash on Delivery'
-
-    payment_method = models.CharField(
-        max_length=50,
-        choices=MethodChoices.choices,
-        default=MethodChoices.CARD
-    )
-
-    def __str__(self):
-        """
-        This returns a string representation of the model
-        """
-        return f"{self.get_payment_method_display()} for {self.delivery}"
+#
+# class TransactionMethod(BaseModel):
+#     """
+#     This defines the payment method
+#     """
+#     delivery = models.ForeignKey(
+#         Delivery,
+#         on_delete=models.CASCADE,
+#         related_name='transaction_methods',
+#         null=True,
+#     )
+#
+#     class MethodChoices(models.TextChoices):
+#         """"
+#         This is the various choices for payment
+#         """
+#         CARD = 'card', 'Card'
+#         COD = 'cod', 'Cash on Delivery'
+#
+#     payment_method = models.CharField(
+#         max_length=50,
+#         choices=MethodChoices.choices,
+#         default=MethodChoices.CARD
+#     )
+#
+#     def __str__(self):
+#         """
+#         This returns a string representation of the model
+#         """
+#         return f"{self.get_payment_method_display()} for {self.delivery}"
 
 
 class DeliveryTransaction(BaseModel):
@@ -230,13 +245,6 @@ class DeliveryTransaction(BaseModel):
         Delivery,
         on_delete=models.CASCADE,
         related_name='delivery_transactions',
-    )
-    transaction_method = models.ForeignKey(
-        TransactionMethod,
-        on_delete=models.CASCADE,
-        related_name='transaction_method',
-        blank=True,
-        null=True
     )
 
     class PaymentStatus(models.TextChoices):
@@ -249,7 +257,7 @@ class DeliveryTransaction(BaseModel):
         decimal_places=2,
     )
     transaction_reference = models.CharField(
-        max_length=16,
+        max_length=255,
         default='',
         blank=True
     )

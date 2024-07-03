@@ -1,55 +1,14 @@
+import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import TemplateView, FormView, ListView
 
 from finance.forms import TransactionForm
-from shipments.forms import DeliveryItemForm, DeliveryPickupForm, DeliveryRecipientForm
-from shipments.models import Delivery, TransactionMethod, DeliveryTransaction
-
-
-# Create your views here.
-
-
-# class ShipmentView(LoginRequiredMixin, TemplateView):
-#     """
-#     This class shows the shipping dashboard`
-#     """
-#     template_name = 'shipments/shipment.html'
-
-
-class ChooseTransactionMethodView(LoginRequiredMixin, FormView):
-    template_name = 'shipments/choose_transaction_method.html'
-    form_class = TransactionForm
-
-    def dispatch(self, request, *args, **kwargs):
-        self.delivery = Delivery.objects.get(pk=self.kwargs['delivery_id'])
-        return super().dispatch(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        method = form.cleaned_data['transaction_method']
-        transaction_method, _ = TransactionMethod.objects.get_or_create(payment_method=method)
-
-        delivery_transaction = DeliveryTransaction.objects.create(
-            delivery=self.delivery,
-            transaction_method=transaction_method,
-            amount=self.delivery.price
-        )
-
-        if method == TransactionMethod.MethodChoices.CARD:
-            # Redirect to payment gateway
-            return redirect(reverse('payment_gateway', kwargs={'transaction_id': delivery_transaction.id}))
-        elif method == TransactionMethod.MethodChoices.COD:
-            # Mark as COD and redirect to confirmation page
-            delivery_transaction.transaction_status = DeliveryTransaction.PaymentStatus.NOT_PAID
-            delivery_transaction.save()
-            return redirect(reverse('cod_confirmation', kwargs={'transaction_id': delivery_transaction.id}))
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['delivery'] = self.delivery
-        return context
+from shipments.forms import DeliveryItemForm, DeliveryPickupForm, DeliveryRecipientForm, PaymentMethod
+from shipments.models import Delivery, DeliveryTransaction
 
 
 class ShipmentView(LoginRequiredMixin, ListView):
@@ -97,9 +56,6 @@ class ShipmentView(LoginRequiredMixin, ListView):
 
 
 def create_delivery_view(request):
-    """
-    This handles view for creation of delivery tasks
-    """
     task_owner = request.user.customer_account
 
     existing_delivery_task = Delivery.objects.filter(
@@ -110,6 +66,7 @@ def create_delivery_view(request):
             Delivery.StatusChoices.DELIVERY_IN_PROGRESS,
         ]
     ).exists()
+
     if existing_delivery_task:
         messages.info(request, 'You currently have an ongoing delivery request.')
         return redirect(reverse('shipments:shipment_index'))
@@ -117,11 +74,20 @@ def create_delivery_view(request):
     creating_delivery_task = Delivery.objects.filter(
         customer=task_owner,
         status=Delivery.StatusChoices.CREATING
-
     ).last()
+
     item_form = DeliveryItemForm(instance=creating_delivery_task)
     pickup_form = DeliveryPickupForm(instance=creating_delivery_task)
     delivery_form = DeliveryRecipientForm(instance=creating_delivery_task)
+    payment_form = PaymentMethod(instance=creating_delivery_task)
+
+    map_url = ("https://maps.googleapis.com/maps/api/distancematrix/json?origins"
+               "={}&destinations={}&mode=transit&key={}").format(
+        creating_delivery_task.pickup_address if creating_delivery_task else '',
+        creating_delivery_task.delivery_address if creating_delivery_task else '',
+        settings.GOOGLE_MAP_API_KEY,
+    )
+    price_per_km = 100
 
     if request.method == 'POST':
         if request.POST.get('step') == '1':
@@ -131,13 +97,84 @@ def create_delivery_view(request):
                 creating_delivery_task.customer = task_owner
                 creating_delivery_task.save()
                 return redirect(reverse('shipments:create_delivery'))
+        elif request.POST.get('step') == '2':
+            pickup_form = DeliveryPickupForm(request.POST, instance=creating_delivery_task)
+            if pickup_form.is_valid():
+                creating_delivery_task = pickup_form.save()
+                return redirect(reverse('shipments:create_delivery'))
+        elif request.POST.get('step') == '3':
+            delivery_form = DeliveryRecipientForm(request.POST, instance=creating_delivery_task)
+            if delivery_form.is_valid():
+                creating_delivery_task = delivery_form.save()
+                try:
+                    response = requests.get(map_url)
+                    distance = response.json()['rows'][0]['elements'][0]['distance']['value']
+                    duration = response.json()['rows'][0]['elements'][0]['duration']['value']
+                    creating_delivery_task.distance = round(distance / 1000, 2)
+                    creating_delivery_task.duration = int(duration / 60)
+                    creating_delivery_task.price = creating_delivery_task.distance * price_per_km
+                    creating_delivery_task.save()
+                except Exception as e:
+                    messages.error(request, str(e))
+                return redirect(reverse('shipments:create_delivery'))
+        elif request.POST.get('step') == '4':
+            payment_form = PaymentMethod(request.POST, instance=creating_delivery_task)
+            if payment_form.is_valid():
+                creating_delivery_task = payment_form.save()
+                if creating_delivery_task.payment_method == Delivery.PaymentMethodChoices.COD:
+                    creating_delivery_task.status = Delivery.StatusChoices.PROCESSING
+                    creating_delivery_task.save()
+                    messages.success(request, 'Delivery task created successfully.')
+                    return redirect(reverse('shipments:shipment_index'))
+                elif creating_delivery_task.payment_method == Delivery.PaymentMethodChoices.CARD:
+                    # Create a DeliveryTransaction
+                    transaction = DeliveryTransaction.objects.create(
+                        delivery=creating_delivery_task,
+                        amount=creating_delivery_task.price
+                    )
+                    return redirect(reverse('finance:initiate_transaction',))
 
     if not creating_delivery_task:
         progress = 1
+    elif creating_delivery_task.recipient_name:
+        progress = 4
+    elif creating_delivery_task.sender_name:
+        progress = 3
+    else:
+        progress = 2
 
     return render(request, 'shipments/create_delivery.html',
                   {
                       'delivery_task': creating_delivery_task,
                       'step': progress,
                       'item_form': item_form,
+                      'pickup_form': pickup_form,
+                      'delivery_form': delivery_form,
+                      'payment_form': payment_form,
+                      'GOOGLE_MAP_API_KEY': settings.GOOGLE_MAP_API_KEY,
                   })
+
+
+def verify_delivery_payment(request, transaction_reference):
+    transaction = get_object_or_404(DeliveryTransaction, id=transaction_reference)
+
+    if transaction.transaction_verified:
+        messages.info(request, 'This transaction has already been processed.')
+        return redirect('shipments:shipment_index')
+
+    verified = transaction.verify_transaction()
+
+    if verified:
+        with transaction.atomic():
+            delivery = transaction.delivery
+            delivery.status = Delivery.StatusChoices.PROCESSING
+            delivery.save()
+
+            transaction.transaction_verified = True
+            transaction.save()
+
+        messages.success(request, 'Payment successful. Delivery task created.')
+    else:
+        messages.error(request, 'Transaction verification failed')
+
+    return redirect('shipments:shipment_index')

@@ -2,104 +2,477 @@
 {% load static %}
 {% load widget_tweaks %}
 {% block title %} Create Delivery {% endblock %}
+{% block head_js %}
+
+	<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=maps,marker,places&v=weekly"
+	        async defer></script>
+
+	<style>
+		#pickup-map,
+		#delivery-map {
+			height: 100%;
+			}
+	</style>
+
+{% endblock head_js %}
 {% block content %}
+	<div class="flex flex-wrap -mx-4">
+		<!-- Left side -->
+		<div class="w-full lg:w-1/3 px-4 mb-8">
+			<div class="bg-white shadow-md rounded-lg overflow-hidden">
+				<div class="bg-gray-100 px-4 py-3 border-b">
+					<h2 class="text-lg font-semibold">Delivery Summary</h2>
+				</div>
+				<div class="p-4">
+					{% if not delivery_task %}
+						<p class="text-gray-600">A summary of your delivery information will appear here</p>
+					{% else %}
+						{% if step > 1 %}
+							<h3 class="text-xl font-bold">{{ delivery_task.item_name }}</h3>
+							<p class="text-gray-600">{{ delivery_task.quantity }} Item(s)</p>
+							<p class="text-gray-600">{{ delivery_task.get_size_display }} Size</p>
+						{% endif %}
 
-	<div class="space-y-8 w-full">
-		<div class="w-full">
-			<form class="flex flex-col w-full">
-				{% csrf_token %}
-				<div class="col-span-full py-4 border-b border-gray-100">
-					<p class="font-bold text-xl tracking-tight">
-						Item Information
-					</p>
+						{% if step > 2 %}
+							<hr class="my-4">
+							<p class="text-sm font-semibold text-gray-500">PICKUP</p>
+							<h4 class="text-lg font-semibold">{{ delivery_task.sender_name }}</h4>
+							<p class="text-gray-600">{{ delivery_task.pickup_address }}</p>
+						{% endif %}
+
+						{% if step > 3 %}
+							<hr class="my-4">
+							<p class="text-sm font-semibold text-gray-500">DELIVERY</p>
+							<h4 class="text-lg font-semibold">{{ delivery_task.recipient_name }}</h4>
+							<p class="text-gray-600">{{ delivery_task.delivery_address }}</p>
+						{% endif %}
+					{% endif %}
 				</div>
-				<div class="w-full grid grid-cols-2 md:grid-cols-6 gap-4 gap-y-6 py-8">
-					{% for hidden in item_form.hidden_fields %}
-						{{ hidden }}
-					{% endfor %}
-					{% for field in item_form.visible_fields %}
-						<div class="col-span-full">
-							<fieldset class="relative">
-								<div class="relative">
-									<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-									       for="{{ field.id_for_label }}">{{ field.label }}</label>
-									{{ field|add_class:'bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' }}
-									{% for error in field.errors %}
-										<span class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500">{{ error|add_error_class:'mt-2 text-sm text-red-600 dark:text-red-500' }}</span>
-									{% endfor %}
-								</div>
-							</fieldset>
-						</div>
-					{% endfor %}
-					<div class="col-span-full">
-						<div class="md:w-1/3">
-							<input type="hidden" name="action" value="update_user_details">
-							<button type="submit" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4
-						focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
-						dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-								SAVE
-							</button>
-						</div>
-					</div>
-				</div>
-			</form>
+			</div>
 		</div>
 
-		<div class="w-full">
-			<form method="post" class="flex flex-col w-full">
-				{% csrf_token %}
-				<div class="col-span-full py-4 border-b border-gray-100"><p class="font-bold text-xl tracking-tight">
-					Change your password</p></div>
+		<!-- Right side -->
+		<div class="w-full lg:w-2/3 px-4">
+			<!-- Progress tabs -->
+			<div class="bg-white shadow-md rounded-lg overflow-hidden mb-8">
+				<div class="p-4">
+					<ul class="flex justify-between items-center">
+						<li class="flex-1 text-center">
+							<a href="#"
+							   class="{% if step == 1 %}text-orange-500 font-semibold{% else %}text-gray-600{% endif %}">Item
+							                                                                                             Info</a>
+						</li>
+						<li class="flex-1 text-center">
+							<a href="#"
+							   class="{% if step == 2 %}text-orange-500 font-semibold{% else %}text-gray-600{% endif %}">Pickup</a>
+						</li>
+						<li class="flex-1 text-center">
+							<a href="#"
+							   class="{% if step == 3 %}text-orange-500 font-semibold{% else %}text-gray-600{% endif %}">Delivery</a>
+						</li>
+						<li class="flex-1 text-center">
+							<a href="#"
+							   class="{% if step == 4 %}text-orange-500 font-semibold{% else %}text-gray-600{% endif %}">Payment</a>
+						</li>
+					</ul>
+				</div>
+			</div>
 
-				<div class="w-full grid grid-cols-2 md:grid-cols-6 gap-4 gap-y-6 py-8">
-					{% for hidden in password_form.hidden_fields %}
-						{{ hidden }}
-					{% endfor %}
-					{% for field in password_form.visible_fields %}
-						<div class="col-span-full">
-							<fieldset class="relative">
-								<div class="relative">
-									<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-									       for="{{ field.id_for_label }}">{{ field.label }}</label>
-									{{ field|add_class:'bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' }}
-									{% for error in field.errors %}
-										<span class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500">{{ error|add_error_class:'mt-2 text-sm text-red-600 dark:text-red-500' }}</span>
-									{% endfor %}
-								</div>
-							</fieldset>
+			<h2 class="text-2xl font-bold mb-4">Create a Delivery</h2>
+
+			{% if step == 1 %}
+				<form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg overflow-hidden">
+					{% csrf_token %}
+					<div class="p-4">
+						<h3 class="text-lg font-semibold mb-4">Item Information</h3>
+
+						<div class="mb-4">
+							<label for="{{ item_form.item_name.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ item_form.item_name.label }}
+							</label>
+							{% render_field item_form.item_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if item_form.item_name.errors %}
+								<p class="text-red-500 text-xs italic">{{ item_form.item_name.errors.0 }}</p>
+							{% endif %}
 						</div>
-					{% endfor %}
-					<div class="col-span-full">
-						<div class="md:w-1/3">
-							<input type="hidden" name="action" value="update_user_password">
-							<button type="submit" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4
-						focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
-						dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-								SAVE
+
+						<div class="mb-4">
+							<label for="{{ item_form.description.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ item_form.description.label }}
+							</label>
+							{% render_field item_form.description class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if item_form.description.errors %}
+								<p class="text-red-500 text-xs italic">{{ item_form.description.errors.0 }}</p>
+							{% endif %}
+						</div>
+
+						<div class="mb-4">
+							<label for="{{ item_form.item_type.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ item_form.item_type.label }}
+							</label>
+							{% render_field item_form.item_type class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if item_form.item_type.errors %}
+								<p class="text-red-500 text-xs italic">{{ item_form.item_type.errors.0 }}</p>
+							{% endif %}
+						</div>
+
+						<div class="mb-4">
+							<label for="{{ item_form.size.id_for_label }}" class="block text-gray-700 font-bold mb-2">
+								{{ item_form.size.label }}
+							</label>
+							{% render_field item_form.size class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if item_form.size.errors %}
+								<p class="text-red-500 text-xs italic">{{ item_form.size.errors.0 }}</p>
+							{% endif %}
+						</div>
+
+						<div class="mb-4">
+							<label for="{{ item_form.quantity.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ item_form.quantity.label }}
+							</label>
+							{% render_field item_form.quantity class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if item_form.quantity.errors %}
+								<p class="text-red-500 text-xs italic">{{ item_form.quantity.errors.0 }}</p>
+							{% endif %}
+						</div>
+					</div>
+					<div class="bg-gray-100 px-4 py-3 text-right">
+						<input type="hidden" name="step" value="1">
+						<button type="submit"
+						        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+							Save & Continue
+						</button>
+					</div>
+				</form>
+
+			{% elif step == 2 %}
+				<form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg overflow-hidden">
+					{% csrf_token %}
+					<div class="p-4">
+						<h3 class="text-lg font-semibold mb-4">Pickup Information</h3>
+
+						<div class="mb-4">
+							<label for="{{ pickup_form.pickup_address.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ pickup_form.pickup_address.label }}
+							</label>
+							{% render_field pickup_form.pickup_address class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if pickup_form.pickup_address.errors %}
+								<p class="text-red-500 text-xs italic">{{ pickup_form.pickup_address.errors.0 }}</p>
+							{% endif %}
+						</div>
+
+						<div class="mb-4">
+							<label for="{{ pickup_form.sender_name.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ pickup_form.sender_name.label }}
+							</label>
+							{% render_field pickup_form.sender_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if pickup_form.sender_name.errors %}
+								<p class="text-red-500 text-xs italic">{{ pickup_form.sender_name.errors.0 }}</p>
+							{% endif %}
+						</div>
+
+						<div class="mb-4">
+							<label for="{{ pickup_form.sender_phone.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ pickup_form.sender_phone.label }}
+							</label>
+							{% render_field pickup_form.sender_phone class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if pickup_form.sender_phone.errors %}
+								<p class="text-red-500 text-xs italic">{{ pickup_form.sender_phone.errors.0 }}</p>
+							{% endif %}
+						</div>
+
+						{% render_field pickup_form.pickup_latitude type="hidden" id="pickup_lat" value="{{ creating_delivery_task.pickup_latitude }}" %}
+						{% render_field pickup_form.pickup_longitude type="hidden" id="pickup_lng" value="{{ creating_delivery_task.pickup_longitude }}" %}
+						<div class="col-lg-4">
+							<div id="pickup-map" style="height: 500px; width: 100%;"></div>
+
+							<div id="pickup-infowindow-content">
+								<img src="" width="16" height="16" id="pickup-place-icon" alt=""/>
+								<span id="pickup-place-name" class="title"></span><br/>
+								<span id="pickup-place-address"></span>
+							</div>
+						</div>
+						<div class="bg-gray-100 px-4 py-3 text-right">
+							<input type="hidden" name="step" value="2">
+							<button type="button" onclick="location.href='{% url 'shipments:create_delivery' %}?step=1'"
+							        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">
+								Back
+							</button>
+							<button type="submit"
+							        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+								Save & Continue
 							</button>
 						</div>
-					</div>
-				</div>
+				</form>
 
-			</form>
-		</div>
+			{% elif step == 3 %}
+				<form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg overflow-hidden">
+					{% csrf_token %}
+					<div class="p-4">
+						<h3 class="text-lg font-semibold mb-4">Delivery Information</h3>
 
-		<div class="w-full">
-			<form method="post" class="flex flex-col w-full">
-				{% csrf_token %}
-				<div class="w-full py-6 border-b border-gray-100"><p class="font-bold text-xl tracking-tight">Delete
-				                                                                                              Account</p>
-				</div>
-				<div class="col-span-full py-6 text-base font-medium flex flex-col justify-between items-start space-y-6">
-					<p class="">Would you like to delete your account? Please note that this action will delete all your
-					            data and it <span class="font-bold text-primary">cannot be reversed.</span></p>
-					<div><span
-							class="bg-primary text-white border-primary rounded ring-transparent focus:outline-none hover:ring-2 hover:ring-offset-1 hover:ring-primary hover:border-primary hover:text-white whitespace-nowrap border cursor-pointer inline-flex items-center justify-center w-full px-3.5 py-3 uppercase text-xs tracking-wide font-bold transition-all duration-200">Delete my account</span>
+						<div class="mb-4">
+							<label for="{{ delivery_form.delivery_address.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ delivery_form.delivery_address.label }}
+							</label>
+							{% render_field delivery_form.delivery_address class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if delivery_form.delivery_address.errors %}
+								<p class="text-red-500 text-xs italic">{{ delivery_form.delivery_address.errors.0 }}</p>
+							{% endif %}
+						</div>
+
+						<div class="mb-4">
+							<label for="{{ delivery_form.recipient_name.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ delivery_form.recipient_name.label }}
+							</label>
+							{% render_field delivery_form.recipient_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if delivery_form.recipient_name.errors %}
+								<p class="text-red-500 text-xs italic">{{ delivery_form.recipient_name.errors.0 }}</p>
+							{% endif %}
+						</div>
+
+						<div class="mb-4">
+							<label for="{{ delivery_form.recipient_phone.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ delivery_form.recipient_phone.label }}
+							</label>
+							{% render_field delivery_form.recipient_phone class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if delivery_form.recipient_phone.errors %}
+								<p class="text-red-500 text-xs italic">{{ delivery_form.recipient_phone.errors.0 }}</p>
+							{% endif %}
+						</div>
+
+						{% render_field delivery_form.delivery_latitude type="hidden" %}
+						{% render_field delivery_form.delivery_longitude type="hidden" %}
 					</div>
-				</div>
-			</form>
+					<div class="bg-gray-100 px-4 py-3 text-right">
+						<input type="hidden" name="step" value="3">
+						<button type="button" onclick="location.href='{% url 'shipments:create_delivery' %}?step=2'"
+						        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">
+							Back
+						</button>
+						<button type="submit"
+						        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+							Save & Continue
+						</button>
+					</div>
+				</form>
+
+			{% elif step == 4 %}
+				<form method="POST" class="bg-white shadow-md rounded-lg overflow-hidden">
+					{% csrf_token %}
+					<div class="p-4">
+						<h3 class="text-lg font-semibold mb-4">Payment Method</h3>
+
+						<div class="mb-4">
+							<label for="{{ payment_form.payment_method.id_for_label }}"
+							       class="block text-gray-700 font-bold mb-2">
+								{{ payment_form.payment_method.label }}
+							</label>
+							{% render_field payment_form.payment_method class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+							{% if payment_form.payment_method.errors %}
+								<p class="text-red-500 text-xs italic">{{ payment_form.payment_method.errors.0 }}</p>
+							{% endif %}
+						</div>
+
+						<div class="mb-4">
+							<label class="block text-gray-700 font-bold mb-2">Price</label>
+							<input class="w-full px-3 py-2 text-gray-700 border rounded-lg bg-gray-100"
+							       value="${{ delivery_task.price }}" disabled>
+						</div>
+					</div>
+					<div class="bg-gray-100 px-4 py-3 text-right">
+						<input type="hidden" name="step" value="4">
+						<button type="button" onclick="location.href='{% url 'shipments:create_delivery' %}?step=3'"
+						        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">
+							Back
+						</button>
+						<button type="submit"
+						        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+							Create Delivery
+						</button>
+					</div>
+				</form>
+			{% endif %}
 		</div>
 	</div>
+	<script>
+        var pickupLat = parseFloat('{{ creating_delivery_task.pickup_latitude }}');
+        var pickupLng = parseFloat('{{ creating_delivery_task.pickup_longitude }}');
 
+        var deliveryLat = parseFloat('{{ creating_delivery_task.delivery_latitude }}');
+        var deliveryLng = parseFloat('{{ creating_delivery_task.delivery_longitude }}');
+
+        function initMapByType(type, initLat, initLng) {
+            const map = new google.maps.Map(document.getElementById(type + "-map"), {
+                center: {lat: initLat || -33.8688, lng: initLng || 151.2195},
+                zoom: 13,
+            });
+
+            if (initLat && initLng) {
+                new google.maps.Marker({
+                    position: new google.maps.LatLng(initLat, initLng),
+                    map: map,
+                });
+            }
+
+            const input = document.getElementById("id_" + type + "_address");
+            const autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo("bounds", map);
+            autocomplete.setFields(["address_components", "geometry", "icon", "name"]);
+
+            const infowindow = new google.maps.InfoWindow();
+            const infowindowContent = document.getElementById(type + "-infowindow-content");
+            infowindow.setContent(infowindowContent);
+
+            const marker = new google.maps.Marker({
+                map,
+                anchorPoint: new google.maps.Point(0, -29),
+            });
+
+            autocomplete.addListener("place_changed", function () {
+                infowindow.close();
+                marker.setVisible(false);
+                const place = autocomplete.getPlace();
+
+                if (!place.geometry) {
+                    window.alert("No details available for input: '" + place.name + "'");
+                    return;
+                }
+
+                if (place.geometry.viewport) {
+                    map.fitBounds(place.geometry.viewport);
+                } else {
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(17);
+                }
+
+                marker.setPosition(place.geometry.location);
+                marker.setVisible(true);
+
+                let address = "";
+                if (place.address_components) {
+                    address = [
+                        (place.address_components[0] && place.address_components[0].short_name) || "",
+                        (place.address_components[1] && place.address_components[1].short_name) || "",
+                        (place.address_components[2] && place.address_components[2].short_name) || "",
+                    ].join(" ");
+                }
+
+                infowindowContent.children[type + "-place-icon"].src = place.icon;
+                infowindowContent.children[type + "-place-name"].textContent = place.name;
+                infowindowContent.children[type + "-place-address"].textContent = address;
+                infowindow.open(map, marker);
+
+                document.getElementById(type + "_lat").value = place.geometry.location.lat();
+                document.getElementById(type + "_lng").value = place.geometry.location.lng();
+            });
+        }
+
+        function initMap() {
+            initMapByType("pickup", pickupLat, pickupLng);
+            initMapByType("delivery", deliveryLat, deliveryLng);
+        }
+
+        window.onload = initMap;
+	</script>
+
+	{#	<script>#}
+	{#        var pickupLat = parseFloat('{{ creating_delivery_task.pickup_latitude }}');#}
+	{#        var pickupLng = parseFloat('{{ creating_delivery_task.pickup_longitude }}');#}
+	{##}
+	{#        var deliveryLat = parseFloat('{{ creating_delivery_task.delivery_latitude }}');#}
+	{#        var deliveryLng = parseFloat('{{ creating_delivery_task.delivery_longitude }}');#}
+	{##}
+	{#        function initMapByType(type, initLat, initLng) {#}
+	{#            const map = new google.maps.Map(document.getElementById(type + "-map"), {#}
+	{#                center: {lat: initLat || -33.8688, lng: initLng || 151.2195},#}
+	{#                zoom: 13,#}
+	{#            });#}
+	{##}
+	{#            if (initLat && initLng) {#}
+	{#                new google.maps.Marker({#}
+	{#                    position: new google.maps.LatLng(initLat, initLng),#}
+	{#                    map: map,#}
+	{#                })#}
+	{#            }#}
+	{##}
+	{#            const input = document.getElementById("id_" + type + "_address");#}
+	{#            const autocomplete = new google.maps.places.Autocomplete(input);#}
+	{#            // Bind the map's bounds (viewport) property to the autocomplete object,#}
+	{#            // so that the autocomplete requests use the current map bounds for the#}
+	{#            // bounds option in the request.#}
+	{#            autocomplete.bindTo("bounds", map);#}
+	{#            // Set the data fields to return when the user selects a place.#}
+	{#            autocomplete.setFields(["address_components", "geometry", "icon", "name"]);#}
+	{#            const infowindow = new google.maps.InfoWindow();#}
+	{#            const infowindowContent = document.getElementById(type + "-infowindow-content");#}
+	{#            infowindow.setContent(infowindowContent);#}
+	{#            const marker = new google.maps.Marker({#}
+	{#                map,#}
+	{#                anchorPoint: new google.maps.Point(0, -29),#}
+	{#            });#}
+	{#            autocomplete.addListener("place_changed", () => {#}
+	{#                infowindow.close();#}
+	{#                marker.setVisible(false);#}
+	{#                const place = autocomplete.getPlace();#}
+	{##}
+	{#                if (!place.geometry) {#}
+	{#                    // User entered the name of a Place that was not suggested and#}
+	{#                    // pressed the Enter key, or the Place Details request failed.#}
+	{#                    window.alert("No details available for input: '" + place.name + "'");#}
+	{#                    return;#}
+	{#                }#}
+	{##}
+	{#                // If the place has a geometry, then present it on a map.#}
+	{#                if (place.geometry.viewport) {#}
+	{#                    map.fitBounds(place.geometry.viewport);#}
+	{#                } else {#}
+	{#                    map.setCenter(place.geometry.location);#}
+	{#                    map.setZoom(17); // Why 17? Because it looks good.#}
+	{#                }#}
+	{#                marker.setPosition(place.geometry.location);#}
+	{#                marker.setVisible(true);#}
+	{#                let address = "";#}
+	{##}
+	{#                if (place.address_components) {#}
+	{#                    address = [#}
+	{#                        (place.address_components[0] &&#}
+	{#                            place.address_components[0].short_name) ||#}
+	{#                        "",#}
+	{#                        (place.address_components[1] &&#}
+	{#                            place.address_components[1].short_name) ||#}
+	{#                        "",#}
+	{#                        (place.address_components[2] &&#}
+	{#                            place.address_components[2].short_name) ||#}
+	{#                        "",#}
+	{#                    ].join(" ");#}
+	{#                }#}
+	{#                infowindowContent.children[type + "-place-icon"].src = place.icon;#}
+	{#                infowindowContent.children[type + "-place-name"].textContent = place.name;#}
+	{#                infowindowContent.children[type + "-place-address"].textContent = address;#}
+	{#                infowindow.open(map, marker);#}
+	{##}
+	{#                $("#" + type + "_lat").val(place.geometry.location.lat());#}
+	{#                $("#" + type + "_lng").val(place.geometry.location.lng());#}
+	{#            });#}
+	{#        }#}
+	{##}
+	{#        function initMap() {#}
+	{#            initMapByType("pickup", pickupLat, pickupLng);#}
+	{#            initMapByType("delivery", deliveryLat, deliveryLng);#}
+	{#        }#}
+	{##}
+	{#        window.onload = initMap;#}
+	{#	</script>#}
 
 {% endblock content %}

@@ -3,7 +3,7 @@ This contains all the forms for the shipments app.
 """
 from django import forms
 
-from shipments.models import Delivery, TransactionMethod
+from shipments.models import Delivery
 
 
 class DeliveryItemForm(forms.ModelForm):
@@ -13,7 +13,7 @@ class DeliveryItemForm(forms.ModelForm):
 
     class Meta:
         model = Delivery
-        fields = ('item_name', 'description', 'item_type', 'size', 'quantity',)
+        fields = ('item_name', 'item_type', 'size', 'quantity',)
 
 
 class DeliveryPickupForm(forms.ModelForm):
@@ -36,11 +36,11 @@ class DeliveryRecipientForm(forms.ModelForm):
         fields = ['delivery_address', 'delivery_latitude', 'delivery_longitude', 'recipient_name', 'recipient_phone', ]
 
 
-class TransactionMethodForm(forms.ModelForm):
+class PaymentMethod(forms.ModelForm):
     """
     This renders forms for the transaction model
     """
 
     class Meta:
-        model = TransactionMethod
+        model = Delivery
         fields = ['payment_method', ]
