@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
     'accounts.apps.AccountsConfig',
     'finance',
+    'shipments',
     'phonenumber_field',
     'widget_tweaks',
     'tailwind',
