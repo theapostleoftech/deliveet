@@ -1,9 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import TemplateView, FormView
 
 from finance.forms import TransactionForm
+from shipments.forms import DeliveryItemForm, DeliveryPickupForm, DeliveryRecipientForm
 from shipments.models import Delivery, TransactionMethod, DeliveryTransaction
 
 
@@ -49,3 +51,37 @@ class ChooseTransactionMethodView(LoginRequiredMixin, FormView):
         context['delivery'] = self.delivery
         return context
 
+
+def create_delivery_view(request):
+    """
+    This handles view for creation of delivery tasks
+    """
+    task_owner = request.user.customer
+
+    existing_delivery_task = Delivery.objects.filter(
+        customer=task_owner,
+        status__in=[
+            Delivery.StatusChoices.PROCESSING,
+            Delivery.StatusChoices.PICKUP_IN_PROGRESS,
+            Delivery.StatusChoices.DELIVERY_IN_PROGRESS,
+        ]
+    ).exists()
+    if existing_delivery_task:
+        messages.info(request, 'You currently have an ongoing delivery request.')
+        return redirect(reverse(''))
+
+    creating_delivery_task = Delivery.objects.filter(
+        customer=task_owner,
+        status=Delivery.StatusChoices.CREATING
+
+    ).last()
+    item_form = DeliveryItemForm(instance=creating_delivery_task)
+    pickup_form = DeliveryPickupForm(instance=creating_delivery_task)
+    delivery_form = DeliveryRecipientForm(instance=creating_delivery_task)
+
+    if request.method == 'POST':
+        if item_form.is_valid():
+            creating_delivery_task = item_form.save(commit=False)
+            creating_delivery_task.customer = task_owner
+            creating_delivery_task.save()
+            return redirect(reverse('shipments:delivery'))
