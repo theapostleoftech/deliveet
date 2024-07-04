@@ -2,13 +2,12 @@
 This contains all the models for the finance app.
 """
 import secrets
-import uuid
 
 from django.db import models
 
 from accounts.models import UserAccount
 from app.models import BaseModel
-from finance.wallets import Paystack
+from deliveet.utils.finance import Paystack
 
 
 class Wallet(BaseModel):
