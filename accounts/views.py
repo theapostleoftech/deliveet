@@ -3,16 +3,21 @@ This contains views for the accounts app.
 """
 
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, authenticate, get_user_model, update_session_auth_hash
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetDoneView, PasswordResetView, \
+    PasswordResetCompleteView, PasswordResetConfirmView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites import requests
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, View, DetailView
+from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, View, DetailView, UpdateView, FormView
 
-from accounts.forms import SignUpForm, SignInForm
+from accounts.forms import SignUpForm, SignInForm, ChangePasswordForm, UserAccountUpdateForm
+from accounts.models import UserAccount
+
+UserModel = get_user_model()
 
 
 class SignUpView(CreateView):
@@ -105,3 +110,93 @@ class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
         """
         messages.error(self.request, "There was an error changing your password. Please try again.")
         return super().form_invalid(form)
+
+
+class UserAccountDetailView(LoginRequiredMixin, DetailView):
+    """
+    This view displays the details of the user account.
+    """
+    model = UserModel
+    template_name = 'accounts/user_account_details.html'
+    context_object_name = 'user_account'
+
+    def get_object(self, queryset=None):
+        """
+        This function returns the user account
+        object for the currently logged-in user.
+        """
+        return self.request.user
+
+
+class UserAccountUpdateView(LoginRequiredMixin, FormView):
+    """
+    This view updates the user account records
+    It updates the user password and the user details
+    """
+    template_name = 'accounts/update_user_account.html'
+    success_url = reverse_lazy('customers:customer_dashboard')
+
+    def get(self, request, *args, **kwargs):
+        user_form = UserAccountUpdateForm(instance=request.user)
+        password_form = ChangePasswordForm(request.user)
+        return render(request, self.template_name, {
+            'user_form': user_form,
+            'password_form': password_form
+        })
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('action') == 'update_user_details':
+            user_form = UserAccountUpdateForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                messages.success(request, 'Your profile has been updated')
+                return redirect(reverse('customers:customer_dashboard'))
+        elif request.POST.get('action') == 'update_user_password':
+            password_form = ChangePasswordForm(request.user, request.POST)
+            if password_form.is_valid():
+                password_form.save()
+                update_session_auth_hash(request, password_form.user)
+                messages.success(request, 'Your password has been updated')
+                return redirect(reverse('customers:customer_dashboard'))
+        return redirect(self.success_url)
+
+
+class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    """
+    This view resets the password.
+    It inherits PasswordResetView
+    """
+    template_name = 'accounts/password/password_reset.html'
+    form_class = PasswordResetForm
+    email_template_name = 'registration/password_reset_email.html'
+    subject_template_name = 'registration/password_reset_subject.txt'
+    success_url = reverse_lazy('accounts:reset_password_done')
+
+    pass
+
+
+class ResetPasswordDoneView(PasswordResetDoneView):
+    """
+    This view serves the form for resetting the password
+    It inherits PasswordResetDoneView
+    """
+    template_name = 'accounts/password/password_reset_done_view.html'
+    pass
+
+
+class ResetPasswordConfirmView(PasswordResetConfirmView):
+    """
+    This view is responsible for the password reset url.
+    It inherits PasswordResetConfirmView
+    """
+    template_name = 'accounts/password/password_reset_confirm_view.html'
+    success_url = reverse_lazy('accounts:password_reset_complete')
+
+
+class ResetPasswordCompleteView(SuccessMessageMixin, PasswordResetCompleteView):
+    """
+    This view shows the password reset complete page.
+    It inherits PasswordResetCompleteView
+    """
+    template_name = 'accounts/password/password_reset_complete_view.html'
+    pass

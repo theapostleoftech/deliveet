@@ -6,6 +6,7 @@ import uuid
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django.urls import reverse
 
 from accounts.managers import UserAccountManager
 from app.models import PhoneField, ProfileBaseModel
@@ -117,6 +118,9 @@ class Customer(ProfileBaseModel):
     def __str__(self) -> str:
         return self.user.email
 
+    def get_absolute_url(self):
+        return reverse('profiles:customer_details', kwargs={'uuid': str(self.user_id)})
+
     pass
 
 
@@ -137,5 +141,8 @@ class Courier(ProfileBaseModel):
 
     def __str__(self) -> str:
         return self.user.email
+
+    def get_absolute_url(self):
+        return reverse('profiles:courier_details', args=[str(self.pk)])
 
     pass
