@@ -27,7 +27,7 @@ DEVELOPMENT_MODE = env.bool('DEVELOPMENT_MODE', default=False)
 DEBUG = env.bool('DJANGO_DEBUG', )
 
 # Hosts
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com']
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
@@ -192,3 +192,5 @@ LOGOUT_REDIRECT_URL = 'accounts:signout'
 
 # Google Map
 GOOGLE_MAP_API_KEY = env('GOOGLE_MAP_API_KEY')
+
+FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/firebase-messaging-sw.js")
