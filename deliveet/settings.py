@@ -44,8 +44,10 @@ INSTALLED_APPS = [
     'theme.apps.ThemeConfig',
     'app.apps.AppConfig',
     'accounts.apps.AccountsConfig',
-    'finance',
-    'shipments',
+    'customers.apps.CustomersConfig',
+    'courier.apps.CourierConfig',
+    'finance.apps.FinanceConfig',
+    'shipments.apps.ShipmentsConfig',
     'phonenumber_field',
     'widget_tweaks',
     'tailwind',
@@ -188,7 +190,7 @@ PHONENUMBER_DEFAULT_REGION = 'NG'
 PHONENUMBER_DB_FORMAT = 'NATIONAL'
 
 LOGIN_URL = 'accounts:signin'
-LOGOUT_REDIRECT_URL = 'accounts:signout'
+LOGOUT_REDIRECT_URL = 'pages:app_home'
 
 # Google Map
 GOOGLE_MAP_API_KEY = env('GOOGLE_MAP_API_KEY')

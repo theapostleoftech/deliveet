@@ -8,6 +8,7 @@ from django.db import transaction
 
 from accounts.models import UserAccount, Customer, Courier
 from app.forms import BaseForm
+from finance.models import Wallet
 
 
 class SignUpForm(UserCreationForm):
@@ -50,6 +51,8 @@ class SignUpForm(UserCreationForm):
         :return: a new user account and corresponding profiles
         """
         user = super().save(commit=False)
+        wallet = Wallet.objects.create(user=user)
+        wallet.save()
         if self.cleaned_data["account_type"] == "courier":
             user.is_courier = True
             courier = Courier.objects.create(user=user)

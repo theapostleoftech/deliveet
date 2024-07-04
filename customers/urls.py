@@ -7,6 +7,5 @@ from . import views
 app_name = 'customers'
 urlpatterns = [
     path('dashboard/', views.CustomerDashboardView.as_view(), name='customer_dashboard'),
-    # path('signin/', views.SignInView.as_view(), name='signin'),
 
 ]
