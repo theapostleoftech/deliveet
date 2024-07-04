@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 from .models import UserAccount
 
@@ -18,18 +19,15 @@ def send_welcome_email(sender, instance, created, **kwargs):
     """
     if created and instance.email:
         subject = 'Welcome to DELIVEET'
-        body = render_to_string(
-            'accounts/welcome_email.html',
-            {
-                'user': instance,
-            }
-        )
+        html_message = render_to_string('accounts/welcome_email.html', {'user': instance})
+        plain_message = strip_tags(html_message)
         from_email = settings.DEFAULT_FROM_EMAIL
         recipient_list = [instance.email]
 
         send_mail(
             subject,
-            body,
+            plain_message,
+            html_message=html_message,
             from_email=from_email,
             recipient_list=recipient_list,
             fail_silently=False
