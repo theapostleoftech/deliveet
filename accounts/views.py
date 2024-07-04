@@ -32,22 +32,23 @@ class SignUpView(CreateView):
         This function is used to validate the form
         and create the user account. If the form is
         valid it logs in the user.
-        :param form:
-        :return:
         """
         user = form.save()
         login(self.request, user)
         messages.success(self.request, 'Signup Successful')
-        return redirect('customers:customer_dashboard')
+
+        if user.account_type == UserAccount.UserAccountType.COURIER:
+            return redirect('couriers:courier_dashboard')
+        else:
+            return redirect('customers:customer_dashboard')
 
     def form_invalid(self, form):
         """
-        This function is used to validate the form
-        if invalid, it returns the form with the error message.
-        :param form:
-        :return:
+        If the form is invalid, add error messages and redisplay the form.
         """
-        messages.error(self.request, "There was an error signing you up")
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"{field}: {error}")
         return super().form_invalid(form)
 
     pass

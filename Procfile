@@ -1,1 +1,2 @@
-web: gunicorn demo_app.wsgi --access-logfile -
+web: gunicorn deliveet.wsgi --access-logfile -
+release: ./manage.py migrate --no-input
