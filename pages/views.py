@@ -23,3 +23,10 @@ class DashboardView(TemplateView):
 
 class LandingPageView(TemplateView):
     template_name = 'pages/landing_page.html'
+
+
+class HomeView(TemplateView):
+    """
+    This is view for the app home page
+    """
+    template_name = 'pages/home.html'

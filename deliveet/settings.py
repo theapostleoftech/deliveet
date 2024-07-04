@@ -27,7 +27,7 @@ DEVELOPMENT_MODE = env.bool('DEVELOPMENT_MODE', default=False)
 DEBUG = env.bool('DJANGO_DEBUG', )
 
 # Hosts
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com']
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
@@ -164,12 +164,12 @@ MESSAGE_TAGS = {
 # EMAIL_BACKEND = 'django_ses.SESBackend'
 # DEFAULT_FROM_EMAIL = env('AWS_SES_FROM_EMAIL')
 
-AWS_SES_ACCESS_KEY_ID = env('AWS_SES_ACCESS_KEY_ID')
-AWS_SES_SECRET_ACCESS_KEY = env('AWS_SES_SECRET_ACCESS_KEY')
-AWS_SES_REGION_NAME = env('AWS_SES_REGION_NAME')
-AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
-AWS_SES_FROM_EMAIL = env('AWS_SES_FROM_EMAIL')
-USE_SES_V2 = True
+# AWS_SES_ACCESS_KEY_ID = env('AWS_SES_ACCESS_KEY_ID')
+# AWS_SES_SECRET_ACCESS_KEY = env('AWS_SES_SECRET_ACCESS_KEY')
+# AWS_SES_REGION_NAME = env('AWS_SES_REGION_NAME')
+# AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
+# AWS_SES_FROM_EMAIL = env('AWS_SES_FROM_EMAIL')
+# USE_SES_V2 = True
 
 EMAIL_BACKEND = env('EMAIL_BACKEND')
 EMAIL_HOST = env('EMAIL_HOST')
@@ -192,3 +192,5 @@ LOGOUT_REDIRECT_URL = 'accounts:signout'
 
 # Google Map
 GOOGLE_MAP_API_KEY = env('GOOGLE_MAP_API_KEY')
+
+FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/firebase-messaging-sw.js")
