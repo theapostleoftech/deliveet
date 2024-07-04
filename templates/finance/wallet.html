@@ -1,0 +1,43 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Wallet {% endblock %}
+{% block content %}
+
+
+	<div class="mt-4 space-y-4 pb-4 w-full ">
+		<div class="bg-tertiary-700 w-full flex flex-col justify-between items-start space-y-12 p-6
+				border border-gray-200 rounded-lg shadow">
+			<div class="w-full space-y-2">
+				<p class="mt-0 max-w-2xl text-sm leading-6 text-gray-300">BALANCE</p>
+				<p class="text-5xl lg:text-6xl md:text-5xl sm:text-3xl text-white
+				 font-extrabold tracking-tight mb-4">
+					{{ wallet_balance }} <span class="text-sm tracking-wide font-medium text-gray-400 uppercase">NGN</span>
+				</p>
+			</div>
+			<div class="flex flex-row justify-start items-start space-x-2">
+				<a href="{% url 'finance:initiate_transaction' %}">
+						<span class=" text-white border-primary rounded
+							ring-transparent focus:outline-none hover:ring-2 hover:ring-offset-1 hover:ring-primary 
+							hover:border-primary hover:text-white whitespace-nowrap border cursor-pointer inline-flex 
+							items-center justify-center w-full px-3.5 py-3 
+							uppercase text-xs tracking-wide font-bold 
+							transition-all duration-200 !bg-white !border-opacity-10 !bg-opacity-20">Add Money
+						</span>
+				</a>
+				<div class="flex flex-row justify-start items-start space-x-2">
+					<a href="{% url 'finance:initiate_transaction' %}">
+						<span class="bg-red-600 text-white border-primary rounded
+							ring-transparent focus:outline-none hover:ring-2 hover:ring-offset-1 hover:ring-primary 
+							hover:border-primary hover:text-white whitespace-nowrap border cursor-pointer inline-flex 
+							items-center justify-center w-full px-3.5 py-3 uppercase text-xs tracking-wide font-bold
+							transition-all duration-200 !border-opacity-10 !hover:bg-black
+							!hover:text-white">Withdraw
+						</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}

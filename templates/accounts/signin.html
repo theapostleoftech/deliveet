@@ -1,0 +1,49 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Sign In{% endblock title %}
+
+{% block content %}
+	<div class="w-full">
+		<div class="w-full m-auto max-w-screen-xl px-4">
+			<section class="flex items-center justify-center h-screen">
+				<div class="col-span-1">
+					<div class="w-full max-w-md m-auto flex flex-col justify-start items-start">
+						<div class="w-full space-y-16 flex flex-col justify-start items-start">
+							<div>
+								<h4 class="text-3xl font-bold text-black">
+									Welcome Back<span class="pl-1">👋</span>
+								</h4>
+								<p class="text-sm text-gray-500 font-medium pt-4">
+									To continue, please sign in with your email address and password. Don't have an
+									account? <a title=""
+									            class="font-bold text-primary hover:underline"
+									            href="{% url 'accounts:signup' %}">Sign up</a>
+								</p>
+							</div>
+							<form class="w-full" method="POST">
+								<div class="space-y-4 w-full flex flex-col">
+									{% csrf_token %}
+									{% include 'bases/../snippets/base_form.html' %}
+									<button type="submit"
+									        class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+										SIGN IN
+									</button>
+									<p class="text-xs my-2 text-slate-400">
+										By continuing, I represent that I have read, understand, and fully agree to
+										Delivit's
+										<a class="font-medium underline text-primary-500"
+										   href="">Terms</a> and <a class="font-medium underline text-primary-500"
+										                            href="">Policy</a>
+									</p>
+
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+
+{% endblock content %}
