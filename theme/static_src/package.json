@@ -20,6 +20,7 @@
     "@tailwindcss/typography": "^0.5.9",
     "cross-env": "^7.0.3",
     "daisyui": "^4.12.10",
+    "dotenv-webpack": "^8.1.0",
     "flowbite-typography": "^1.0.3",
     "postcss": "^8.4.24",
     "postcss-import": "^15.1.0",

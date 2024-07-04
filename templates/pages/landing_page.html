@@ -4,55 +4,49 @@
 
 {% block content %}
 	<!-- Hero Section -->
-	<section class="pt-14 bg-gradient-to-tl from-green-900 bg-primary-600 dark:bg-gray-900 px-6 lg:px-8">
-		<div class="pt-14 py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
-			<a href="{% url 'accounts:signup' %}"
-			   class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100
-			   rounded-full dark:bg-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
-			   role="alert">
-				<span class="text-xs bg-primary-600 rounded-full text-white px-4 py-1.5 mr-3">Announcement</span> <span
-					class="text-sm font-medium">We are launching soon!</span>
-				<svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-				     xmlns="http://www.w3.org/2000/svg">
-					<path fill-rule="evenodd"
-					      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-					      clip-rule="evenodd"></path>
-				</svg>
-			</a>
-			<h1 class="mb-4 text-5xl font-extrabold leading-tight text-white md:text-5xl lg:text-6xl dark:text-white">
-				Buy More <br><span class="text-transparent bg-clip-text
-				bg-gradient-to-r to-secondary-200 from-sky-300">Pay Less Save More</span></h1>
-			<p class="mb-8 text-lg font-normal text-gray-200 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
-				Easily purchase groceries in bulk with other individuals at wholesale prices, enjoy lower
-				costs, and increased food availability all delivered to your doorstep
-			</p>
-			<a href="{% url 'accounts:signup' %}"
-			   class="cursor-pointer mb-4 inline-flex justify-center items-center py-3 px-5 text-base font-medium
-			   text-center text-white rounded-lg border border-gray-300 hover:bg-secondary-500 focus:ring-4
-			   focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
-				Join the Waitlist
-				<svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-				     xmlns="http://www.w3.org/2000/svg">
-					<path fill-rule="evenodd"
-					      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-					      clip-rule="evenodd"></path>
-				</svg>
-			</a>
+
+	<section id="intro" class="bg-tertiary-400 from-secondary-500 bg-gradient-to-br bg-tertiary-700  pt-[128px] ">
+		<div class="py-16 px-4 mx-auto max-w-screen-xl lg:py-16 grid lg:grid-cols-2 gap-8 lg:gap-16">
+			<div class="flex flex-col justify-center">
+				<h1 class="text-transparent bg-clip-text bg-gradient-to-r to-secondary-200 from-sky-100 mb-4
+				text-5xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+					DELIVEET</h1>
+				<p class="mb-8 text-lg font-normal text-gray-200 lg:text-xl dark:text-gray-400">
+					An on-demand last-mile hailing delivery service leveraging a network of local and independent
+					couriers to make last-mile deliveries efficient, cost-effective and flexible for individuals, and
+					business owners
+
+				</p>
+				<div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0">
+					<a href="{% url 'pages:home' %}"
+					   class="inline-flex justify-center items-center py-5 px-5 text-base font-medium text-center
+					   text-white rounded-lg bg-secondary-500 hover:bg-tertiary-600 focus:ring-4 focus:ring-tertiary-300">
+						Visit Deliveet
+						<svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							      d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+						</svg>
+					</a>
+				</div>
+			</div>
+			<div>
+				<img class="mx-auto w-full lg:max-w-xl h-64 rounded-lg sm:h-96 shadow-xl"
+				     src="{% static 'static/images/hero.jpg' %}" alt="">
+			</div>
 		</div>
 	</section>
+
+
 	<!-- End Hero Section -->
 
 	<!-- Benefit Section -->
-	<section
-			class="container mx-auto rounded-xl py-[60px] px-4 bg-tertiary-500 md:px-16 md:max-w-[1356px] mt-[80px] md:mt-[128px]">
+	<section id="features"
+	         class="container mx-auto rounded-xl py-[60px] px-4 bg-tertiary-700 md:px-16 md:max-w-[1356px] mt-[80px] md:mt-[128px]">
 		<div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
 			<div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
 				<h1 class="mb-4 text-5xl tracking-tight font-extrabold leading-tight text-white dark:text-white">
-					Unlock wholesale prices with community power</h1>
-
-				<p class="mb-6 font-light text-gray-100 dark:text-gray-400 md:text-lg">
-					Connect with other individuals who need groceries, access wholesale prices from
-					farmers and food suppliers, pool resources together and make purchases.</p>
+					All the tools you need to get your items delivered at convenience</h1>
 			</div>
 
 
@@ -61,29 +55,20 @@
 				<div class="max-w-full bg-primary-200 border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700">
 
 					<img class="bg-[#F4F9FF] p-5 rounded-t-2xl"
-					     src="{% static 'static/images/save.svg' %}"
+					     src="{% static 'static/images/track.jpg' %}"
 					     alt="save more">
 					<div class="p-8">
-						<a href="{% url 'accounts:signup' %}">
+						<a href="">
 							<h1 class="mb-2 text-4xl font-extrabold tracking-tight text-tertiary-500 dark:text-white">
-								Shop More, Pay Less
+								Real Time Updates
 							</h1>
 						</a>
 						<p class="mb-3 font-normal text-gray-600 dark:text-gray-400">
-							Easily purchase groceries in bulk with other individuals at wholesale prices,
-							enjoy significant discounts, and stretch your food budget further with every order.
+							Monitor your package's journey from the moment
+							it's picked up to its final delivery. Get up-to-the-minute updates, giving
+							you peace of mind and full transparency. Know exactly where your package is at all times and
+							receive notifications for any important status changes.
 						</p>
-						<a href="{% url 'accounts:signup' %}"
-						   class="cursor-pointer inline-flex items-center py-3 px-5 text-sm font-medium text-center text-white
-						   bg-secondary-500 rounded-lg hover:bg-tertiary-500 focus:ring-4 focus:outline-none
-						   focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-							Join the Waitlist
-							<svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
-							     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-								      stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
-							</svg>
-						</a>
 					</div>
 
 				</div>
@@ -92,91 +77,40 @@
 				<div class="max-w-full bg-primary-100 border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700">
 
 					<img class="bg-[#F4F9FF] p-5 rounded-t-2xl"
-					     src="{% static 'static/images/buymore.svg' %}"
+					     src="{% static 'static/images/pay.jpg' %}"
 					     alt="save more">
 					<div class="p-8">
-						<a href="{% url 'accounts:signup' %}">
+						<a href="">
 							<h1 class="mb-2 text-4xl font-extrabold tracking-tight text-tertiary-500 dark:text-white">
-								Explore More, Spend Less
+								Easy Payment Methods
 							</h1>
 						</a>
 						<p class="mb-3 font-normal text-gray-600 dark:text-gray-400">
-							Connect with other food lovers to access a wider variety of products, including specialty
-							items, at
-							prices typically reserved for large-scale buyers.
+							Multiple payment options to make your experience seamless and convenient. Whether you prefer
+							to pay with a wallet balance, cash, or card, our platform accommodates all preferences.
+							Secure and straightforward payment processes ensure that transactions are smooth and
+							hassle-free.
 						</p>
-						<a href="{% url 'accounts:signup' %}"
-						   class="cursor-pointer inline-flex items-center py-3 px-5 text-sm font-medium text-center text-white
-						   bg-secondary-500 rounded-lg hover:bg-tertiary-500 focus:ring-4 focus:outline-none
-						   focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-							Join the Waitlist
-							<svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
-							     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-								      stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
-							</svg>
-						</a>
 					</div>
 				</div>
 
 				<div class="max-w-full bg-tertiary-400 border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700">
 
 					<img class="bg-[#F4F9FF] p-5 rounded-t-2xl"
-					     src="{% static 'static/images/quality.svg' %}"
+					     src="{% static 'static/images/delivered.jpg' %}"
 					     alt="save more">
 					<div class="p-8">
-						<a href="{% url 'accounts:signup' %}">
+						<a href="">
 							<h1 class="mb-2 text-4xl font-extrabold tracking-tight text-white dark:text-white">
-								Better Quality, Lower Prices
+								Proof of Delivery
 							</h1>
 						</a>
 						<p class="mb-3 font-normal text-gray-100 dark:text-gray-400">
-							Leverage collective purchasing power to negotiate better deals on high-quality products.
-							Enjoy
-							premium food items at prices that make your wallet happy.
+							Ensure peace of mind with our proof of delivery feature. We provide a digital
+							confirmation once your package reaches its destination. Recipients sign digitally upon
+							delivery, and a photo can be taken as additional evidence. This secure proof guarantees that
+							your package has been delivered to the right place and person.
 						</p>
-						<a href="{% url 'accounts:signup' %}"
-						   class="cursor-pointer inline-flex items-center py-3 px-5 text-sm font-medium text-center text-white
-						   bg-secondary-500 rounded-lg hover:bg-tertiary-500 focus:ring-4 focus:outline-none
-						   focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-							Join the Waitlist
-							<svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
-							     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-								      stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
-							</svg>
-						</a>
-					</div>
-				</div>
-
-
-				<div class="max-w-full bg-tertiary-500 border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700">
-
-					<img class="bg-[#F4F9FF] p-5 rounded-t-2xl"
-					     src="{% static 'static/images/time.svg' %}"
-					     alt="timee">
-					<div class="p-8">
-						<a href="{% url 'accounts:signup' %}">
-							<h1 class="mb-2 text-4xl font-extrabold tracking-tight text-white dark:text-white">
-								Shop Once, Save Time
-							</h1>
-						</a>
-						<p class="mb-3 font-normal text-gray-100 dark:text-gray-400">
-							Simplify your grocery routine by joining group purchases. Reduce shopping trips and
-							streamline the
-							buying process, giving you more time for what matters.
-						</p>
-						<a href="{% url 'accounts:signup' %}"
-						   class="cursor-pointer inline-flex items-center py-3 px-5 text-sm font-medium text-center text-white
-						   bg-secondary-500 rounded-lg hover:bg-tertiary-500 focus:ring-4 focus:outline-none
-						   focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-							Join the Waitlist
-							<svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
-							     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-								      stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
-							</svg>
-						</a>
 					</div>
 				</div>
 
@@ -184,22 +118,14 @@
 
 		</div>
 	</section>
-	<!-- End Benefit Section -->
+	<!-- End Features section -->
 
-	<!-- Features Section -->
+	<!-- About Section -->
 	<section
 			class="container mx-auto rounded-xl py-[60px] px-4 md:px-16 md:max-w-[1024px] mt-[80px] md:mt-[128px]">
 		<div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-			<div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
-				<h1 class="mb-4 text-5xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-white">
-					Everything you need to get the food item you need</h1>
 
-				<p class="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">
-					We provide an easy and transparent platform for individuals and households to access wholesale
-					prices, make group purchases, and enjoy significant savings on quality food items.</p>
-			</div>
-
-			<div class="grid grid-cols gap-5 mb-24 md:grid-cols-12 md:mb-24">
+			<div class="grid grid-cols gap-5 mb-24 md:mb-24">
 
 				<div class="rounded-2xl py-10 px-6 md:px-10 bg-primary-200 md:col-span-6">
 
@@ -212,228 +138,135 @@
 					</svg>
 
 
-					<a href="{% url 'accounts:signup' %}">
+					<a href="">
 						<h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
 							Group Formation
 						</h2>
 					</a>
 					<p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
-						Our A.I. & ML algorithm matches you with a purchasing group or creates one based on food need,
-						location,
-						preferences, or social connections, fostering community and maximizing buying power.
+						DELIVEET was born from a desire to streamline last-mile delivery operations by making them more
+						efficient and less expensive.
 					</p>
-					<a href="{% url 'accounts:signup' %}"
-					   class="inline-flex font-medium items-center text-secondary-500 hover:underline">
-						Join the Waitlist
-						<svg class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]" aria-hidden="true"
-						     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							      d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"></path>
-						</svg>
-					</a>
-				</div>
-
-				<div class="rounded-2xl py-10 px-6 md:px-10 bg-tertiary-400 md:col-span-6">
-					<svg class="w-[120px] h-[120px] text-gray-800 dark:text-white" aria-hidden="true"
-					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					     viewBox="0 0 24 24">
-						<path fill-rule="evenodd"
-						      d="M14 7h-4v3a1 1 0 0 1-2 0V7H6a1 1 0 0 0-.997.923l-.917 11.924A2 2 0 0 0 6.08 22h11.84a2 2 0 0 0 1.994-2.153l-.917-11.924A1 1 0 0 0 18 7h-2v3a1 1 0 1 1-2 0V7Zm-2-3a2 2 0 0 0-2 2v1H8V6a4 4 0 0 1 8 0v1h-2V6a2 2 0 0 0-2-2Z"
-						      clip-rule="evenodd"></path>
-					</svg>
-
-					<a href="{% url 'accounts:signup' %}">
-						<h2 class="mb-2 text-2xl font-bold tracking-tight text-white dark:text-white">
-							Smart Order Matching
-						</h2>
-					</a>
-					<p class="mb-3 font-normal text-gray-100 dark:text-gray-400">
-						Our AI-driven algorithm matches your group's orders with the best suppliers, ensuring optimal
-						pricing and product quality.
-					</p>
-					<a href="{% url 'accounts:signup' %}"
-					   class="inline-flex font-medium items-center text-secondary-500 hover:underline">
-						Join the Waitlist
-						<svg class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]" aria-hidden="true"
-						     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							      d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"></path>
-						</svg>
-					</a>
-				</div>
-
-
-				<div class="rounded-2xl py-10 px-6 md:px-10 bg-tertiary-400 md:col-span-6">
-					<svg class="w-[120px] h-[120px] text-gray-800 dark:text-white" aria-hidden="true"
-					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					     viewBox="0 0 24 24">
-						<path fill-rule="evenodd"
-						      d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z"
-						      clip-rule="evenodd"></path>
-						<path fill-rule="evenodd"
-						      d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"
-						      clip-rule="evenodd"></path>
-						<path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path>
-					</svg>
-
-					<a href="{% url 'accounts:signup' %}">
-						<h2 class="mb-2 text-2xl font-bold tracking-tight text-white dark:text-white">
-							Flexible Payment Options
-						</h2>
-					</a>
-					<p class="mb-3 font-normal text-gray-100 dark:text-gray-400">
-						Choose from various payment methods for convenient and secure transactions
-					</p>
-					<a href="{% url 'accounts:signup' %}"
-					   class="inline-flex font-medium items-center text-secondary-500 hover:underline">
-						Join the Waitlist
-						<svg class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]" aria-hidden="true"
-						     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							      d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"></path>
-						</svg>
-					</a>
-				</div>
-				<div class="rounded-2xl py-10 px-6 md:px-10 bg-primary-200 md:col-span-6">
-					<svg class="w-[120px] h-[120px] text-gray-800 dark:text-white" aria-hidden="true"
-					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					     viewBox="0 0 24 24">
-						<path fill-rule="evenodd"
-						      d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z"
-						      clip-rule="evenodd"></path>
-					</svg>
-
-					<a href="{% url 'accounts:signup' %}">
-						<h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-							Real-time Order Tracking
-						</h2>
-					</a>
 					<p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
-						Follow your order's journey from purchase to delivery with live updates, providing transparency
-						and peace of mind.
+						After having first-hand experience of the nightmares that come from lost packages and delayed
+						arrival of important parcels, the need to do something about this constant problem became a
+						vision.
 					</p>
-					<a href="{% url 'accounts:signup' %}"
-					   class="inline-flex font-medium items-center text-secondary-500 hover:underline">
-						Join the Waitlist
-						<svg class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]" aria-hidden="true"
-						     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							      d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"></path>
-						</svg>
-					</a>
-				</div>
-
-				<div class="rounded-2xl py-10 px-6 md:px-10 bg-primary-200 md:col-span-6">
-					<svg class="w-[120px] h-[120px] text-gray-800 dark:text-white" aria-hidden="true"
-					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					     viewBox="0 0 24 24">
-						<path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z"></path>
-						<path fill-rule="evenodd"
-						      d="M21.707 21.707a1 1 0 0 1-1.414 0l-3.5-3.5a1 1 0 0 1 1.414-1.414l3.5 3.5a1 1 0 0 1 0 1.414Z"
-						      clip-rule="evenodd"></path>
-					</svg>
-
-					<a href="{% url 'accounts:signup' %}">
-						<h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-							Product Discovery
-						</h2>
-					</a>
 					<p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
-						Explore new and specialty food items suggested based on your group's preferences and seasonal
-						availability.
+						From high cost of deliveries, to missing packages and sometimes delays in scheduled delivery,
+						last-mile delivery which is the last stage in the supply chain process of e-commerce for
+						individuals and businesses happens to be the most frustrating of all.
+						Consumer buying behaviors have changed, especially when it comes to online shopping.
+						Today’s consumers expect cheap—or, better yet, free—and fast delivery.
+						So, in order to stay competitive, companies need to find a way to improve efficiency and cut
+						costs in order to fund their logistics.
 					</p>
-					<a href="{% url 'accounts:signup' %}"
-					   class="inline-flex font-medium items-center text-secondary-500 hover:underline">
-						Join the Waitlist
-						<svg class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]" aria-hidden="true"
-						     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							      d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"></path>
-						</svg>
-					</a>
+					<p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
+						A big part of this boils down to a company’s last mile delivery process. That means, for a
+						company to survive in this market, they need to find ways to improve efficiency in this area.
+						The concept of DELIVEET is to utilize a network of local couriers and delivery personels, who
+						are familiar with their areas and can provide on-demand fast and cost-effective last-mile
+						deliveries to individuals and businesses who need them.
+					</p>
+
+					<p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
+						DELIVEET was created as a portfolio project to showcase my skills and passion for solving
+						problems with technology and to reflect my learning journey in the ALX(Holberton) Software
+						Engineering’s Cohort 1 Blended program.
+						The development process spanned three weeks with positive brainstorming sessions, late-night
+						code hacks and several interations in order to reach an MVP.
+					</p>
+					<p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
+						The vision of DELIVEET is to offer a new, more efficient, and better way for individuals and
+						businesses to solve their last-mile delivery problems - delivering convenience one package at a
+						time.
+						DELIVEET aims to make life simpler for people who deserve a better way of getting their things
+						delivered.
+					</p>
 				</div>
 
-				<div class="rounded-2xl py-10 px-6 md:px-10 bg-tertiary-400 md:col-span-6">
-					<svg class="w-[120px] h-[120px] text-gray-800 dark:text-white" aria-hidden="true"
-					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					     viewBox="0 0 24 24">
-						<path fill-rule="evenodd"
-						      d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
-						      clip-rule="evenodd"></path>
-					</svg>
-
-					<a href="{% url 'accounts:signup' %}">
-						<h2 class="mb-2 text-2xl font-bold tracking-tight text-white dark:text-white">
-							Scheduled Purchases
-						</h2>
-					</a>
-					<p class="mb-3 font-normal text-gray-100 dark:text-gray-400">
-						Set up recurring group orders for staple items, streamlining your grocery planning and ensuring
-						consistent savings.
-					</p>
-					<a href="{% url 'accounts:signup' %}"
-					   class="inline-flex font-medium items-center text-secondary-500 hover:underline">
-						Join the Waitlist
-						<svg class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]" aria-hidden="true"
-						     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							      d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"></path>
-						</svg>
-					</a>
-				</div>
-
-				<div class="rounded-2xl py-10 px-6 md:px-10 bg-tertiary-400 md:col-span-6">
-					<svg class="w-[120px] h-[120px] text-gray-800 dark:text-white" aria-hidden="true"
-					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					     viewBox="0 0 24 24">
-						<path d="M13.5 2c-.178 0-.356.013-.492.022l-.074.005a1 1 0 0 0-.934.998V11a1 1 0 0 0 1 1h7.975a1 1 0 0 0 .998-.934l.005-.074A7.04 7.04 0 0 0 22 10.5 8.5 8.5 0 0 0 13.5 2Z"></path>
-						<path d="M11 6.025a1 1 0 0 0-1.065-.998 8.5 8.5 0 1 0 9.038 9.039A1 1 0 0 0 17.975 13H11V6.025Z"></path>
-					</svg>
-
-					<a href="{% url 'accounts:signup' %}">
-						<h2 class="mb-2 text-2xl font-bold tracking-tight text-white dark:text-white">
-							Savings Dashboard
-						</h2>
-					</a>
-					<p class="mb-3 font-normal text-gray-100 dark:text-gray-400">
-						Track your personal and group savings over time, visualizing the financial impact of collective
-						purchasing.
-					</p>
-					<a href="{% url 'accounts:signup' %}"
-					   class="inline-flex font-medium items-center text-secondary-500 hover:underline">
-						Join the Waitlist
-						<svg class="w-3 h-3 ms-2.5 rtl:rotate-[270deg]" aria-hidden="true"
-						     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							      d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"></path>
-						</svg>
-					</a>
-				</div>
 			</div>
 
 		</div>
 	</section>
-	<!-- End features Section -->
+	<!-- End About Section -->
 
 
-	<section
-			class="bg-gradient-to-tl from-green-900 bg-primary-600 container rounded-lg mx-auto flex flex-col items-center mb-16">
-		<div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-			<div class="mx-auto max-w-screen-sm text-center">
-				<h2 class="mb-4 text-5xl tracking-tight font-extrabold leading-tight text-white dark:text-white">
-					Join ULOAHIA today and start saving!</h2>
-				<p class="mb-6 font-light text-gray-100 dark:text-gray-400 md:text-lg">
-					Join thousands of smart shoppers saving money and accessing quality food through group buying on
-					ULOAHIA.
+	<section id="team" class="">
+		<div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-6">
+			<div class="mx-auto mb-8 max-w-screen-sm lg:mb-16">
+				<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Our Team</h2>
+				<p class="font-light text-gray-500 sm:text-xl dark:text-gray-400">
+					Meet the exceptional team working on DELIVEET
 				</p>
-				<a href="{% url 'accounts:signup' %}"
-				   class="cursor-pointer mb-4 inline-flex justify-center items-center py-3 px-5 text-base font-medium
-				   text-center text-white rounded-lg border border-gray-300 hover:bg-secondary-500 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">Join
-				                                                                                                                                                                                                          the
-				                                                                                                                                                                                                          Waitlist</a>
+			</div>
+			<div class="grid gap-8 lg:gap-16">
+				<div class="text-center text-gray-500 dark:text-gray-400">
+					<img class="mx-auto mb-4 w-96 h-96 rounded-full"
+					     src="{% static 'static/images/csn.jpg' %}"
+					     alt="Chukwunonso Nwankpa">
+					<h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+						<a href="">Chukwunonso Nwankpa</a>
+					</h3>
+					<p>Software Engineer</p>
+					<ul class="flex justify-center mt-4 space-x-4">
+						<li>
+							<a href="https://facebook.com/engineer.m.samuel"
+							   class="text-[#39569c] hover:text-gray-900 dark:hover:text-white">
+								<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+									<path fill-rule="evenodd"
+									      d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+									      clip-rule="evenodd"></path>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a href="https://twitter.com/"
+							   class="text-[#00acee] hover:text-gray-900 dark:hover:text-white">
+								<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+									<path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a href="https://github.com/theapostleoftech"
+							   class="text-gray-900 hover:text-gray-900 dark:hover:text-white dark:text-gray-300">
+								<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+									<path fill-rule="evenodd"
+									      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+									      clip-rule="evenodd"></path>
+								</svg>
+							</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</section>
+
+
+
+
+	<section class="container mx-auto rounded-lg py-[60px] px-4 bg-tertiary-700 md:px-16 md:max-w-[1356px] mt-[80px] md:mt-[128px] mb-[128px]">
+		<div class=" p-8 py-16 px-16 rounded-lg mx-auto max-w-screen-xl text-center lg:py-16">
+			<h1 class="mb-8 text-4xl font-extrabold tracking-tight leading-none text-gray-100 md:text-5xl lg:text-6xl dark:text-white">
+				Ready to Get Started?</h1>
+			<div class="p-8 flex flex-col space-y-8 sm:flex-row sm:justify-center sm:space-y-0">
+				<a href="https://github.com/theapostleoftech/deliveet"
+				   class="inline-flex justify-center items-center py-5 px-5 text-base font-medium text-center text-white
+				   rounded-lg bg-secondary-500 hover:bg-tertiary-500 focus:ring-4 focus:ring-tertiary-300">
+					Link to GitHub Repo
+					<svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+					     fill="none" viewBox="0 0 14 10">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						      d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+					</svg>
+				</a>
+			</div>
+		</div>
+	</section>
+
+
 {% endblock content %}
 
 

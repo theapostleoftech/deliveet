@@ -18,13 +18,6 @@ class DashboardView(TemplateView):
     """
     This is the view for customer dashboards
     """
-
-
-class SampleView(TemplateView):
-    """
-    This is the homepage class-based view
-    """
-    template_name = 'finance/sample.html'
     pass
 
 
