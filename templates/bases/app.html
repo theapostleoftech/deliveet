@@ -23,12 +23,13 @@
 	{% tailwind_css %}
 </head>
 
-<body class="bg-[#F4F9FF]">
+<body class="from-secondary-500 bg-gradient-to-br bg-tertiary-700">
 {% include 'snippets/app_header.html' %}
+<div class="container mx-auto">
+	{% block content %}
 
-{% block content %}
-
-{% endblock content %}
+	{% endblock content %}
+</div>
 <script src="{% static 'static_src/node_modules/flowbite/dist/flowbite.min.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>

@@ -3,11 +3,67 @@
 {% block title %}Home{% endblock title %}
 
 {% block content %}
+	<section
+			class="pt-[128px] flex flex-col items-center justify-center h-screen">
+		<section class="">
+			<div class="py-16 px-4 mx-auto max-w-screen-xl lg:py-16 grid lg:grid-cols-2 gap-8 lg:gap-16">
+				<div class="flex flex-col justify-center">
+					<h1 class="text-transparent bg-clip-text bg-gradient-to-r to-secondary-200 from-sky-100 mb-4
+				text-5xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+						Sign Up</h1>
+					<p class="mt-8 mb-8 text-lg font-normal text-gray-200 lg:text-xl dark:text-gray-400">
+						An on-demand last-mile hailing delivery service leveraging a network of local and independent
+						couriers to make last-mile deliveries efficient, cost-effective and flexible for individuals,
+						and
+						business owners
 
-	<section class="flex items-center justify-center h-screen">
-		<h1 class="text-5xl">Django + Tailwind = ❤️</h1>
+					</p>
+
+
+					<div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0">
+						<a href="{% url 'accounts:signup' %}"
+						   class="inline-flex justify-center items-center py-5 px-5 text-base font-medium text-center
+					   text-white rounded-lg bg-secondary-500 hover:bg-tertiary-600 focus:ring-4 focus:ring-tertiary-300">
+							Sign up
+							<svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+								      stroke-width="2"
+								      d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+							</svg>
+						</a>
+					</div>
+				</div>
+
+				<div class="flex flex-col justify-center">
+					<h1 class="text-transparent bg-clip-text bg-gradient-to-r to-secondary-200 from-sky-100 mb-4
+				text-5xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+						Sign In</h1>
+					<p class="mt-8 mb-8 text-lg font-normal text-gray-200 lg:text-xl dark:text-gray-400">
+						An on-demand last-mile hailing delivery service leveraging a network of local and independent
+						couriers to make last-mile deliveries efficient, cost-effective and flexible for individuals,
+						and
+						business owners
+
+					</p>
+
+
+					<div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0">
+						<a href="{% url 'accounts:signin' %}"
+						   class="inline-flex justify-center items-center py-5 px-5 text-base font-medium text-center
+					   text-white rounded-lg bg-secondary-500 hover:bg-tertiary-600 focus:ring-4 focus:ring-tertiary-300">
+							Sign in
+							<svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+								      stroke-width="2"
+								      d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+							</svg>
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
 	</section>
-
-
 
 {% endblock content %}
