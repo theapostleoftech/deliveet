@@ -18,3 +18,8 @@ class DashboardView(TemplateView):
     """
     This is the view for customer dashboards
     """
+    pass
+
+
+class LandingPageView(TemplateView):
+    template_name = 'pages/landing_page.html'

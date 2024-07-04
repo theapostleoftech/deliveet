@@ -1,0 +1,75 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+{% block title %}Shipments{% endblock title %}
+{% block content %}
+
+	<div class="py-4 pt-4 grid grid-cols-3 gap-2 md:gap-4 w-full border-b border-slate-100">
+		<div class="flex flex-col md:flex-row space-y-4 justify-start items-start space-x-2 p-4 bg-slate-50 rounded-md">
+
+			<div class="w-12 h-12 flex justify-center items-center rounded-full bg-slate-100 text-black">
+				{{ total_deliveries }}
+			</div>
+			<p class="text-center text-black text-xs font-bold whitespace-nowrap">Total Deliveries</p>
+		</div>
+		<a class="flex flex-col md:flex-row space-y-4 justify-start items-start space-x-2 p-4 bg-slate-50 rounded-md">
+
+			<div class="w-12 h-12 flex justify-center items-center rounded-full bg-slate-100 text-black">
+				{{ deliveries_in_progress }}
+			</div>
+			<p class="text-center text-black text-xs font-bold whitespace-nowrap">Deliveries in Progress</p>
+		</a>
+		<div class="flex flex-col md:flex-row space-y-4 justify-start items-start space-x-2 p-4 bg-slate-50 rounded-md">
+
+			<div class="w-12 h-12 flex justify-center items-center rounded-full bg-slate-100 text-black">
+				{{ deliveries_completed }}
+			</div>
+			<p class="text-center text-black text-xs font-bold whitespace-nowrap">Completed Deliveries</p>
+		</div>
+	</div>
+
+
+	<div class="w-full py-6 pb-8 lg:pb-0">
+		<div class="py-4 flex flex-row justify-between items-center">
+			<div class="w-full space-y-1"><p class="text-xl font-bold tracking-tight">Recent
+			                                                                          Deliveries</p>
+				<p class="text-sm text-slate-400 w-full max-w-lg leading-relaxed">An overview of the
+				                                                                  current status of
+				                                                                  your most recent
+				                                                                  deliveries.
+				</p>
+
+				<table class="min-w-full bg-white rounded-lg shadow-md">
+					<thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+					<tr>
+						<th class="py-3 px-6 text-left">Delivery ID</th>
+						<th class="py-3 px-6 text-left">Status</th>
+						<th class="py-3 px-6 text-left">Date</th>
+					</tr>
+					</thead>
+					<tbody class="text-gray-600 text-sm font-light">
+					{% for delivery in deliveries %}
+						<tr class="border-b border-gray-200 hover:bg-gray-100">
+							<td class="py-3 px-6 text-left whitespace-nowrap">{{ delivery.tracking_number }}</td>
+							<td class="py-3 px-6 text-left">{{ delivery.get_status_display }}</td>
+							<td class="py-3 px-6 text-left">{{ delivery.created_date }}</td>
+						</tr>
+					{% empty %}
+						<tr>
+							<td colspan="3" class="text-center py-3 px-6">
+								<p class="text-base tracking-normal font-semibold">
+									You have no pending shipments. <span class="mr-4 text-sm font-medium text-slate-400">
+									<a href="{% url 'shipments:create_delivery' %}" class="underline">Book a delivery to get started</a>
+									</span>
+								</p>
+
+							</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+
+{% endblock content %}

@@ -1,0 +1,25 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Funding Successful{% endblock %}
+{% block head_js %}
+{% endblock head_js %}
+{% block content %}
+	<div class="mt-4 space-y-4 pb-4 w-full ">
+		<div class="bg-tertiary-700 w-full flex flex-col justify-between items-start space-y-12 p-6
+				border border-gray-200 rounded-lg shadow">
+			<div class="w-full space-y-2">
+				<p class="text-lg tracking-wide font-normal text-gray-400">Your wallet has been funded with</p>
+				<p class="text-3xl lg:text-3xl md:text-3xl sm:text-3xl text-white
+				 font-normal tracking-tight mb-4">
+					₦ {{ amount }}
+				</p>
+				<p class="text-lg tracking-wide font-normal text-gray-400">
+					Transaction Reference: {{ transaction_reference }}
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+{% endblock content %}
