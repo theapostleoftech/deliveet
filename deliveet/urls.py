@@ -3,6 +3,7 @@ URL configuration for deliveet project.
 """
 from django.contrib import admin
 from django.urls import include, path, re_path
+from django.views.generic import TemplateView
 
 from deliveet import test_consumer
 from deliveet.utils import consumers
@@ -20,6 +21,9 @@ urlpatterns = [
     path('shipments/', include('shipments.urls', namespace='shipments')),
 
     path("__reload__/", include("django_browser_reload.urls")),
+
+    path('firebase.js',
+         (TemplateView.as_view(template_name="snippets/firebase.js", content_type="application/javascript", ))),
 ]
 
 websocket_urlpatterns = [
