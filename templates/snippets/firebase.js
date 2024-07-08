@@ -15,8 +15,8 @@
 // Import the functions you need from the SDKs you need
 import {initializeApp} from "firebase/app";
 
-importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-messaging.js");
+importScripts("https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js");
 
 
 // Your web app's Firebase configuration

@@ -13,7 +13,7 @@ class DeliveryItemForm(forms.ModelForm):
 
     class Meta:
         model = Delivery
-        fields = ('item_name', 'item_type', 'size', 'quantity',)
+        fields = ('item_name', 'item_type', 'size', 'quantity', 'photo')
 
 
 class DeliveryPickupForm(forms.ModelForm):
@@ -36,7 +36,7 @@ class DeliveryRecipientForm(forms.ModelForm):
         fields = ['delivery_address', 'delivery_latitude', 'delivery_longitude', 'recipient_name', 'recipient_phone', ]
 
 
-class PaymentMethod(forms.ModelForm):
+class PaymentMethodForm(forms.ModelForm):
     """
     This renders forms for the transaction model
     """

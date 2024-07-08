@@ -1,5 +1,9 @@
 from django.contrib.auth.base_user import BaseUserManager
 
+"""
+Custom manager for user account creation using Django's BaseUserManager.
+"""
+
 
 class UserAccountManager(BaseUserManager):
     """

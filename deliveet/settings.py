@@ -1,12 +1,15 @@
 """
 Django settings for deliveet project.
 """
+import json
 import os
 from urllib.parse import urlparse
 
 import dj_database_url
+from decouple import config
 from django.contrib import messages
 from django.core.management.utils import get_random_secret_key
+from django.template.context_processors import media
 from environ import Env
 from pathlib import Path
 
@@ -86,6 +89,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -145,6 +149,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'theme/static'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = [os.path.join(BASE_DIR, 'media')]
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'theme')]
 
@@ -212,13 +219,6 @@ CHANNEL_LAYERS = {
     },
 }
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels.layers.InMemoryChannelLayer"
-#     }
-# }
-# 'BACKEND': "channels.layers.InMemoryChannelLayer"
-
 FIREBASE_CONFIG = {
     'API_KEY': env('FIREBASE_API_KEY'),
     'AUTH_DOMAIN': env('FIREBASE_AUTH_DOMAIN'),
@@ -227,3 +227,8 @@ FIREBASE_CONFIG = {
     'MESSAGING_SENDER_ID': env('FIREBASE_MESSAGING_SENDER_ID'),
     'APP_ID': env('FIREBASE_APP_ID'),
 }
+
+# Load Firebase secrets
+FIREBASE_SECRETS_PATH = config('FIREBASE_SECRETS_PATH')
+with open(FIREBASE_SECRETS_PATH) as firebase_secrets_file:
+    FIREBASE_SECRETS = json.load(firebase_secrets_file)
