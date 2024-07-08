@@ -1,0 +1,134 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+{% block title %}Delivery Tasks{% endblock title %}
+{% block head_js %}
+	<script
+			src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=places&v=weekly"
+			defer></script>
+
+	<script>
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 13,
+                center: {lat: 41.85, lng: -87.65},
+            });
+
+            // Get available jobs via API
+            fetch("{% url 'couriers:courier_delivery_tasks_api' %}")
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json);
+
+                    // Create a new viewpoint bound
+                    var bounds = new google.maps.LatLngBounds();
+
+                    for (let i = 0; i < json.delivery_tasks.length; i++) {
+                        const delivery_task = json.delivery_tasks[i];
+                        const position = {lat: delivery_task.pickup_latitude, lng: delivery_task.pickup_longitude};
+                        const marker = new google.maps.Marker({
+                            position,
+                            map,
+                        });
+
+                        // Increase the bounds to take this point
+                        bounds.extend(position);
+
+                        new google.maps.InfoWindow({
+                            content: "<small><b>" + delivery_task.name + "</b></small><br/><small>" + delivery_task.distance + " Km</small>"
+                        }).open(map, marker);
+
+                        // Click event for each job
+                        marker.addListener("click", () => {
+                            showJobDetails(delivery_task);
+                        });
+
+                        // Fit these bounds to the map
+                        map.fitBounds(bounds);
+                    }
+                })
+        }
+
+        function showJobDetails(delivery_task) {
+            $("#job-details").css("display", "block");
+            $("#job-name").html(delivery_task.item_name);
+
+            $("#job-photo").attr('src', "/media/" + delivery_task.photo);
+            $("#pickup-address").html(delivery_task.pickup_address);
+            $("#delivery-address").html(delivery_task.delivery_address);
+            $("#duration").html(delivery_task.duration);
+            $("#distance").html(delivery_task.distance);
+            $("#price").html(delivery_task.price);
+
+            $("#job-details").on("click", function () {
+                window.location.href = "{% url 'couriers:available_delivery_tasks' %}" + delivery_task.id + "/";
+            })
+
+        }
+
+        messaging.onMessage((payload) => {
+            window.location.reload();
+        })
+	</script>
+
+	<style>
+		.gm-ui-hover-effect {
+			display: none !important;
+			}
+
+		#map {
+			flex: 1;
+			}
+
+		small {
+			font-size: 12px;
+			line-height: 1.2rem;
+			}
+
+		.card {
+			border: none;
+			}
+
+		#job-details {
+			display: none;
+			}
+	</style>
+{% endblock head_js %}
+{% block content %}
+
+	<div class="d-flex flex-column h-100" style="padding-bottom: 60px">
+		<div id="map" style="height: 500px; width: 100%;"></div>
+		<div id="job-details" class="flex items-start gap-2.5">
+			<div class="flex items-start gap-2.5">
+				<div class="media">
+					<img id="job-photo" class="w-8 h-8 rounded-full" width="50px" height="50px">
+					<div class="flex flex-col w-full max-w-[320px] leading-1.5">
+						<b id="job-name"></b>
+						<div class="d-flex">
+							<div class="flex-grow-1 mr-2">
+
+								<small class="text-success">
+									<i class="fas fa-car"></i> <span id="distance"></span> km
+									<i class="far fa-clock ml-2"></i> <span id="duration"></span> mins
+								</small>
+
+								<div class="d-flex align-items-center mt-2">
+									<i class="fas fa-map-marker-alt"></i>
+									<small id="pickup-address" class="text-secondary ml-2"></small>
+								</div>
+
+								<div class="d-flex align-items-center mt-2">
+									<i class="fas fa-flag-checkered"></i>
+									<small id="delivery-address" class="text-secondary ml-2"></small>
+								</div>
+
+							</div>
+							$<h3 id="price"></h3>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}

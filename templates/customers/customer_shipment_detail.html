@@ -115,12 +115,12 @@
                 $("form").css("display", "none");
             }
 
-            if (job.pickup_photo) {
-                $("#pickup_photo").html('<img src="' + job.pickup_photo + '" class="rounded-lg photo" width="130" height="130">');
+            if (delivery_task.pickup_photo) {
+                $("#pickup_photo").html('<img src="' + delivery_task.pickup_photo + '" class="rounded-lg photo" width="130" height="130">');
             }
 
-            if (job.delivery_photo) {
-                $("#delivery_photo").html('<img src="' + job.delivery_photo + '" class="rounded-lg photo" width="130" height="130">');
+            if (delivery_task.delivery_photo) {
+                $("#delivery_photo").html('<img src="' + delivery_task.delivery_photo + '" class="rounded-lg photo" width="130" height="130">');
             }
 
         }

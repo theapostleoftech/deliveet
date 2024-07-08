@@ -3,14 +3,20 @@ from django.contrib.auth.base_user import BaseUserManager
 
 class UserAccountManager(BaseUserManager):
     """
-    This is the manager class that
-    handles all account creation in the database
+    Custom manager for user account creation.
     """
-    use_in_migrations = True
 
-    def create_user(self, email, password=None, **kwargs):
+    def create_user(self, email: str, password: str = None, **kwargs):
         """
-        Creates and saves a new user
+        Create and save a new user.
+
+        Args:
+            email (str): User's email address.
+            password (str, optional): User's password.
+            **kwargs: Additional user attributes.
+
+        Returns:
+            User: Created user instance.
         """
         if not email:
             raise ValueError('Users must have an email address')
@@ -21,14 +27,20 @@ class UserAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password, **kwargs):
+    def create_superuser(self, email: str, password: str, **kwargs):
         """
-        Creates and saves a new superuser
+        Create and save a new superuser.
+
+        Args:
+            email (str): Superuser's email address.
+            password (str): Superuser's password.
+            **kwargs: Additional user attributes.
+
+        Returns:
+            User: Created superuser instance.
         """
         user = self.create_user(email, password, **kwargs)
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
         return user
-
-    pass

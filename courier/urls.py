@@ -11,13 +11,13 @@ urlpatterns = [
 
     path('deliveries/', views.CourierShipmentsView.as_view(), name='courier_shipments'),
 
-    path('deliveries/tasks/', views.CourierOrdersView.as_view(), name='shipment_orders'),
+    path('deliveries/tasks/', views.CourierDeliveryTasksView.as_view(), name='available_delivery_tasks'),
 
     path('deliveries/task/<id>', views.CourierOrderDetailView.as_view(), name='shipment_order_details'),
 
     # path('shipments/order/', views.CourierShipmentsView.as_view(), name='shipment_order'),
 
-    path('apis/deliveries/tasks', delivery_tasks_api, name='courier_delivery_tasks'),
+    path('apis/deliveries/tasks', delivery_tasks_api, name='courier_delivery_tasks_api'),
 
     path('apis/deliveries/tasks/<id>/status', delivery_tasks_api, name='courier_delivery_tasks_status'),
 

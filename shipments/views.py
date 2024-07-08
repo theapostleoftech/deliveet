@@ -7,7 +7,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, ListView
+from firebase_admin import messaging
 
+from accounts.models import Courier
 from deliveet.utils.decorators import customer_required
 from finance.forms import TransactionForm
 from shipments.forms import DeliveryItemForm, DeliveryPickupForm, DeliveryRecipientForm, PaymentMethod
@@ -150,13 +152,16 @@ def check_existing_delivery_tasks(request):
 
 
 def handle_item_form(request, creating_delivery_task, task_owner):
-    item_form = DeliveryItemForm(request.POST, instance=creating_delivery_task)
-    if item_form.is_valid():
-        creating_delivery_task = item_form.save(commit=False)
-        creating_delivery_task.customer = task_owner
-        creating_delivery_task.save()
-        return redirect(reverse('shipments:create_delivery'))
-    return None
+    if request.method == 'POST':
+        item_form = DeliveryItemForm(request.POST, request.FILES, instance=creating_delivery_task)
+        if item_form.is_valid():
+            creating_delivery_task = item_form.save(commit=False)
+            creating_delivery_task.customer = task_owner
+            creating_delivery_task.save()
+            return redirect(reverse('shipments:create_delivery'))
+    else:
+        item_form = DeliveryItemForm(instance=creating_delivery_task)
+    return item_form, creating_delivery_task
 
 
 def handle_pickup_form(request, creating_delivery_task):
@@ -209,7 +214,7 @@ def handle_payment_form(request, creating_delivery_task):
             creating_delivery_task.status = Delivery.StatusChoices.PROCESSING
             creating_delivery_task.save()
             messages.success(request, 'Delivery task created successfully.')
-            return redirect(reverse('shipments:shipment_index'))
+            return redirect(reverse('customers:customer_shipments'))
         elif creating_delivery_task.payment_method == Delivery.PaymentMethodChoices.CARD:
             transaction = DeliveryTransaction.objects.create(
                 delivery=creating_delivery_task,
@@ -230,13 +235,35 @@ def get_progress(creating_delivery_task):
         return 2
 
 
+def send_courier_notifications(creating_delivery_task):
+    couriers = Courier.objects.all()
+    registration_tokens = [i.fcm_token for i in couriers if i.fcm_token]
+    message = messaging.MulticastMessage(
+        notification=messaging.Notification(
+            title=creating_delivery_task.item_name,
+            body=creating_delivery_task.delivery_address,
+        ),
+        webpush=messaging.WebpushConfig(
+            notification=messaging.WebpushNotification(
+                icon=creating_delivery_task.photo.url,
+            ),
+            fcm_options=messaging.WebpushFCMOptions(
+                link=settings.NOTIFICATION_URL + reverse('couriers:available_delivery_tasks'),
+            ),
+        ),
+        tokens=registration_tokens
+    )
+    response = messaging.send_multicast(message)
+    print('{0} messages were sent successfully'.format(response.success_count))
+
+
 def create_delivery_view(request):
     task_owner = request.user.customer_account
     creating_delivery_task = check_existing_delivery_tasks(request)
 
     # Check if creating_delivery_task is a redirect
     if isinstance(creating_delivery_task, HttpResponseRedirect):
-        return creating_delivery_task  # If it's a redirect, return it immediately
+        return creating_delivery_task
 
     if request.method == 'POST':
         step = request.POST.get('step')
@@ -272,7 +299,7 @@ def verify_delivery_payment(request, transaction_reference):
 
     if transaction.transaction_verified:
         messages.info(request, 'This transaction has already been processed.')
-        return redirect('shipments:shipment_index')
+        return redirect('customers:customer_shipments')
 
     verified = transaction.verify_transaction()
 
@@ -289,4 +316,4 @@ def verify_delivery_payment(request, transaction_reference):
     else:
         messages.error(request, 'Transaction verification failed')
 
-    return redirect('shipments:shipment_index')
+    return redirect('customers:customer_shipments')

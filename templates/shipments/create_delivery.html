@@ -3,15 +3,15 @@
 {% load widget_tweaks %}
 {% block title %} Create Delivery {% endblock %}
 {% block head_js %}
-<style>
-	#pickup-map,
-	#delivery-map {
-		width: 100%;
-		height: 500px
-		}
-</style>
-<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=marker,places&v=weekly"
-        async defer></script>
+	<style>
+		#pickup-map,
+		#delivery-map {
+			width: 100%;
+			height: 500px
+			}
+	</style>
+	<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=marker,places&v=weekly"
+	        async defer></script>
 {% endblock head_js %}
 {% block content %}
 	<div class="container mx-auto flex flex-wrap">
@@ -57,15 +57,10 @@
 			<!-- Progress tabs -->
 			<div class="bg-white shadow-md rounded-lg overflow-hidden mb-8">
 				<div class="p-4">
-					<ul class="flex justify-between items-center" id="default-styled-tab
-					" data-tabs-toggle="#default-styled-tab-content" data-tabs-active-classes="text-purple-600
-					hover:text-purple-600 dark:text-purple-500 dark:hover:text-purple-500 border-purple-600
-					dark:border-purple-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500
-					hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700
-					dark:hover:text-gray-300" role="tablist">
+					<ul class="flex justify-between items-center" id="default-styled-tab"
+					    data-tabs-toggle="#default-styled-tab-content" role="tablist">
 						<li class="flex-1 text-center">
-							<button href="#"
-							        class="{% if step == 1 %}text-orange-500 font-semibold{% else %}text-gray-600{% endif %}"
+							<button href="#" class="{% if step == 1 %}text-orange-500 font-semibold{% else %}text-gray-600{% endif %}"
 							        id="item-info" data-tabs-target="#item-info" type="button" role="tab"
 							        aria-controls="item-info" aria-selected="false">
 								Item Info
@@ -86,9 +81,6 @@
 					</ul>
 				</div>
 
-
-
-
 				{% if step == 1 %}
 					<form method="POST" enctype="multipart/form-data"
 					      class="bg-white shadow-md rounded-lg overflow-hidden">
@@ -108,13 +100,13 @@
 							</div>
 
 							<div class="mb-4">
-								<label for="{{ item_form.description.id_for_label }}"
+								<label for="{{ item_form.photo.id_for_label }}"
 								       class="block text-gray-700 font-bold mb-2">
-									{{ item_form.description.label }}
+									{{ item_form.photo.label }}
 								</label>
-								{% render_field item_form.description class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-								{% if item_form.description.errors %}
-									<p class="text-red-500 text-xs italic">{{ item_form.description.errors.0 }}</p>
+								{% render_field item_form.photo class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if item_form.photo.errors %}
+									<p class="text-red-500 text-xs italic">{{ item_form.photo.errors.0 }}</p>
 								{% endif %}
 							</div>
 
@@ -159,7 +151,6 @@
 							</button>
 						</div>
 					</form>
-
 
 				{% elif step == 2 %}
 					<form method="POST" enctype="multipart/form-data"
@@ -214,7 +205,7 @@
 							<div class="bg-gray-100 px-4 py-3 text-right">
 								<input type="hidden" name="step" value="2">
 								<button type="button"
-								        onclick="location.href='{% url 'shipments:create_delivery' %}?step=1'"
+								        onclick="$('#item-info').('show');"
 								        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">
 									Back
 								</button>
@@ -333,11 +324,11 @@
 	</div>
 
 	<script>
-        var pickupLat = parseFloat('{{ creating_delivery_task.pickup_latitude }}') || -33.8688;
-        var pickupLng = parseFloat('{{ creating_delivery_task.pickup_longitude }}') || 151.2195;
+        var pickupLat = parseFloat('{{ creating_delivery_task.pickup_latitude }}') || 6.585787;
+        var pickupLng = parseFloat('{{ creating_delivery_task.pickup_longitude }}') || 3.363888;
 
-        var deliveryLat = parseFloat('{{ creating_delivery_task.delivery_latitude }}') || -33.8688;
-        var deliveryLng = parseFloat('{{ creating_delivery_task.delivery_longitude }}') || 151.2195;
+        var deliveryLat = parseFloat('{{ creating_delivery_task.delivery_latitude }}') || 6.585787;
+        var deliveryLng = parseFloat('{{ creating_delivery_task.delivery_longitude }}') || 3.363888;
 
         function initMapByType(type, initLat, initLng) {
             const mapDiv = document.getElementById(type + "-map");

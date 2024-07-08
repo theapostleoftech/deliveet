@@ -34,25 +34,25 @@ class CourierDashboardView(TemplateView):
 
 
 @method_decorator(courier_required, name='dispatch')
-class CourierShipmentsView(RedirectView):
-    """
-    This view displays the deliveries available to the courier
-    """
-    url = reverse_lazy('couriers:shipment_orders')
-
-
-@method_decorator(courier_required, name='dispatch')
-class CourierOrdersView(TemplateView):
+class CourierDeliveryTasksView(TemplateView):
     """
     This view displays the deliveries available to the courier
     Allows the courier to accept deliveries
     """
-    template_name = 'courier/shipment_orders.html'
+    template_name = 'courier/delivery_tasks.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['GOOGLE_MAP_API_KEY'] = settings.GOOGLE_MAP_API_KEY
         return context
+
+
+@method_decorator(courier_required, name='dispatch')
+class CourierShipmentsView(RedirectView):
+    """
+    This view displays the deliveries available to the courier
+    """
+    url = reverse_lazy('couriers:shipment_orders')
 
 
 @method_decorator(courier_required, name='dispatch')

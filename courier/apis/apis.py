@@ -9,7 +9,7 @@ from shipments.models import Delivery
 
 
 @csrf_exempt
-@login_required(login_url="accounts:signin")
+@login_required
 def delivery_tasks_api(request):
     delivery_tasks = list(Delivery.objects.filter(status=Delivery.StatusChoices.PROCESSING).values())
 
@@ -20,7 +20,7 @@ def delivery_tasks_api(request):
 
 
 @csrf_exempt
-@login_required(login_url="accounts:signin")
+@login_required
 def delivery_task_status_api(request, id):
     delivery_task = Delivery.objects.filter(
         id=id,
@@ -75,7 +75,7 @@ def delivery_task_status_api(request, id):
 
 
 @csrf_exempt
-@login_required(login_url="accounts:signin")
+@login_required
 def fcm_token_update_api(request):
     request.user.courier_account.fcm_token = request.GET.get('fcm_token')
     request.user.courier_account.save()
