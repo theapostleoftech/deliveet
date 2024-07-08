@@ -44,7 +44,8 @@ module.exports = {
         /**
          * Flowbite settings
          */
-        "./node_modules/flowbite/**/*.js"
+        "./node_modules/flowbite/**/*.js",
+        "node_modules/preline/dist/*.js"
     ],
     theme: {
         extend: {
@@ -130,6 +131,7 @@ module.exports = {
              */
             require('flowbite/plugin'),
             require('flowbite-typography'),
+            require('preline/plugin'),
         ],
     }
 }

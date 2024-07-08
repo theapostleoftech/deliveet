@@ -1,0 +1,262 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %} Pickup & Delivery of {{ delivery_task.item_name }} {% endblock %}
+{% block head_js %}
+
+	<style>
+		.photo {
+			object-fit: cover;
+			}
+
+		.photo-blank {
+			@apply border-2 border-dashed border-gray-300 h-32 w-32 rounded-lg flex items-center justify-center text-center p-2;
+			}
+	</style>
+
+	<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=marker,places&v=weekly"
+	        async defer></script>
+	<script>
+        var pickupLat = parseFloat(" {{ delivery_task.pickup_latitude }} ");
+        var pickupLng = parseFloat(" {{ delivery_task.pickup_longitude }} ");
+        var deliveryLat = parseFloat(" {{ delivery_task.delivery_latitude }} ");
+        var deliveryLng = parseFloat(" {{ delivery_task.delivery_longitude }} ");
+
+        var courierLat = parseFloat(" {{ delivery_task.courier.courier_latitude }} ");
+        var courierLng = parseFloat(" {{ delivery_task.courier.courier_longitude }} ");
+
+        function initMap() {
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer();
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12,
+
+                center: {
+                    lat: (pickupLat + deliveryLat) / 2,
+                    lng: (pickupLng + deliveryLng) / 2
+                },
+            });
+            directionsRenderer.setMap(map);
+
+            calculateAndDisplayRoute(map, directionsService, directionsRenderer);
+        }
+
+        function calculateAndDisplayRoute(map, directionsService, directionsRenderer) {
+            directionsService.route(
+                {
+                    origin: new google.maps.LatLng(pickupLat, pickupLng),
+                    destination: new google.maps.LatLng(deliveryLat, deliveryLng),
+                    travelMode: google.maps.TravelMode.DRIVING,
+                },
+                (response, status) => {
+                    if (status === "OK") {
+                        new google.maps.DirectionsRenderer({
+                            map: map,
+                            directions: response,
+                            suppressMarkers: true,
+                            polylineOptions: {
+                                strokeColor: "#000",
+                                strokeWeight: 5,
+                                strokeOpacity: 0.8
+                            }
+                        });
+
+                        var leg = response.routes[0].legs[0];
+                        new google.maps.Marker({
+                            position: leg.start_location,
+                            map: map,
+                            icon: "{% static 'static/images/start.png' %}"
+                        });
+
+                        new google.maps.Marker({
+                            position: leg.end_location,
+                            map: map,
+                            icon: "{% static 'static/images/end.png' %}"
+                        });
+
+                        window.courierMarker = new google.maps.Marker({
+                            position: new google.maps.LatLng(courierLat, courierLng),
+                            map,
+                            icon: '/static/img/courier.png',
+                        })
+                    } else {
+                        window.alert("Directions request failed due to " + status);
+                    }
+                }
+            );
+        }
+
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const host = window.location.host;
+        const deliveryTaskId = "{{ delivery_task.id }}";
+        const wsUrl = `${protocol}//${host}/ws/shipments/${deliveryTaskId}/`;
+
+        console.log('Attempting to connect to WebSocket:', wsUrl);
+
+        const jobSocket = new WebSocket(wsUrl);
+        {#const jobSocket = new WebSocket(#}
+        {#    "ws{% if request.get_host != 'localhost:8000' %}#}
+        {#    s{% endif %}://" + window.location.host + "/ws/shipments/{{ delivery_task.id }}/"#}
+        {#);#}
+
+        // Execute this function whenever this page receives an event from Job Consumer via WebSocket
+        jobSocket.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+            var delivery_task = data.delivery_task;
+            console.log(delivery_task);
+
+            if (delivery_task.courier_latitude && delivery_task.courier_longitude) {
+                var courierPosition = new google.maps.LatLng(delivery_task.courier_latitude, delivery_task.courier_longitude);
+                window.courierMarker.setPosition(courierPosition);
+            }
+
+            if (delivery_task.status) {
+                $("#job_status").html(delivery_task.status);
+                $("form").css("display", "none");
+            }
+
+            if (job.pickup_photo) {
+                $("#pickup_photo").html('<img src="' + job.pickup_photo + '" class="rounded-lg photo" width="130" height="130">');
+            }
+
+            if (job.delivery_photo) {
+                $("#delivery_photo").html('<img src="' + job.delivery_photo + '" class="rounded-lg photo" width="130" height="130">');
+            }
+
+        }
+
+	</script>
+
+{% endblock head_js %}
+
+{% block content %}
+
+
+	<div class="w-full mb-4 px-4 2xl:px-0">
+		<h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">DELIVERY DETAILS</h2>
+
+		<div class="mt-2 sm:mt-2 md:gap-6 lg:flex lg:items-start xl:gap-8">
+			<div class="w-full flex-none lg:max-w-2xl xl:max-w-4xl">
+				<div class="space-y-6">
+					<div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+						<div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
+							<a href="#" class="shrink-0 md:order-1">
+								<img class="rounded-lg mr-6 w-40 h-40 object-cover"
+								     src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg"
+								     alt="imac image"/>
+							</a>
+
+							<label for="counter-input" class="sr-only">Choose quantity:</label>
+
+
+							<div class="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
+								<a href="#" class="text-base font-medium text-gray-900 hover:underline dark:text-white">
+									{{ delivery_task.item_name }}
+								</a>
+
+
+								<div class="space-y-4">
+									<div class="space-y-2">
+										<dl class="flex items-center justify-between gap-4">
+											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Category
+											</dt>
+											<dd class="text-base font-medium text-gray-900 dark:text-white">{{ delivery_task.get_item_type_display }}</dd>
+										</dl>
+
+										<dl class="flex items-center justify-between gap-4">
+											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Size
+											</dt>
+											<dd class="text-base font-medium text-green-600">
+												-{{ delivery_task.get_size_display }}</dd>
+										</dl>
+
+										<dl class="flex items-center justify-between gap-4">
+											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Quantity
+											</dt>
+											<dd class="text-base font-medium text-gray-900 dark:text-white">{{ delivery_task.quantity }}</dd>
+										</dl>
+
+										<dl class="flex items-center justify-between gap-4">
+											<dt class="text-base font-bold text-gray-500 dark:text-gray-400">Price
+											</dt>
+											<dd class="text-base font-bold text-gray-900 dark:text-white">
+												₦{{ delivery_task.price }}</dd>
+										</dl>
+									</div>
+								</div>
+
+								<a href="#"
+								   class="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5
+								   py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none
+								   focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700
+								   dark:focus:ring-primary-800">Cancel Delivery</a>
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="w-full px-4 2xl:px-0">
+		<!-- DELIVERY INFORMATION -->
+		<h6 class="text-gray-500 font-semibold mb-2">DELIVERY INFORMATION</h6>
+		<div class="bg-white rounded-lg shadow-md p-6 mb-8">
+			<h4 class="text-xl font-semibold mb-4">Pickup</h4>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+				<div>
+					<p class="font-semibold">Address</p>
+					<p>{{ delivery_task.pickup_address }}</p>
+				</div>
+				<div>
+					<p class="font-semibold">{{ delivery_task.pickup_name }}</p>
+					<p>{{ delivery_task.pickup_phone }}</p>
+				</div>
+				<div id="pickup_photo">
+					{% if delivery_task.pickup_photo %}
+						<img src="{{ delivery_task.pickup_photo.url }}" class="rounded-lg photo w-32 h-32"
+						     alt="Pickup Photo">
+					{% else %}
+						<div class="photo-blank">Pickup Photo Will Appear Here</div>
+					{% endif %}
+				</div>
+			</div>
+
+			<hr class="my-6">
+
+			<h4 class="text-xl font-semibold mb-4">Delivery</h4>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+				<div>
+					<p class="font-semibold">Address</p>
+					<p>{{ delivery_task.delivery_address }}</p>
+				</div>
+				<div>
+					<p class="font-semibold">{{ delivery_task.delivery_name }}</p>
+					<p>{{ delivery_task.delivery_phone }}</p>
+				</div>
+				<div id="delivery_photo">
+					{% if delivery_task.delivery_photo %}
+						<img src="{{ delivery_task.delivery_photo.url }}" class="rounded-lg photo w-32 h-32"
+						     alt="Delivery Photo">
+					{% else %}
+						<div class="photo-blank">Delivery Photo Will Appear Here</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="w-full px-4 2xl:px-0">
+		<div class="flex justify-between items-center mb-2">
+			<h6 class="text-gray-500 font-semibold">TRACK DELIVERY</h6>
+			<span id="delivery_task_status"
+			      class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">{{ delivery_task.get_status_display }}</span>
+		</div>
+
+		<div class="bg-white rounded-lg shadow-md overflow-hidden">
+			<div id="map" style="height: 500px; width: 100%;"></div>
+		</div>
+	</div>
+{% endblock content %}

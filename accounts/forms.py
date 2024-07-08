@@ -125,3 +125,9 @@ class UserAccountUpdateForm(forms.ModelForm):
     class Meta:
         model = UserAccount
         fields = ("email", "first_name", "last_name",)
+
+
+class CustomerPhoneVerificationForm(forms.Form):
+    class Meta:
+        model = Customer
+        fields = ("phone_number",)

@@ -13,7 +13,7 @@ class CustomerUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Customer
-        fields = ['phone', 'gender']
+        fields = ['gender']
 
 
 class CourierUpdateForm(forms.ModelForm):
@@ -23,4 +23,4 @@ class CourierUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Courier
-        fields = ['phone', 'gender']
+        fields = ['gender']

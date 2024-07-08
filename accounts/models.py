@@ -7,9 +7,12 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.urls import reverse
+from phonenumber_field.modelfields import PhoneNumberField
+from versatileimagefield.fields import VersatileImageField
 
 from accounts.managers import UserAccountManager
 from app.models import PhoneField, ProfileBaseModel
+from deliveet.utils.validators import phone_number_validator
 
 
 # Create your models here.
@@ -45,6 +48,16 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         unique=True,
         max_length=255,
         help_text='Type in your email address',
+    )
+    phone_number = PhoneNumberField(
+        validators=[phone_number_validator],
+        help_text='Type in your phone number',
+        unique=True,
+        null=True,
+        blank=True,
+    )
+    phone_number_verified = models.BooleanField(
+        default=False,
     )
     is_active = models.BooleanField(
         default=True,
@@ -134,6 +147,16 @@ class Courier(ProfileBaseModel):
         primary_key=True,
         related_name='courier_account',
         limit_choices_to={'account_type': 'courier'},
+    )
+    courier_latitude = models.FloatField(
+        default=0.0
+    )
+    courier_longitude = models.FloatField(
+        default=0.0
+    )
+    fcm_token = models.TextField(
+        blank=True,
+        null=True
     )
 
     class Meta:

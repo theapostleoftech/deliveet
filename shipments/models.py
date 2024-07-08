@@ -6,6 +6,7 @@ import uuid
 
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from versatileimagefield.fields import VersatileImageField
 
 from accounts.models import Customer, Courier
 from app.models import BaseModel
@@ -53,6 +54,7 @@ class Delivery(BaseModel):
         """"
         This is the various choices for payment
         """
+        WALLET = 'wallet', 'Wallet Balance',
         CARD = 'card', 'Card Payment'
         COD = 'cod', 'Cash on Delivery'
 
@@ -90,6 +92,14 @@ class Delivery(BaseModel):
         default=SizeChoices.SMALL,
         help_text='Select the size of type to be delivered'
     )
+    photo = VersatileImageField(
+        'Photo',
+        upload_to='images/delivery',
+        null=True,
+        blank=True,
+        default='images/deliveries/photo.jpg'
+
+    )
     quantity = models.PositiveIntegerField(
         default=1
     )
@@ -109,14 +119,22 @@ class Delivery(BaseModel):
     pickup_longitude = models.FloatField(
         default=0
     )
+    pickup_photo = VersatileImageField(
+        'Pickup',
+        upload_to='images/delivery/pickup',
+        null=True,
+        blank=True,
+        default='images/deliveries/pickup.jpg'
+
+    )
     sender_name = models.CharField(
         help_text='Name of the sender or the person to be picked up from',
         max_length=255,
         null=True,
     )
-    sender_phone = PhoneNumberField(
+    sender_phone = models.CharField(
         help_text='Phone number of the sender or the person to be picked up from',
-        max_length=50,
+        max_length=14,
         null=True
     )
 
@@ -136,10 +154,17 @@ class Delivery(BaseModel):
         max_length=255,
         null=True
     )
-    recipient_phone = PhoneNumberField(
+    recipient_phone = models.CharField(
         help_text='Name of the receiver or the person to be delivered to',
-        max_length=50,
+        max_length=14,
         null=True
+    )
+    delivery_photo = VersatileImageField(
+        'Delivery',
+        upload_to='images/delivery/delivery',
+        null=True,
+        blank=True,
+        default='images/deliveries/delivery.jpg'
     )
     duration = models.IntegerField(
         default=0
@@ -196,45 +221,13 @@ class Delivery(BaseModel):
         This is the save method for the delivery model
         """
         while not self.tracking_number:
-            tracking_number = secrets.token_urlsafe(16)
+            tracking_number = secrets.token_urlsafe(6)
             existing_tracking_number = Delivery.objects.filter(
                 tracking_number=tracking_number
             ).first()
             if not existing_tracking_number:
                 self.tracking_number = tracking_number
         super().save(*args, **kwargs)
-
-
-#
-# class TransactionMethod(BaseModel):
-#     """
-#     This defines the payment method
-#     """
-#     delivery = models.ForeignKey(
-#         Delivery,
-#         on_delete=models.CASCADE,
-#         related_name='transaction_methods',
-#         null=True,
-#     )
-#
-#     class MethodChoices(models.TextChoices):
-#         """"
-#         This is the various choices for payment
-#         """
-#         CARD = 'card', 'Card'
-#         COD = 'cod', 'Cash on Delivery'
-#
-#     payment_method = models.CharField(
-#         max_length=50,
-#         choices=MethodChoices.choices,
-#         default=MethodChoices.CARD
-#     )
-#
-#     def __str__(self):
-#         """
-#         This returns a string representation of the model
-#         """
-#         return f"{self.get_payment_method_display()} for {self.delivery}"
 
 
 class DeliveryTransaction(BaseModel):

@@ -2,12 +2,15 @@
 URL configuration for deliveet project.
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
+
+from deliveet import test_consumer
+from deliveet.utils import consumers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('pages.urls', namespace='pages')),
-    path('', include('accounts.urls', namespace='accounts')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
     path('customer/', include('customers.urls', namespace='customers')),
 
     path('courier/', include('courier.urls', namespace='couriers')),
@@ -17,4 +20,11 @@ urlpatterns = [
     path('shipments/', include('shipments.urls', namespace='shipments')),
 
     path("__reload__/", include("django_browser_reload.urls")),
+]
+
+websocket_urlpatterns = [
+    # path('ws/shipments/<delivery_task_id>/', consumers.ShipmentOrderConsumer.as_asgi())
+    re_path(r'ws/shipments/(?P<delivery_task_id>[\w-]+)/$', consumers.ShipmentOrderConsumer.as_asgi()),
+
+    re_path(r'ws/test/$', test_consumer.TestConsumer.as_asgi()),
 ]

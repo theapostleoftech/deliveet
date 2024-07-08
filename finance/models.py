@@ -77,7 +77,7 @@ class WalletTransaction(BaseModel):
         This is the string representation of the wallet transaction
         :return: The user who performed the transactions
         """
-        return self.wallet.user.__str__()
+        return self.transaction_reference
 
     def save(self, *args, **kwargs):
         """

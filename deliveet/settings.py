@@ -34,6 +34,7 @@ AUTH_USER_MODEL = 'accounts.UserAccount'
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,8 +52,9 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'widget_tweaks',
     'tailwind',
-
     'django_browser_reload',
+    'versatileimagefield',
+
 ]
 
 # Middlewares
@@ -195,4 +197,33 @@ LOGOUT_REDIRECT_URL = 'pages:app_home'
 # Google Map
 GOOGLE_MAP_API_KEY = env('GOOGLE_MAP_API_KEY')
 
-FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/firebase-messaging-sw.js")
+FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/delivit-1d2d5-firebase.json")
+
+NOTIFICATION_URL = 'localhost:8000'
+
+# Channels
+ASGI_APPLICATION = 'deliveet.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": ['localhost', 6379],
+        },
+    },
+}
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
+# 'BACKEND': "channels.layers.InMemoryChannelLayer"
+
+FIREBASE_CONFIG = {
+    'API_KEY': env('FIREBASE_API_KEY'),
+    'AUTH_DOMAIN': env('FIREBASE_AUTH_DOMAIN'),
+    'PROJECT_ID': env('FIREBASE_PROJECT_ID'),
+    'STORAGE_BUCKET': env('FIREBASE_STORAGE_BUCKET'),
+    'MESSAGING_SENDER_ID': env('FIREBASE_MESSAGING_SENDER_ID'),
+    'APP_ID': env('FIREBASE_APP_ID'),
+}

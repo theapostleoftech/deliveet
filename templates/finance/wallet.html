@@ -5,14 +5,15 @@
 {% block content %}
 
 
-	<div class="mt-4 space-y-4 pb-4 w-full ">
-		<div class="bg-tertiary-700 w-full flex flex-col justify-between items-start space-y-12 p-6
+	<div class="pb-4 ">
+		<div class="bg-tertiary-700 w-1/2 flex flex-col justify-between items-start space-y-12 p-6
 				border border-gray-200 rounded-lg shadow">
 			<div class="w-full space-y-2">
 				<p class="mt-0 max-w-2xl text-sm leading-6 text-gray-300">BALANCE</p>
 				<p class="text-5xl lg:text-6xl md:text-5xl sm:text-3xl text-white
 				 font-extrabold tracking-tight mb-4">
-					{{ wallet_balance }} <span class="text-sm tracking-wide font-medium text-gray-400 uppercase">NGN</span>
+					{{ wallet_balance }} <span
+						class="text-sm tracking-wide font-medium text-gray-400 uppercase">NGN</span>
 				</p>
 			</div>
 			<div class="flex flex-row justify-start items-start space-x-2">
@@ -36,6 +37,45 @@
 						</span>
 					</a>
 				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="w-full divide-y divide-slate-100 py-6">
+		<div class="py-4 flex flex-row justify-between items-center">
+			<div class="w-full"><p class="font-bold text-xs tracking-wider uppercase text-primary">Payment Methods</p>
+			</div>
+		</div>
+		<div class="w-full divide-y divide-slate-100 pl-16">
+			<div class="w-full flex justify-between items-center py-4 cursor-pointer">
+				<div class="flex flex-1 flex-row justify-start items-center space-x-4 -ml-16">
+					<div class="w-12 h-12 flex items-center justify-start"><img
+							src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAABMCAYAAADHl1ErAAAACXBIWXMAABYlAAAWJQFJUiTwAAABlElEQVR4nO3bMU4CQRhA4Z+JvfQ0egJK2y3kGCbewG3prKRdzuAxaLgCJ5DC7bkBZs1AUJZ1XywM8r4StoCXybDA/IPtdhvqL9mKMRhkMMhgkMEgg0EGgwwGGQwyGGQwyGCQwaCrtssns/omIsqIKCJifHTB/7aKiGVEVIvpaP39nR79vDOZ1VVEPF1YpFPmi+moPHxuH2wyq4e57KWtqJ80K65YTEeb2O1hxurUNFnmRvtN/9lYnca5UQzuX96bDf6t62rt3ab8aah+ypRvHdRPkdy7kLF3+pDBIINBg+u7R//6BlxhkMEgg0EGgwwGNV++/ZQEXGGQwSCDQQaDDAYZDDIYZDDIYJDBIINBrad3zlH1MPzVqy5fN0ePtXGFQQaDDAYZDDIY5C+ukCsMMhhkMCjlU8LqZ5Xy6Wn1s2yCVcbqrUp5PGR+Ji/4LzVTIevDc/ruZaetduf0P4PlsZDCaK2+jM44nNXt9HDWIcf/wPifunmnDxkMMhhkMMhgkMEgg0EGgwwGGQwyGGQwyGBERHwApGZYzjar+VIAAAAASUVORK5CYII="
+							class="w-full h-auto" alt=""></div>
+					<div class="flex flex-col justify-start items-start"><p
+							class="text-base tracking-normal font-bold text-primary">Add credit or debit card</p>
+						<p class="text-xs font-normal text-slate-400">Visa, Mastercard, etc.</p></div>
+				</div>
+				<div class="flex flex-row justify-between items-end space-x-2"><p
+						class="text-xs font-normal text-slate-400"></p></div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="w-full divide-y divide-slate-100 py-6">
+		<div class="py-4 flex flex-row justify-between items-center">
+			<div class="w-full"><p class="font-bold text-xs tracking-wider uppercase text-primary">Withdrawal
+			                                                                                       Accounts</p></div>
+		</div>
+		<div class="w-full divide-y divide-slate-100">
+			<div class="w-full flex justify-between items-center py-4 cursor-pointer">
+				<div class="flex flex-1 flex-row justify-start items-center space-x-4">
+					<div class="flex flex-col justify-start items-start"><p
+							class="text-base tracking-normal font-bold text-primary">Add bank account or wallet</p>
+						<p class="text-xs font-normal text-slate-400">Connect a bank or mobile money account</p></div>
+				</div>
+				<div class="flex flex-row justify-between items-end space-x-2"></div>
 			</div>
 		</div>
 	</div>

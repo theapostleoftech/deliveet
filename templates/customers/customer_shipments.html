@@ -1,0 +1,132 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %} My Deliveries {% endblock %}
+{% block head_js %}
+{% endblock head_js %}
+
+{% block content %}
+	<!-- Card -->
+
+	<div class="py-4 flex flex-row justify-between items-center">
+		<div class="w-full space-y-1">
+			<div class="bg-white border border-gray-200 rounded-xl
+				shadow-sm overflow-hidden">
+				<!-- Header -->
+				<div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+					<div>
+						<h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+							Deliveries
+						</h2>
+						<p class="text-sm text-gray-600 dark:text-neutral-400">
+							An overview of your most recent deliveries.
+						</p>
+					</div>
+
+					<div>
+						<a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg
+							border border-transparent bg-secondary-500 text-white cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
+						   href="{% url 'shipments:create_delivery' %}">
+							<svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
+							     width="24"
+							     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+							     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M5 12h14"></path>
+								<path d="M12 5v14"></path>
+							</svg>
+							Create Delivery
+						</a>
+					</div>
+				</div>
+				<!-- Table -->
+				<table class="min-w-full divide-y divide-gray-200 ">
+					<thead class="bg-gray-50 text-gray-600 uppercase text-sm leading-normal">
+					<tr>
+
+						<th scope="col" class="py-3 px-6 text-left">
+							<div class="flex items-center gap-x-2">
+                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                        Tracking Number
+                      </span>
+							</div>
+						</th>
+						<th scope="col" class="py-3 px-6 text-left">
+							<div class="flex items-center gap-x-2">
+                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                        Item Name
+                      </span>
+							</div>
+						</th>
+
+						<th scope="col" class="py-3 px-6 text-left">
+							<div class="flex items-center gap-x-2">
+                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                        Status
+                      </span>
+							</div>
+						</th>
+					</tr>
+					</thead>
+
+					<tbody class="text-sm divide-gray-200">
+					{% if delivery_tasks %}
+						{% for delivery_task in delivery_tasks %}
+							<tr>
+								<td class="py-3 px-6 text-left whitespace-nowrap">
+									<a class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:text-blue-500"
+									   href="{% url 'customers:customer_shipment_detail' delivery_task.id %}">
+										{{ delivery_task.tracking_number }}
+									</a>
+								</td>
+								<td class="py-3 px-6 text-left">
+
+									<div class="flex items-center gap-x-3">
+										<img class="inline-block size-[38px] rounded-full"
+										     src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
+										     alt="Image Description">
+										<div class="grow">
+											<span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">Christina Bersh</span>
+											<span class="block text-sm text-gray-500 dark:text-neutral-500">christina@site.com</span>
+										</div>
+									</div>
+								</td>
+
+								<td class="py-3 px-6 text-left">
+                      <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                        <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                             fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                        </svg>
+                        {{ delivery_task.get_status_display }}
+                      </span>
+								</td>
+							</tr>
+						{% empty %}
+							<tr>
+								<td colspan="3" class="text-center py-3 px-6">
+									<p class="text-base tracking-normal font-semibold">
+										You have no pending shipments. <span
+											class="mr-4 text-sm font-medium text-slate-400">
+									<a href="{% url 'shipments:create_delivery' %}" class="underline">Book a delivery to get started</a>
+									</span>
+									</p>
+
+								</td>
+							</tr>
+
+						{% endfor %}
+					{% endif %}
+					</tbody>
+				</table>
+				<!-- End Table -->
+			</div>
+			<!-- End Header -->
+
+
+		</div>
+	</div>
+
+	<!-- End Card -->
+{% endblock %}
+
+

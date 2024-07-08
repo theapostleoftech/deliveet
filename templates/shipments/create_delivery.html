@@ -3,22 +3,20 @@
 {% load widget_tweaks %}
 {% block title %} Create Delivery {% endblock %}
 {% block head_js %}
-
-	<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=maps,marker,places&v=weekly"
-	        async defer></script>
-
-	<style>
-		#pickup-map,
-		#delivery-map {
-			height: 100%;
-			}
-	</style>
-
+<style>
+	#pickup-map,
+	#delivery-map {
+		width: 100%;
+		height: 500px
+		}
+</style>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=marker,places&v=weekly"
+        async defer></script>
 {% endblock head_js %}
 {% block content %}
-	<div class="flex flex-wrap -mx-4">
+	<div class="container mx-auto flex flex-wrap">
 		<!-- Left side -->
-		<div class="w-full lg:w-1/3 px-4 mb-8">
+		<div class="w-full lg:w-1/3 mb-8 px-4">
 			<div class="bg-white shadow-md rounded-lg overflow-hidden">
 				<div class="bg-gray-100 px-4 py-3 border-b">
 					<h2 class="text-lg font-semibold">Delivery Summary</h2>
@@ -45,6 +43,9 @@
 							<p class="text-sm font-semibold text-gray-500">DELIVERY</p>
 							<h4 class="text-lg font-semibold">{{ delivery_task.recipient_name }}</h4>
 							<p class="text-gray-600">{{ delivery_task.delivery_address }}</p>
+
+							<p class="text-gray-600">{{ delivery_task.distance }}Km</p>
+							<p class="text-gray-600">{{ delivery_task.duration }}minutes</p>
 						{% endif %}
 					{% endif %}
 				</div>
@@ -56,11 +57,19 @@
 			<!-- Progress tabs -->
 			<div class="bg-white shadow-md rounded-lg overflow-hidden mb-8">
 				<div class="p-4">
-					<ul class="flex justify-between items-center">
+					<ul class="flex justify-between items-center" id="default-styled-tab
+					" data-tabs-toggle="#default-styled-tab-content" data-tabs-active-classes="text-purple-600
+					hover:text-purple-600 dark:text-purple-500 dark:hover:text-purple-500 border-purple-600
+					dark:border-purple-500" data-tabs-inactive-classes="dark:border-transparent text-gray-500
+					hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700
+					dark:hover:text-gray-300" role="tablist">
 						<li class="flex-1 text-center">
-							<a href="#"
-							   class="{% if step == 1 %}text-orange-500 font-semibold{% else %}text-gray-600{% endif %}">Item
-							                                                                                             Info</a>
+							<button href="#"
+							        class="{% if step == 1 %}text-orange-500 font-semibold{% else %}text-gray-600{% endif %}"
+							        id="item-info" data-tabs-target="#item-info" type="button" role="tab"
+							        aria-controls="item-info" aria-selected="false">
+								Item Info
+							</button>
 						</li>
 						<li class="flex-1 text-center">
 							<a href="#"
@@ -76,131 +85,202 @@
 						</li>
 					</ul>
 				</div>
-			</div>
 
-			<h2 class="text-2xl font-bold mb-4">Create a Delivery</h2>
 
-			{% if step == 1 %}
-				<form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg overflow-hidden">
-					{% csrf_token %}
-					<div class="p-4">
-						<h3 class="text-lg font-semibold mb-4">Item Information</h3>
 
-						<div class="mb-4">
-							<label for="{{ item_form.item_name.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ item_form.item_name.label }}
-							</label>
-							{% render_field item_form.item_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if item_form.item_name.errors %}
-								<p class="text-red-500 text-xs italic">{{ item_form.item_name.errors.0 }}</p>
-							{% endif %}
-						</div>
 
-						<div class="mb-4">
-							<label for="{{ item_form.description.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ item_form.description.label }}
-							</label>
-							{% render_field item_form.description class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if item_form.description.errors %}
-								<p class="text-red-500 text-xs italic">{{ item_form.description.errors.0 }}</p>
-							{% endif %}
-						</div>
+				{% if step == 1 %}
+					<form method="POST" enctype="multipart/form-data"
+					      class="bg-white shadow-md rounded-lg overflow-hidden">
+						{% csrf_token %}
+						<div class="p-4">
+							<h3 class="text-lg font-semibold mb-4">Item Information</h3>
 
-						<div class="mb-4">
-							<label for="{{ item_form.item_type.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ item_form.item_type.label }}
-							</label>
-							{% render_field item_form.item_type class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if item_form.item_type.errors %}
-								<p class="text-red-500 text-xs italic">{{ item_form.item_type.errors.0 }}</p>
-							{% endif %}
-						</div>
+							<div class="mb-4">
+								<label for="{{ item_form.item_name.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ item_form.item_name.label }}
+								</label>
+								{% render_field item_form.item_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if item_form.item_name.errors %}
+									<p class="text-red-500 text-xs italic">{{ item_form.item_name.errors.0 }}</p>
+								{% endif %}
+							</div>
 
-						<div class="mb-4">
-							<label for="{{ item_form.size.id_for_label }}" class="block text-gray-700 font-bold mb-2">
-								{{ item_form.size.label }}
-							</label>
-							{% render_field item_form.size class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if item_form.size.errors %}
-								<p class="text-red-500 text-xs italic">{{ item_form.size.errors.0 }}</p>
-							{% endif %}
-						</div>
+							<div class="mb-4">
+								<label for="{{ item_form.description.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ item_form.description.label }}
+								</label>
+								{% render_field item_form.description class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if item_form.description.errors %}
+									<p class="text-red-500 text-xs italic">{{ item_form.description.errors.0 }}</p>
+								{% endif %}
+							</div>
 
-						<div class="mb-4">
-							<label for="{{ item_form.quantity.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ item_form.quantity.label }}
-							</label>
-							{% render_field item_form.quantity class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if item_form.quantity.errors %}
-								<p class="text-red-500 text-xs italic">{{ item_form.quantity.errors.0 }}</p>
-							{% endif %}
-						</div>
-					</div>
-					<div class="bg-gray-100 px-4 py-3 text-right">
-						<input type="hidden" name="step" value="1">
-						<button type="submit"
-						        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-							Save & Continue
-						</button>
-					</div>
-				</form>
+							<div class="mb-4">
+								<label for="{{ item_form.item_type.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ item_form.item_type.label }}
+								</label>
+								{% render_field item_form.item_type class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if item_form.item_type.errors %}
+									<p class="text-red-500 text-xs italic">{{ item_form.item_type.errors.0 }}</p>
+								{% endif %}
+							</div>
 
-			{% elif step == 2 %}
-				<form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg overflow-hidden">
-					{% csrf_token %}
-					<div class="p-4">
-						<h3 class="text-lg font-semibold mb-4">Pickup Information</h3>
+							<div class="mb-4">
+								<label for="{{ item_form.size.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ item_form.size.label }}
+								</label>
+								{% render_field item_form.size class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if item_form.size.errors %}
+									<p class="text-red-500 text-xs italic">{{ item_form.size.errors.0 }}</p>
+								{% endif %}
+							</div>
 
-						<div class="mb-4">
-							<label for="{{ pickup_form.pickup_address.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ pickup_form.pickup_address.label }}
-							</label>
-							{% render_field pickup_form.pickup_address class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if pickup_form.pickup_address.errors %}
-								<p class="text-red-500 text-xs italic">{{ pickup_form.pickup_address.errors.0 }}</p>
-							{% endif %}
-						</div>
-
-						<div class="mb-4">
-							<label for="{{ pickup_form.sender_name.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ pickup_form.sender_name.label }}
-							</label>
-							{% render_field pickup_form.sender_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if pickup_form.sender_name.errors %}
-								<p class="text-red-500 text-xs italic">{{ pickup_form.sender_name.errors.0 }}</p>
-							{% endif %}
-						</div>
-
-						<div class="mb-4">
-							<label for="{{ pickup_form.sender_phone.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ pickup_form.sender_phone.label }}
-							</label>
-							{% render_field pickup_form.sender_phone class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if pickup_form.sender_phone.errors %}
-								<p class="text-red-500 text-xs italic">{{ pickup_form.sender_phone.errors.0 }}</p>
-							{% endif %}
-						</div>
-
-						{% render_field pickup_form.pickup_latitude type="hidden" id="pickup_lat" value="{{ creating_delivery_task.pickup_latitude }}" %}
-						{% render_field pickup_form.pickup_longitude type="hidden" id="pickup_lng" value="{{ creating_delivery_task.pickup_longitude }}" %}
-						<div class="col-lg-4">
-							<div id="pickup-map" style="height: 500px; width: 100%;"></div>
-							<div id="pickup-infowindow-content">
-								<img src="" width="16" height="16" id="pickup-place-icon" alt=""/>
-								<span id="pickup-place-name" class="title"></span><br/>
-								<span id="pickup-place-address"></span>
+							<div class="mb-4">
+								<label for="{{ item_form.quantity.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ item_form.quantity.label }}
+								</label>
+								{% render_field item_form.quantity class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if item_form.quantity.errors %}
+									<p class="text-red-500 text-xs italic">{{ item_form.quantity.errors.0 }}</p>
+								{% endif %}
 							</div>
 						</div>
 						<div class="bg-gray-100 px-4 py-3 text-right">
-							<input type="hidden" name="step" value="2">
-							<button type="button" onclick="location.href='{% url 'shipments:create_delivery' %}?step=1'"
+							<input type="hidden" name="step" value="1">
+							<button type="submit"
+							        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+								Save & Continue
+							</button>
+						</div>
+					</form>
+
+
+				{% elif step == 2 %}
+					<form method="POST" enctype="multipart/form-data"
+					      class="bg-white shadow-md rounded-lg overflow-hidden">
+						{% csrf_token %}
+						<div class="p-4">
+							<h3 class="text-lg font-semibold mb-4">Pickup Information</h3>
+
+							<div class="mb-4">
+								<label for="{{ pickup_form.pickup_address.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ pickup_form.pickup_address.label }}
+								</label>
+								{% render_field pickup_form.pickup_address class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if pickup_form.pickup_address.errors %}
+									<p class="text-red-500 text-xs italic">{{ pickup_form.pickup_address.errors.0 }}</p>
+								{% endif %}
+							</div>
+
+							<div class="mb-4">
+								<label for="{{ pickup_form.sender_name.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ pickup_form.sender_name.label }}
+								</label>
+								{% render_field pickup_form.sender_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if pickup_form.sender_name.errors %}
+									<p class="text-red-500 text-xs italic">{{ pickup_form.sender_name.errors.0 }}</p>
+								{% endif %}
+							</div>
+
+							<div class="mb-4">
+								<label for="{{ pickup_form.sender_phone.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ pickup_form.sender_phone.label }}
+								</label>
+								{% render_field pickup_form.sender_phone class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if pickup_form.sender_phone.errors %}
+									<p class="text-red-500 text-xs italic">{{ pickup_form.sender_phone.errors.0 }}</p>
+								{% endif %}
+							</div>
+
+							{% render_field pickup_form.pickup_latitude type="hidden" id="pickup_lat" value="{{ creating_delivery_task.pickup_latitude }}" %}
+							{% render_field pickup_form.pickup_longitude type="hidden" id="pickup_lng" value="{{ creating_delivery_task.pickup_longitude }}" %}
+							<div class="col-lg-4">
+								<div id="pickup-map" style="height: 500px; width: 100%;"></div>
+								<div id="pickup-infowindow-content">
+									<img src="" width="16" height="16" id="pickup-place-icon" alt=""/>
+									<span id="pickup-place-name" class="title"></span><br/>
+									<span id="pickup-place-address"></span>
+								</div>
+							</div>
+							<div class="bg-gray-100 px-4 py-3 text-right">
+								<input type="hidden" name="step" value="2">
+								<button type="button"
+								        onclick="location.href='{% url 'shipments:create_delivery' %}?step=1'"
+								        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">
+									Back
+								</button>
+								<button type="submit"
+								        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+									Save & Continue
+								</button>
+							</div>
+					</form>
+
+				{% elif step == 3 %}
+					<form method="POST" enctype="multipart/form-data"
+					      class="bg-white shadow-md rounded-lg overflow-hidden">
+						{% csrf_token %}
+						<div class="p-4">
+							<h3 class="text-lg font-semibold mb-4">Delivery Information</h3>
+
+							<div class="mb-4">
+								<label for="{{ delivery_form.delivery_address.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ delivery_form.delivery_address.label }}
+								</label>
+								{% render_field delivery_form.delivery_address class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if delivery_form.delivery_address.errors %}
+									<p class="text-red-500 text-xs italic">{{ delivery_form.delivery_address.errors.0 }}</p>
+								{% endif %}
+							</div>
+
+							<div class="mb-4">
+								<label for="{{ delivery_form.recipient_name.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ delivery_form.recipient_name.label }}
+								</label>
+								{% render_field delivery_form.recipient_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if delivery_form.recipient_name.errors %}
+									<p class="text-red-500 text-xs italic">{{ delivery_form.recipient_name.errors.0 }}</p>
+								{% endif %}
+							</div>
+
+							<div class="mb-4">
+								<label for="{{ delivery_form.recipient_phone.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ delivery_form.recipient_phone.label }}
+								</label>
+								{% render_field delivery_form.recipient_phone class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if delivery_form.recipient_phone.errors %}
+									<p class="text-red-500 text-xs italic">{{ delivery_form.recipient_phone.errors.0 }}</p>
+								{% endif %}
+							</div>
+
+							{% render_field delivery_form.delivery_latitude type="hidden" id="delivery_lat" value="{{ creating_delivery_task.delivery_latitude" %}
+							{% render_field delivery_form.delivery_longitude type="hidden" id="delivery_lng" value="{{ creating_delivery_task.delivery_longitude" %}
+
+							<div class="col-lg-4">
+								<div id="delivery-map" style="height: 500px; width: 100%;"></div>
+								<div id="delivery-map-infowindow-content">
+									<img src="" width="16" height="16" id="delivery-place-icon" alt=""/>
+									<span id="delivery-place-name" class="title"></span><br/>
+									<span id="delivery-place-address"></span>
+								</div>
+							</div>
+						</div>
+						<div class="bg-gray-100 px-4 py-3 text-right">
+							<input type="hidden" name="step" value="3">
+							<button type="button"
+							        onclick="location.href='{% url 'shipments:create_delivery' %}?step=2'"
 							        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">
 								Back
 							</button>
@@ -209,277 +289,129 @@
 								Save & Continue
 							</button>
 						</div>
-				</form>
+					</form>
 
-			{% elif step == 3 %}
-				<form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg overflow-hidden">
-					{% csrf_token %}
-					<div class="p-4">
-						<h3 class="text-lg font-semibold mb-4">Delivery Information</h3>
+				{% elif step == 4 %}
+					<form method="POST" class="bg-white shadow-md rounded-lg overflow-hidden">
+						{% csrf_token %}
+						<div class="p-4">
+							<h3 class="text-lg font-semibold mb-4">Payment Method</h3>
 
-						<div class="mb-4">
-							<label for="{{ delivery_form.delivery_address.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ delivery_form.delivery_address.label }}
-							</label>
-							{% render_field delivery_form.delivery_address class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if delivery_form.delivery_address.errors %}
-								<p class="text-red-500 text-xs italic">{{ delivery_form.delivery_address.errors.0 }}</p>
-							{% endif %}
-						</div>
+							<div class="mb-4">
+								<label for="{{ payment_form.payment_method.id_for_label }}"
+								       class="block text-gray-700 font-bold mb-2">
+									{{ payment_form.payment_method.label }}
+								</label>
+								{% render_field payment_form.payment_method class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% if payment_form.payment_method.errors %}
+									<p class="text-red-500 text-xs italic">{{ payment_form.payment_method.errors.0 }}</p>
+								{% endif %}
+							</div>
 
-						<div class="mb-4">
-							<label for="{{ delivery_form.recipient_name.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ delivery_form.recipient_name.label }}
-							</label>
-							{% render_field delivery_form.recipient_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if delivery_form.recipient_name.errors %}
-								<p class="text-red-500 text-xs italic">{{ delivery_form.recipient_name.errors.0 }}</p>
-							{% endif %}
-						</div>
-
-						<div class="mb-4">
-							<label for="{{ delivery_form.recipient_phone.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ delivery_form.recipient_phone.label }}
-							</label>
-							{% render_field delivery_form.recipient_phone class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if delivery_form.recipient_phone.errors %}
-								<p class="text-red-500 text-xs italic">{{ delivery_form.recipient_phone.errors.0 }}</p>
-							{% endif %}
-						</div>
-
-						{% render_field delivery_form.delivery_latitude type="hidden" id="delivery_lat" value="{{ creating_delivery_task.delivery_latitude" %}
-						{% render_field delivery_form.delivery_longitude type="hidden" id="delivery_lng" value="{{ creating_delivery_task.delivery_longitude" %}
-						<div class="col-lg-4">
-							<div id="delivery-map" style="height: 500px; width: 100%;"></div>
-							<div id="delivery-infowindow-content">
-								<img src="" width="16" height="16" id="delivery-place-icon" alt=""/>
-								<span id="delivery-place-name" class="title"></span><br/>
-								<span id="delivery-place-address"></span>
+							<div class="mb-4">
+								<label class="block text-gray-700 font-bold mb-2">Price</label>
+								<input class="w-full px-3 py-2 text-gray-700 border rounded-lg bg-gray-100"
+								       value="${{ delivery_task.price }}" disabled>
 							</div>
 						</div>
-					</div>
-					<div class="bg-gray-100 px-4 py-3 text-right">
-						<input type="hidden" name="step" value="3">
-						<button type="button" onclick="location.href='{% url 'shipments:create_delivery' %}?step=2'"
-						        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">
-							Back
-						</button>
-						<button type="submit"
-						        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-							Save & Continue
-						</button>
-					</div>
-				</form>
-
-			{% elif step == 4 %}
-				<form method="POST" class="bg-white shadow-md rounded-lg overflow-hidden">
-					{% csrf_token %}
-					<div class="p-4">
-						<h3 class="text-lg font-semibold mb-4">Payment Method</h3>
-
-						<div class="mb-4">
-							<label for="{{ payment_form.payment_method.id_for_label }}"
-							       class="block text-gray-700 font-bold mb-2">
-								{{ payment_form.payment_method.label }}
-							</label>
-							{% render_field payment_form.payment_method class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
-							{% if payment_form.payment_method.errors %}
-								<p class="text-red-500 text-xs italic">{{ payment_form.payment_method.errors.0 }}</p>
-							{% endif %}
+						<div class="bg-gray-100 px-4 py-3 text-right">
+							<input type="hidden" name="step" value="4">
+							<button type="button"
+							        onclick="location.href='{% url 'shipments:create_delivery' %}?step=3'"
+							        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">
+								Back
+							</button>
+							<button type="submit"
+							        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+								Create Delivery
+							</button>
 						</div>
-
-						<div class="mb-4">
-							<label class="block text-gray-700 font-bold mb-2">Price</label>
-							<input class="w-full px-3 py-2 text-gray-700 border rounded-lg bg-gray-100"
-							       value="${{ delivery_task.price }}" disabled>
-						</div>
-					</div>
-					<div class="bg-gray-100 px-4 py-3 text-right">
-						<input type="hidden" name="step" value="4">
-						<button type="button" onclick="location.href='{% url 'shipments:create_delivery' %}?step=3'"
-						        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">
-							Back
-						</button>
-						<button type="submit"
-						        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-							Create Delivery
-						</button>
-					</div>
-				</form>
-			{% endif %}
+					</form>
+				{% endif %}
+			</div>
 		</div>
 	</div>
-	<script>
-        var pickupLat = parseFloat('{{ creating_delivery_task.pickup_latitude }}');
-        var pickupLng = parseFloat('{{ creating_delivery_task.pickup_longitude }}');
 
-        var deliveryLat = parseFloat('{{ creating_delivery_task.delivery_latitude }}');
-        var deliveryLng = parseFloat('{{ creating_delivery_task.delivery_longitude }}');
+	<script>
+        var pickupLat = parseFloat('{{ creating_delivery_task.pickup_latitude }}') || -33.8688;
+        var pickupLng = parseFloat('{{ creating_delivery_task.pickup_longitude }}') || 151.2195;
+
+        var deliveryLat = parseFloat('{{ creating_delivery_task.delivery_latitude }}') || -33.8688;
+        var deliveryLng = parseFloat('{{ creating_delivery_task.delivery_longitude }}') || 151.2195;
 
         function initMapByType(type, initLat, initLng) {
-            const map = new google.maps.Map(document.getElementById(type + "-map"), {
-                center: {lat: initLat || -33.8688, lng: initLng || 151.2195},
+            const mapDiv = document.getElementById(type + "-map");
+            if (!mapDiv) {
+                console.log(type + "-map div not found");
+                return;
+            }
+
+            const map = new google.maps.Map(mapDiv, {
+                center: {lat: initLat, lng: initLng},
                 zoom: 13,
             });
 
-            if (initLat && initLng) {
-                new google.maps.Marker({
-                    position: new google.maps.LatLng(initLat, initLng),
-                    map: map,
-                });
-            }
+            const marker = new google.maps.Marker({
+                position: new google.maps.LatLng(initLat, initLng),
+                map: map,
+            });
 
             const input = document.getElementById("id_" + type + "_address");
-            const autocomplete = new google.maps.places.Autocomplete(input);
-            autocomplete.bindTo("bounds", map);
-            autocomplete.setFields(["address_components", "geometry", "icon", "name"]);
+            if (input) {
+                const autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.bindTo("bounds", map);
 
-            const infowindow = new google.maps.InfoWindow();
-            const infowindowContent = document.getElementById(type + "-infowindow-content");
-            infowindow.setContent(infowindowContent);
+                autocomplete.addListener("place_changed", function () {
+                    const place = autocomplete.getPlace();
 
-            const marker = new google.maps.Marker({
-                map,
-                anchorPoint: new google.maps.Point(0, -29),
-            });
+                    if (!place.geometry) {
+                        window.alert("No details available for input: '" + place.name + "'");
+                        return;
+                    }
 
-            autocomplete.addListener("place_changed", function () {
-                infowindow.close();
-                marker.setVisible(false);
-                const place = autocomplete.getPlace();
+                    // If the place has a geometry, then present it on a map.
+                    if (place.geometry.viewport) {
+                        map.fitBounds(place.geometry.viewport);
+                    } else {
+                        map.setCenter(place.geometry.location);
+                        map.setZoom(17);
+                    }
 
-                if (!place.geometry) {
-                    window.alert("No details available for input: '" + place.name + "'");
-                    return;
-                }
+                    marker.setPosition(place.geometry.location);
+                    marker.setVisible(true);
 
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(17);
-                }
+                    const address = place.formatted_address;
+                    const infowindow = new google.maps.InfoWindow({
+                        content: "<div><strong>" + place.name + "</strong><br>" + address + "</div>"
+                    });
 
-                marker.setPosition(place.geometry.location);
-                marker.setVisible(true);
+                    infowindow.open(map, marker);
 
-                let address = "";
-                if (place.address_components) {
-                    address = [
-                        (place.address_components[0] && place.address_components[0].short_name) || "",
-                        (place.address_components[1] && place.address_components[1].short_name) || "",
-                        (place.address_components[2] && place.address_components[2].short_name) || "",
-                    ].join(" ");
-                }
-
-                infowindowContent.children[type + "-place-icon"].src = place.icon;
-                infowindowContent.children[type + "-place-name"].textContent = place.name;
-                infowindowContent.children[type + "-place-address"].textContent = address;
-                infowindow.open(map, marker);
-
-                document.getElementById(type + "_lat").value = place.geometry.location.lat();
-                document.getElementById(type + "_lng").value = place.geometry.location.lng();
-            });
+                    // Update hidden fields with new lat/lng
+                    document.getElementById(type + "_lat").value = place.geometry.location.lat();
+                    document.getElementById(type + "_lng").value = place.geometry.location.lng();
+                });
+            }
         }
 
         function initMap() {
-            initMapByType("pickup", pickupLat, pickupLng);
-            initMapByType("delivery", deliveryLat, deliveryLng);
+            if (document.getElementById("pickup-map")) {
+                initMapByType("pickup", pickupLat, pickupLng);
+            }
+            if (document.getElementById("delivery-map")) {
+                initMapByType("delivery", deliveryLat, deliveryLng);
+            }
         }
 
-        window.onload = initMap;
+        // If you want to ensure the DOM is fully loaded before running initMap:
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof google !== 'undefined') {
+                initMap();
+            } else {
+                console.error('Google Maps API not loaded');
+            }
+        });
 	</script>
 
-	{#	<script>#}
-	{#        var pickupLat = parseFloat('{{ creating_delivery_task.pickup_latitude }}');#}
-	{#        var pickupLng = parseFloat('{{ creating_delivery_task.pickup_longitude }}');#}
-	{##}
-	{#        var deliveryLat = parseFloat('{{ creating_delivery_task.delivery_latitude }}');#}
-	{#        var deliveryLng = parseFloat('{{ creating_delivery_task.delivery_longitude }}');#}
-	{##}
-	{#        function initMapByType(type, initLat, initLng) {#}
-	{#            const map = new google.maps.Map(document.getElementById(type + "-map"), {#}
-	{#                center: {lat: initLat || -33.8688, lng: initLng || 151.2195},#}
-	{#                zoom: 13,#}
-	{#            });#}
-	{##}
-	{#            if (initLat && initLng) {#}
-	{#                new google.maps.Marker({#}
-	{#                    position: new google.maps.LatLng(initLat, initLng),#}
-	{#                    map: map,#}
-	{#                })#}
-	{#            }#}
-	{##}
-	{#            const input = document.getElementById("id_" + type + "_address");#}
-	{#            const autocomplete = new google.maps.places.Autocomplete(input);#}
-	{#            // Bind the map's bounds (viewport) property to the autocomplete object,#}
-	{#            // so that the autocomplete requests use the current map bounds for the#}
-	{#            // bounds option in the request.#}
-	{#            autocomplete.bindTo("bounds", map);#}
-	{#            // Set the data fields to return when the user selects a place.#}
-	{#            autocomplete.setFields(["address_components", "geometry", "icon", "name"]);#}
-	{#            const infowindow = new google.maps.InfoWindow();#}
-	{#            const infowindowContent = document.getElementById(type + "-infowindow-content");#}
-	{#            infowindow.setContent(infowindowContent);#}
-	{#            const marker = new google.maps.Marker({#}
-	{#                map,#}
-	{#                anchorPoint: new google.maps.Point(0, -29),#}
-	{#            });#}
-	{#            autocomplete.addListener("place_changed", () => {#}
-	{#                infowindow.close();#}
-	{#                marker.setVisible(false);#}
-	{#                const place = autocomplete.getPlace();#}
-	{##}
-	{#                if (!place.geometry) {#}
-	{#                    // User entered the name of a Place that was not suggested and#}
-	{#                    // pressed the Enter key, or the Place Details request failed.#}
-	{#                    window.alert("No details available for input: '" + place.name + "'");#}
-	{#                    return;#}
-	{#                }#}
-	{##}
-	{#                // If the place has a geometry, then present it on a map.#}
-	{#                if (place.geometry.viewport) {#}
-	{#                    map.fitBounds(place.geometry.viewport);#}
-	{#                } else {#}
-	{#                    map.setCenter(place.geometry.location);#}
-	{#                    map.setZoom(17); // Why 17? Because it looks good.#}
-	{#                }#}
-	{#                marker.setPosition(place.geometry.location);#}
-	{#                marker.setVisible(true);#}
-	{#                let address = "";#}
-	{##}
-	{#                if (place.address_components) {#}
-	{#                    address = [#}
-	{#                        (place.address_components[0] &&#}
-	{#                            place.address_components[0].short_name) ||#}
-	{#                        "",#}
-	{#                        (place.address_components[1] &&#}
-	{#                            place.address_components[1].short_name) ||#}
-	{#                        "",#}
-	{#                        (place.address_components[2] &&#}
-	{#                            place.address_components[2].short_name) ||#}
-	{#                        "",#}
-	{#                    ].join(" ");#}
-	{#                }#}
-	{#                infowindowContent.children[type + "-place-icon"].src = place.icon;#}
-	{#                infowindowContent.children[type + "-place-name"].textContent = place.name;#}
-	{#                infowindowContent.children[type + "-place-address"].textContent = address;#}
-	{#                infowindow.open(map, marker);#}
-	{##}
-	{#                $("#" + type + "_lat").val(place.geometry.location.lat());#}
-	{#                $("#" + type + "_lng").val(place.geometry.location.lng());#}
-	{#            });#}
-	{#        }#}
-	{##}
-	{#        function initMap() {#}
-	{#            initMapByType("pickup", pickupLat, pickupLng);#}
-	{#            initMapByType("delivery", deliveryLat, deliveryLng);#}
-	{#        }#}
-	{##}
-	{#        window.onload = initMap;#}
-	{#	</script>#}
 
 {% endblock content %}

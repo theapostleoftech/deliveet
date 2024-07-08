@@ -21,6 +21,11 @@
 	<meta name="theme-color" content="#f4f9ff">
 	{% tailwind_preload_css %}
 	{% tailwind_css %}
+
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+
 </head>
 
 <body class="bg-[#F4F9FF]">
@@ -31,8 +36,9 @@
 {% endblock content %}
 
 {% include 'snippets/footer.html' %}
-<script src="{% static 'static_src/node_modules/flowbite/dist/flowbite.min.js' %}"></script>
+<script src="{% static 'static_src/node_modules/preline/dist/preline.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
 </body>
 </html>
 

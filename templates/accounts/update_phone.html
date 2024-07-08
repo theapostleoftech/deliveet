@@ -1,0 +1,158 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Update & Verify Phone{% endblock title %}
+{% block content %}
+	<script>
+
+        console.log("Firebase Config:", {
+            apiKey: "{{ firebase_config.API_KEY }}",
+            authDomain: "{{ firebase_config.AUTH_DOMAIN }}",
+            projectId: "{{ firebase_config.PROJECT_ID }}",
+            storageBucket: "{{ firebase_config.STORAGE_BUCKET }}",
+            messagingSenderId: "{{ firebase_config.MESSAGING_SENDER_ID }}",
+            appId: "{{ firebase_config.APP_ID }}"
+        });
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "{{ firebase_config.API_KEY }}",
+            authDomain: "{{ firebase_config.AUTH_DOMAIN }}",
+            projectId: "{{ firebase_config.PROJECT_ID }}",
+            storageBucket: "{{ firebase_config.STORAGE_BUCKET }}",
+            messagingSenderId: "{{ firebase_config.MESSAGING_SENDER_ID }}",
+            appId: "{{ firebase_config.APP_ID }}"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+	</script>
+
+	<div class="flex flex-col items-center justify-center px-6 pt-8 mx-auto md:h-screen pt:mt-0 dark:bg-gray-900">
+		<!-- Card -->
+		<div class="w-full max-w-xl p-6 space-y-8 bg-white rounded-lg shadow sm:p-8 dark:bg-gray-800">
+			<h2 class="flex items-center justify-center text-2xl font-bold text-gray-900 dark:text-white">
+				Change your password
+			</h2>
+			<p class="text-base font-normal text-gray-500 dark:text-gray-400">
+				Don't fret! Just type in your email, and we will send you a code to reset your password!
+			</p>
+			<form class="mt-8 space-y-6" method="POST">
+				{% csrf_token %}
+
+				<div class="bg-white mt-2 mb-5 p-4 rounded-lg shadow">
+					<div id="recaptcha-container"></div>
+
+					<div id="get-code" class="{% if request.user.customer_account.phone %} hidden {% endif %}">
+						<div class="flex mb-3">
+							{% render_field form.phone class="flex-grow px-3 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your phone number" %}
+							<button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-r-lg"
+							        type="button">Send Code
+							</button>
+						</div>
+					</div>
+
+					<div id="verify-code" class="hidden">
+						<div class="flex mb-3">
+							<input type="text"
+							       class="flex-grow px-3 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+							       placeholder="Verification code">
+							<button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-r-lg"
+							        type="button">Verify Code
+							</button>
+						</div>
+					</div>
+
+					<div id="change-phone" class="{% if not request.user.customer_account.phone %} hidden {% endif %}">
+						<div class="flex mb-3">
+							<input type="text" class="flex-grow px-3 py-2 border rounded-l-lg bg-gray-100" disabled
+							       value="{{ request.user.customer_account.phone }}">
+							<button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-r-lg"
+							        type="button">Change
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<button type="submit"
+				        class="w-full px-5 py-3 text-base font-medium text-center text-white rounded-lg
+				        bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto
+				        dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+					Save Phone Number
+				</button>
+			</form>
+		</div>
+	</div>
+
+
+
+	<script>
+        function onVerify(idToken) {
+            var form = document.createElement("form");
+            form.method = "POST";
+
+            var element1 = document.createElement("input");
+            element1.name = "id_token";
+            element1.value = idToken;
+            form.appendChild(element1);
+
+            var element2 = document.createElement("input");
+            element2.name = "action";
+            element2.value = "update_phone";
+            form.appendChild(element2);
+
+            var element3 = document.createElement("input");
+            element3.name = "csrfmiddlewaretoken";
+            element3.value = "{{ csrf_token }}";
+            form.appendChild(element3);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            'size': 'invisible'
+        });
+
+        document.querySelector("#get-code button").addEventListener('click', function () {
+            const phoneNumber = document.querySelector("#get-code input").value;
+            console.log(phoneNumber);
+
+            firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+                .then((confirmationResult) => {
+                    console.log(confirmationResult);
+                    window.confirmationResult = confirmationResult;
+
+                    document.querySelector("#get-code").classList.add("hidden");
+                    document.querySelector("#verify-code").classList.remove("hidden");
+                }).catch((error) => {
+                console.error(error.message);
+            });
+        });
+
+        document.querySelector("#verify-code button").addEventListener('click', function () {
+            const code = document.querySelector("#verify-code input").value;
+
+            confirmationResult.confirm(code).then((result) => {
+                const user = result.user;
+                console.log(user.phoneNumber);
+
+                user.getIdToken().then(function (idToken) {
+                    onVerify(idToken);
+                });
+            }).catch((error) => {
+                console.error(error.message);
+            });
+        });
+
+        document.querySelector("#change-phone button").addEventListener('click', function () {
+            document.querySelector("#change-phone").classList.add("hidden");
+            document.querySelector("#get-code").classList.remove("hidden");
+        });
+	</script>
+
+
+{% endblock content %}
+
+
+
+
+

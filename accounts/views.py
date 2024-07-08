@@ -1,23 +1,32 @@
 """
 This contains views for the accounts app.
 """
-
+import firebase_admin
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, get_user_model, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordResetDoneView, PasswordResetView, \
     PasswordResetCompleteView, PasswordResetConfirmView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites import requests
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, View, DetailView, UpdateView, FormView
+from firebase_admin import auth, credentials, messaging
+from firebase_admin.exceptions import FirebaseError
 
 from accounts.forms import SignUpForm, SignInForm, ChangePasswordForm, UserAccountUpdateForm
-from accounts.models import UserAccount
+from accounts.models import UserAccount, Customer, Courier
 
 UserModel = get_user_model()
+
+config = credentials.Certificate(settings.FIREBASE_ADMIN_CREDENTIAL)
+firebase_admin.initialize_app(config)
 
 
 class SignUpView(CreateView):
@@ -150,16 +159,39 @@ class UserAccountUpdateView(LoginRequiredMixin, FormView):
             user_form = UserAccountUpdateForm(request.POST, instance=request.user)
             if user_form.is_valid():
                 user_form.save()
-                messages.success(request, 'Your profile has been updated')
-                return redirect(reverse('customers:customer_dashboard'))
+                if request.user.account_type == 'customer':
+                    messages.success(request, 'Your profile has been updated')
+                    return redirect(reverse('customers:customer_dashboard'))
+                else:
+                    messages.success(request, 'Your profile has been updated')
+                    return redirect(reverse('couriers:courier_dashboard'))
+
         elif request.POST.get('action') == 'update_user_password':
             password_form = ChangePasswordForm(request.user, request.POST)
             if password_form.is_valid():
                 password_form.save()
                 update_session_auth_hash(request, password_form.user)
-                messages.success(request, 'Your password has been updated')
-                return redirect(reverse('customers:customer_dashboard'))
-        return redirect(self.success_url)
+                if request.user.account_type == 'customer':
+                    messages.success(request, 'Your profile has been updated')
+                    return redirect(reverse('customers:customer_dashboard'))
+                else:
+                    messages.success(request, 'Your profile has been updated')
+                    return redirect(reverse('couriers:courier_dashboard'))
+        elif request.POST.get('action') == 'update_user_phone':
+            firebase_user = auth.verify_id_token(request.POST.get('id_token'))
+
+            request.user.phone_number = firebase_user['phone_number']
+            if request.user.phone_number:
+                request.user.phone_number_verified = True
+                request.user.save()
+                if request.user.account_type == 'customer':
+                    messages.success(request, 'Your phone has been updated')
+                    return redirect(reverse('customers:customer_dashboard'))
+                else:
+                    messages.success(request, 'Your profile has been updated')
+                    return redirect(reverse('couriers:courier_dashboard'))
+            else:
+                messages.error(request, 'Your phone number has not been verified')
 
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
