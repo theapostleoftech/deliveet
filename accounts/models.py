@@ -59,6 +59,13 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     phone_number_verified = models.BooleanField(
         default=False,
     )
+    avatar = VersatileImageField(
+        'Avatar',
+        upload_to='media/avatars/',
+        null=True,
+        blank=True,
+        default=''
+    )
     is_active = models.BooleanField(
         default=True,
     )

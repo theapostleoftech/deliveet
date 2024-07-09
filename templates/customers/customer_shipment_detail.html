@@ -4,16 +4,6 @@
 {% block title %} Pickup & Delivery of {{ delivery_task.item_name }} {% endblock %}
 {% block head_js %}
 
-	<style>
-		.photo {
-			object-fit: cover;
-			}
-
-		.photo-blank {
-			@apply border-2 border-dashed border-gray-300 h-32 w-32 rounded-lg flex items-center justify-center text-center p-2;
-			}
-	</style>
-
 	<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=marker,places&v=weekly"
 	        async defer></script>
 	<script>
@@ -55,7 +45,7 @@
                             directions: response,
                             suppressMarkers: true,
                             polylineOptions: {
-                                strokeColor: "#000",
+                                strokeColor: "#1371d9",
                                 strokeWeight: 5,
                                 strokeOpacity: 0.8
                             }
@@ -133,24 +123,30 @@
 
 
 	<div class="w-full mb-4 px-4 2xl:px-0">
-		<h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">DELIVERY DETAILS</h2>
-
 		<div class="mt-2 sm:mt-2 md:gap-6 lg:flex lg:items-start xl:gap-8">
 			<div class="w-full flex-none lg:max-w-2xl xl:max-w-4xl">
 				<div class="space-y-6">
 					<div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
 						<div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
-							<a href="#" class="shrink-0 md:order-1">
-								<img class="rounded-lg mr-6 w-40 h-40 object-cover"
-								     src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg"
-								     alt="imac image"/>
+							<a href="" class="shrink-0 md:order-1">
+								{% if delivery_task.photo %}
+
+									<img class="rounded-lg mr-6 w-40 h-40 object-cover"
+									     src="{{ delivery_task.photo.url }}"
+									     alt=""/>
+
+								{% else %}
+									<img class="rounded-lg mr-6 w-40 h-40 object-cover"
+									     src="{% static 'static/images/delivery/photo.jpg' %}"
+									     alt=""/>
+								{% endif %}
 							</a>
 
 							<label for="counter-input" class="sr-only">Choose quantity:</label>
 
 
 							<div class="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
-								<a href="#" class="text-base font-medium text-gray-900 hover:underline dark:text-white">
+								<a href="" class="text-base font-medium text-gray-900 hover:underline dark:text-white">
 									{{ delivery_task.item_name }}
 								</a>
 
@@ -167,13 +163,29 @@
 											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Size
 											</dt>
 											<dd class="text-base font-medium text-green-600">
-												-{{ delivery_task.get_size_display }}</dd>
+												{{ delivery_task.get_size_display }}</dd>
 										</dl>
 
 										<dl class="flex items-center justify-between gap-4">
 											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Quantity
 											</dt>
 											<dd class="text-base font-medium text-gray-900 dark:text-white">{{ delivery_task.quantity }}</dd>
+										</dl>
+
+										<dl class="flex items-center justify-between gap-4">
+											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Distance
+											</dt>
+											<dd class="text-base font-medium text-gray-900 dark:text-white">{{ delivery_task.distance }}
+												Kilometre
+											</dd>
+										</dl>
+
+										<dl class="flex items-center justify-between gap-4">
+											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Duration
+											</dt>
+											<dd class="text-base font-medium text-gray-900 dark:text-white">{{ delivery_task.duration }}
+												Minutes
+											</dd>
 										</dl>
 
 										<dl class="flex items-center justify-between gap-4">
@@ -185,7 +197,7 @@
 									</div>
 								</div>
 
-								<a href="#"
+								<a href=""
 								   class="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5
 								   py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none
 								   focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700
@@ -220,7 +232,9 @@
 						<img src="{{ delivery_task.pickup_photo.url }}" class="rounded-lg photo w-32 h-32"
 						     alt="Pickup Photo">
 					{% else %}
-						<div class="photo-blank">Pickup Photo Will Appear Here</div>
+						<img class="rounded-lg mr-6 w-40 h-40 object-cover"
+						     src="{% static 'static/images/delivery/pickup.jpg.jpg' %}"
+						     alt=""/>
 					{% endif %}
 				</div>
 			</div>
@@ -242,7 +256,9 @@
 						<img src="{{ delivery_task.delivery_photo.url }}" class="rounded-lg photo w-32 h-32"
 						     alt="Delivery Photo">
 					{% else %}
-						<div class="photo-blank">Delivery Photo Will Appear Here</div>
+						<img class="rounded-lg mr-6 w-40 h-40 object-cover"
+						     src="{% static 'static/images/delivery/delivery.jpg' %}"
+						     alt=""/>
 					{% endif %}
 				</div>
 			</div>

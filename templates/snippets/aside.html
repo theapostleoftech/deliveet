@@ -28,68 +28,69 @@
 				<li>
 					<a href="{% url 'customers:customer_dashboard' %}"
 					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-						     viewBox="0 0 18 18">
-							<path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"></path>
+						<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+						     viewBox="0 0 24 24">
+							<path fill-rule="evenodd"
+							      d="M4.857 3A1.857 1.857 0 0 0 3 4.857v4.286C3 10.169 3.831 11 4.857 11h4.286A1.857 1.857 0 0 0 11 9.143V4.857A1.857 1.857 0 0 0 9.143 3H4.857Zm10 0A1.857 1.857 0 0 0 13 4.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 9.143V4.857A1.857 1.857 0 0 0 19.143 3h-4.286Zm-10 10A1.857 1.857 0 0 0 3 14.857v4.286C3 20.169 3.831 21 4.857 21h4.286A1.857 1.857 0 0 0 11 19.143v-4.286A1.857 1.857 0 0 0 9.143 13H4.857Zm10 0A1.857 1.857 0 0 0 13 14.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 19.143v-4.286A1.857 1.857 0 0 0 19.143 13h-4.286Z"
+							      clip-rule="evenodd"></path>
 						</svg>
+
 						<span class="flex-1 ms-3 whitespace-nowrap">Dashboard</span>
 					</a>
 				</li>
 				<li>
 					<a href="{% url 'customers:customer_shipments' %}"
 					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-						     viewBox="0 0 20 20">
-							<path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"></path>
+						<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+						     viewBox="0 0 24 24">
+							<path fill-rule="evenodd"
+							      d="M4 4a2 2 0 0 0-2 2v9a1 1 0 0 0 1 1h.535a3.5 3.5 0 1 0 6.93 0h3.07a3.5 3.5 0 1 0 6.93 0H21a1 1 0 0 0 1-1v-4a.999.999 0 0 0-.106-.447l-2-4A1 1 0 0 0 19 6h-5a2 2 0 0 0-2-2H4Zm14.192 11.59.016.02a1.5 1.5 0 1 1-.016-.021Zm-10 0 .016.02a1.5 1.5 0 1 1-.016-.021Zm5.806-5.572v-2.02h4.396l1 2.02h-5.396Z"
+							      clip-rule="evenodd"></path>
 						</svg>
-						<span class="flex-1 ms-3 whitespace-nowrap">Deliveries</span>
-						<span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
-					</a>
-				</li>
-				<li>
-					<a href="{% url 'customers:customer_shipments' %}"
-					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-						     viewBox="0 0 18 20">
-							<path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"></path>
-						</svg>
-						<span class="flex-1 ms-3 whitespace-nowrap">Orders</span>
+
+						<span class="flex-1 ms-3 whitespace-nowrap">Delivery</span>
 					</a>
 				</li>
 				<li>
 					<a href="{% url 'finance:wallet' %}"
 					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-						     viewBox="0 0 20 18">
-							<path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"></path>
+						<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+						     viewBox="0 0 24 24">
+							<path fill-rule="evenodd"
+							      d="M12 14a3 3 0 0 1 3-3h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4a3 3 0 0 1-3-3Zm3-1a1 1 0 1 0 0 2h4v-2h-4Z"
+							      clip-rule="evenodd"></path>
+							<path fill-rule="evenodd"
+							      d="M12.293 3.293a1 1 0 0 1 1.414 0L16.414 6h-2.828l-1.293-1.293a1 1 0 0 1 0-1.414ZM12.414 6 9.707 3.293a1 1 0 0 0-1.414 0L5.586 6h6.828ZM4.586 7l-.056.055A2 2 0 0 0 3 9v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2h-4a5 5 0 0 1 0-10h4a2 2 0 0 0-1.53-1.945L17.414 7H4.586Z"
+							      clip-rule="evenodd"></path>
 						</svg>
+
 						<span class="flex-1 ms-3 whitespace-nowrap">Wallet</span>
 					</a>
 				</li>
 				<li>
 					<a href="{% url 'accounts:user_settings' %}"
 					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-						     viewBox="0 0 20 20">
-							<path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"></path>
-							<path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"></path>
-							<path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z"></path>
+						<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+						     viewBox="0 0 24 24">
+							<path fill-rule="evenodd"
+							      d="M17 10v1.126c.367.095.714.24 1.032.428l.796-.797 1.415 1.415-.797.796c.188.318.333.665.428 1.032H21v2h-1.126c-.095.367-.24.714-.428 1.032l.797.796-1.415 1.415-.796-.797a3.979 3.979 0 0 1-1.032.428V20h-2v-1.126a3.977 3.977 0 0 1-1.032-.428l-.796.797-1.415-1.415.797-.796A3.975 3.975 0 0 1 12.126 16H11v-2h1.126c.095-.367.24-.714.428-1.032l-.797-.796 1.415-1.415.796.797A3.977 3.977 0 0 1 15 11.126V10h2Zm.406 3.578.016.016c.354.358.574.85.578 1.392v.028a2 2 0 0 1-3.409 1.406l-.01-.012a2 2 0 0 1 2.826-2.83ZM5 8a4 4 0 1 1 7.938.703 7.029 7.029 0 0 0-3.235 3.235A4 4 0 0 1 5 8Zm4.29 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h6.101A6.979 6.979 0 0 1 9 15c0-.695.101-1.366.29-2Z"
+							      clip-rule="evenodd"></path>
 						</svg>
-						<span class="flex-1 ms-3 whitespace-nowrap">Settings</span>
+
+						<span class="flex-1 ms-3 whitespace-nowrap">Profile</span>
 					</a>
 				</li>
 				<li>
 					<a href="{% url 'accounts:signout' %}"
 					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
+						<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
 							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							      d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"></path>
+							      d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"></path>
 						</svg>
 						<span class="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
 					</a>
@@ -101,149 +102,269 @@
 				<li>
 					<a href="{% url 'couriers:courier_dashboard' %}"
 					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-						     viewBox="0 0 18 18">
-							<path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"></path>
+						<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+						     viewBox="0 0 24 24">
+							<path fill-rule="evenodd"
+							      d="M4.857 3A1.857 1.857 0 0 0 3 4.857v4.286C3 10.169 3.831 11 4.857 11h4.286A1.857 1.857 0 0 0 11 9.143V4.857A1.857 1.857 0 0 0 9.143 3H4.857Zm10 0A1.857 1.857 0 0 0 13 4.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 9.143V4.857A1.857 1.857 0 0 0 19.143 3h-4.286Zm-10 10A1.857 1.857 0 0 0 3 14.857v4.286C3 20.169 3.831 21 4.857 21h4.286A1.857 1.857 0 0 0 11 19.143v-4.286A1.857 1.857 0 0 0 9.143 13H4.857Zm10 0A1.857 1.857 0 0 0 13 14.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 19.143v-4.286A1.857 1.857 0 0 0 19.143 13h-4.286Z"
+							      clip-rule="evenodd"></path>
 						</svg>
+
 						<span class="flex-1 ms-3 whitespace-nowrap">Dashboard</span>
-					</a>
-				</li>
-				<li>
-					<a href="#"
-					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-						     viewBox="0 0 20 20">
-							<path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"></path>
-						</svg>
-						<span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
-						<span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
-					</a>
-				</li>
-				<li>
-					<a href="#"
-					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-						     viewBox="0 0 20 18">
-							<path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"></path>
-						</svg>
-						<span class="flex-1 ms-3 whitespace-nowrap">Users</span>
 					</a>
 				</li>
 				<li>
 					<a href="{% url 'couriers:available_delivery_tasks' %}"
 					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-						     viewBox="0 0 18 20">
-							<path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"></path>
+						<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+						     viewBox="0 0 24 24">
+							<path fill-rule="evenodd"
+							      d="M4 4a2 2 0 0 0-2 2v9a1 1 0 0 0 1 1h.535a3.5 3.5 0 1 0 6.93 0h3.07a3.5 3.5 0 1 0 6.93 0H21a1 1 0 0 0 1-1v-4a.999.999 0 0 0-.106-.447l-2-4A1 1 0 0 0 19 6h-5a2 2 0 0 0-2-2H4Zm14.192 11.59.016.02a1.5 1.5 0 1 1-.016-.021Zm-10 0 .016.02a1.5 1.5 0 1 1-.016-.021Zm5.806-5.572v-2.02h4.396l1 2.02h-5.396Z"
+							      clip-rule="evenodd"></path>
 						</svg>
-						<span class="flex-1 ms-3 whitespace-nowrap">Delivery Tasks</span>
+
+						<span class="flex-1 ms-3 whitespace-nowrap">Delivery</span>
 					</a>
 				</li>
 				<li>
-					<a href="#"
+					<a href="{% url 'finance:wallet' %}"
 					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
-							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							      d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"></path>
+						<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+						     viewBox="0 0 24 24">
+							<path fill-rule="evenodd"
+							      d="M12 14a3 3 0 0 1 3-3h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4a3 3 0 0 1-3-3Zm3-1a1 1 0 1 0 0 2h4v-2h-4Z"
+							      clip-rule="evenodd"></path>
+							<path fill-rule="evenodd"
+							      d="M12.293 3.293a1 1 0 0 1 1.414 0L16.414 6h-2.828l-1.293-1.293a1 1 0 0 1 0-1.414ZM12.414 6 9.707 3.293a1 1 0 0 0-1.414 0L5.586 6h6.828ZM4.586 7l-.056.055A2 2 0 0 0 3 9v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2h-4a5 5 0 0 1 0-10h4a2 2 0 0 0-1.53-1.945L17.414 7H4.586Z"
+							      clip-rule="evenodd"></path>
 						</svg>
-						<span class="flex-1 ms-3 whitespace-nowrap">Sign In</span>
+
+						<span class="flex-1 ms-3 whitespace-nowrap">Wallet</span>
 					</a>
 				</li>
 				<li>
 					<a href="{% url 'accounts:user_settings' %}"
 					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-						<svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-						     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-						     viewBox="0 0 20 20">
-							<path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"></path>
-							<path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"></path>
-							<path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z"></path>
+						<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+						     viewBox="0 0 24 24">
+							<path fill-rule="evenodd"
+							      d="M17 10v1.126c.367.095.714.24 1.032.428l.796-.797 1.415 1.415-.797.796c.188.318.333.665.428 1.032H21v2h-1.126c-.095.367-.24.714-.428 1.032l.797.796-1.415 1.415-.796-.797a3.979 3.979 0 0 1-1.032.428V20h-2v-1.126a3.977 3.977 0 0 1-1.032-.428l-.796.797-1.415-1.415.797-.796A3.975 3.975 0 0 1 12.126 16H11v-2h1.126c.095-.367.24-.714.428-1.032l-.797-.796 1.415-1.415.796.797A3.977 3.977 0 0 1 15 11.126V10h2Zm.406 3.578.016.016c.354.358.574.85.578 1.392v.028a2 2 0 0 1-3.409 1.406l-.01-.012a2 2 0 0 1 2.826-2.83ZM5 8a4 4 0 1 1 7.938.703 7.029 7.029 0 0 0-3.235 3.235A4 4 0 0 1 5 8Zm4.29 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h6.101A6.979 6.979 0 0 1 9 15c0-.695.101-1.366.29-2Z"
+							      clip-rule="evenodd"></path>
 						</svg>
-						<span class="flex-1 ms-3 whitespace-nowrap">Settings</span>
+
+						<span class="flex-1 ms-3 whitespace-nowrap">Profile</span>
 					</a>
 				</li>
+				<li>
+					<a href="{% url 'accounts:signout' %}"
+					   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+						<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							      d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"></path>
+						</svg>
+						<span class="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
+					</a>
+				</li>
+
 			</ul>
 		{% endif %}
 	</div>
 </aside>
 
-
-<div class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2  bg-[#F4F9FF] border border-gray-200 bottom-0 left-1/2 dark:bg-gray-700 dark:border-gray-600 md:hidden">
-	<div class="grid h-full max-w-lg grid-cols-5 mx-auto">
-		<button data-tooltip-target="tooltip-home" type="button"
-		        class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
-			<svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-			     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-				<path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"></path>
-			</svg>
-			<span class="sr-only">Home</span>
-		</button>
-		<div id="tooltip-home" role="tooltip"
-		     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-			Home
-			<div class="tooltip-arrow" data-popper-arrow></div>
-		</div>
-		<button data-tooltip-target="tooltip-wallet" type="button"
-		        class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
-			<svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-			     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-				<path d="M11.074 4 8.442.408A.95.95 0 0 0 7.014.254L2.926 4h8.148ZM9 13v-1a4 4 0 0 1 4-4h6V6a1 1 0 0 0-1-1H1a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h17a1 1 0 0 0 1-1v-2h-6a4 4 0 0 1-4-4Z"></path>
-				<path d="M19 10h-6a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1Zm-4.5 3.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2ZM12.62 4h2.78L12.539.41a1.086 1.086 0 1 0-1.7 1.352L12.62 4Z"></path>
-			</svg>
-			<span class="sr-only">Wallet</span>
-		</button>
-		<div id="tooltip-wallet" role="tooltip"
-		     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-			Wallet
-			<div class="tooltip-arrow" data-popper-arrow></div>
-		</div>
-		<div class="flex items-center justify-center">
-			<button data-tooltip-target="tooltip-new" type="button"
-			        class="inline-flex items-center justify-center w-10 h-10 font-medium bg-blue-600 rounded-full hover:bg-blue-700 group focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800">
-				<svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-				     viewBox="0 0 18 18">
-					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-					      d="M9 1v16M1 9h16"></path>
+{% if user.is_authenticated and user.is_customer %}
+	<div class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2  bg-[#F4F9FF] border border-gray-200 bottom-0 left-1/2 dark:bg-gray-700 dark:border-gray-600 md:hidden">
+		<div class="grid h-full max-w-lg grid-cols-5 mx-auto">
+			<a href="{% url 'customers:customer_dashboard' %}" data-tooltip-target="tooltip-home" type="button"
+			   class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 group">
+				<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+				     viewBox="0 0 24 24">
+					<path fill-rule="evenodd"
+					      d="M4.857 3A1.857 1.857 0 0 0 3 4.857v4.286C3 10.169 3.831 11 4.857 11h4.286A1.857 1.857 0 0 0 11 9.143V4.857A1.857 1.857 0 0 0 9.143 3H4.857Zm10 0A1.857 1.857 0 0 0 13 4.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 9.143V4.857A1.857 1.857 0 0 0 19.143 3h-4.286Zm-10 10A1.857 1.857 0 0 0 3 14.857v4.286C3 20.169 3.831 21 4.857 21h4.286A1.857 1.857 0 0 0 11 19.143v-4.286A1.857 1.857 0 0 0 9.143 13H4.857Zm10 0A1.857 1.857 0 0 0 13 14.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 19.143v-4.286A1.857 1.857 0 0 0 19.143 13h-4.286Z"
+					      clip-rule="evenodd"></path>
 				</svg>
-				<span class="sr-only">New item</span>
-			</button>
-		</div>
-		<div id="tooltip-new" role="tooltip"
-		     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-			Create new item
-			<div class="tooltip-arrow" data-popper-arrow></div>
-		</div>
-		<button data-tooltip-target="tooltip-settings" type="button"
-		        class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
-			<svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-			     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-				<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-				      d="M4 12.25V1m0 11.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M4 19v-2.25m6-13.5V1m0 2.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M10 19V7.75m6 4.5V1m0 11.25a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM16 19v-2"></path>
-			</svg>
-			<span class="sr-only">Settings</span>
-		</button>
-		<div id="tooltip-settings" role="tooltip"
-		     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-			Settings
-			<div class="tooltip-arrow" data-popper-arrow></div>
-		</div>
-		<button data-tooltip-target="tooltip-profile" type="button"
-		        class="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group">
-			<svg class="w-5 h-5 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-			     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-				<path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z"></path>
-			</svg>
-			<span class="sr-only">Profile</span>
-		</button>
-		<div id="tooltip-profile" role="tooltip"
-		     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-			Profile
-			<div class="tooltip-arrow" data-popper-arrow></div>
+				<span class="sr-only">Home</span>
+			</a>
+			<div id="tooltip-home" role="tooltip"
+			     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+				Home
+				<div class="tooltip-arrow" data-popper-arrow></div>
+			</div>
+
+			<a href="{% url 'finance:wallet' %}" data-tooltip-target="tooltip-wallet" type="button"
+			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+				<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+				     viewBox="0 0 24 24">
+					<path fill-rule="evenodd"
+					      d="M12 14a3 3 0 0 1 3-3h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4a3 3 0 0 1-3-3Zm3-1a1 1 0 1 0 0 2h4v-2h-4Z"
+					      clip-rule="evenodd"></path>
+					<path fill-rule="evenodd"
+					      d="M12.293 3.293a1 1 0 0 1 1.414 0L16.414 6h-2.828l-1.293-1.293a1 1 0 0 1 0-1.414ZM12.414 6 9.707 3.293a1 1 0 0 0-1.414 0L5.586 6h6.828ZM4.586 7l-.056.055A2 2 0 0 0 3 9v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2h-4a5 5 0 0 1 0-10h4a2 2 0 0 0-1.53-1.945L17.414 7H4.586Z"
+					      clip-rule="evenodd"></path>
+				</svg>
+				<span class="sr-only">Wallet</span>
+			</a>
+			<div id="tooltip-wallet" role="tooltip"
+			     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+				Wallet
+				<div class="tooltip-arrow" data-popper-arrow></div>
+			</div>
+
+			<div class="flex items-center justify-center">
+				<a href="{% url 'customers:customer_shipments' %}" data-tooltip-target="tooltip-new" type="button"
+				   class="inline-flex items-center justify-center w-10 h-10 font-medium
+				   group focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800">
+					<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+					     viewBox="0 0 24 24">
+						<path fill-rule="evenodd"
+						      d="M4 4a2 2 0 0 0-2 2v9a1 1 0 0 0 1 1h.535a3.5 3.5 0 1 0 6.93 0h3.07a3.5 3.5 0 1 0 6.93 0H21a1 1 0 0 0 1-1v-4a.999.999 0 0 0-.106-.447l-2-4A1 1 0 0 0 19 6h-5a2 2 0 0 0-2-2H4Zm14.192 11.59.016.02a1.5 1.5 0 1 1-.016-.021Zm-10 0 .016.02a1.5 1.5 0 1 1-.016-.021Zm5.806-5.572v-2.02h4.396l1 2.02h-5.396Z"
+						      clip-rule="evenodd"></path>
+					</svg>
+					<span class="sr-only">Delivery</span>
+				</a>
+			</div>
+			<div id="tooltip-new" role="tooltip"
+			     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white
+			     transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+				Delivery
+				<div class="tooltip-arrow" data-popper-arrow></div>
+			</div>
+
+			<a href="{% url 'accounts:user_settings' %}" data-tooltip-target="tooltip-profile" type="button"
+			   class="inline-flex flex-col items-center justify-center px-5 rounded-e-full
+			        hover:bg-gray-50 dark:hover:bg-gray-800 group">
+				<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+				     viewBox="0 0 24 24">
+					<path fill-rule="evenodd"
+					      d="M17 10v1.126c.367.095.714.24 1.032.428l.796-.797 1.415 1.415-.797.796c.188.318.333.665.428 1.032H21v2h-1.126c-.095.367-.24.714-.428 1.032l.797.796-1.415 1.415-.796-.797a3.979 3.979 0 0 1-1.032.428V20h-2v-1.126a3.977 3.977 0 0 1-1.032-.428l-.796.797-1.415-1.415.797-.796A3.975 3.975 0 0 1 12.126 16H11v-2h1.126c.095-.367.24-.714.428-1.032l-.797-.796 1.415-1.415.796.797A3.977 3.977 0 0 1 15 11.126V10h2Zm.406 3.578.016.016c.354.358.574.85.578 1.392v.028a2 2 0 0 1-3.409 1.406l-.01-.012a2 2 0 0 1 2.826-2.83ZM5 8a4 4 0 1 1 7.938.703 7.029 7.029 0 0 0-3.235 3.235A4 4 0 0 1 5 8Zm4.29 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h6.101A6.979 6.979 0 0 1 9 15c0-.695.101-1.366.29-2Z"
+					      clip-rule="evenodd"></path>
+				</svg>
+				<span class="sr-only">Profile</span>
+			</a>
+			<div id="tooltip-profile" role="tooltip"
+			     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+				Profile
+				<div class="tooltip-arrow" data-popper-arrow></div>
+			</div>
+
+
+			<a href="{% url 'accounts:signout' %}" data-tooltip-target="tooltip-settings" type="button"
+			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+				<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+					      d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"></path>
+				</svg>
+				<span class="sr-only">Sign Out</span>
+			</a>
+			<div id="tooltip-settings" role="tooltip"
+			     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+				Sign Out
+				<div class="tooltip-arrow" data-popper-arrow></div>
+			</div>
 		</div>
 	</div>
-</div>
+{% else %}
+	<div class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2  bg-[#F4F9FF] border border-gray-200 bottom-0 left-1/2 dark:bg-gray-700 dark:border-gray-600 md:hidden">
+		<div class="grid h-full max-w-lg grid-cols-5 mx-auto">
+			<a href="{% url 'couriers:courier_dashboard' %}" data-tooltip-target="tooltip-home" type="button"
+			   class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 group">
+				<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+				     viewBox="0 0 24 24">
+					<path fill-rule="evenodd"
+					      d="M4.857 3A1.857 1.857 0 0 0 3 4.857v4.286C3 10.169 3.831 11 4.857 11h4.286A1.857 1.857 0 0 0 11 9.143V4.857A1.857 1.857 0 0 0 9.143 3H4.857Zm10 0A1.857 1.857 0 0 0 13 4.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 9.143V4.857A1.857 1.857 0 0 0 19.143 3h-4.286Zm-10 10A1.857 1.857 0 0 0 3 14.857v4.286C3 20.169 3.831 21 4.857 21h4.286A1.857 1.857 0 0 0 11 19.143v-4.286A1.857 1.857 0 0 0 9.143 13H4.857Zm10 0A1.857 1.857 0 0 0 13 14.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 19.143v-4.286A1.857 1.857 0 0 0 19.143 13h-4.286Z"
+					      clip-rule="evenodd"></path>
+				</svg>
+				<span class="sr-only">Home</span>
+			</a>
+			<div id="tooltip-home" role="tooltip"
+			     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+				Home
+				<div class="tooltip-arrow" data-popper-arrow></div>
+			</div>
+
+			<a href="{% url 'finance:wallet' %}" data-tooltip-target="tooltip-wallet" type="button"
+			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+				<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+				     viewBox="0 0 24 24">
+					<path fill-rule="evenodd"
+					      d="M12 14a3 3 0 0 1 3-3h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4a3 3 0 0 1-3-3Zm3-1a1 1 0 1 0 0 2h4v-2h-4Z"
+					      clip-rule="evenodd"></path>
+					<path fill-rule="evenodd"
+					      d="M12.293 3.293a1 1 0 0 1 1.414 0L16.414 6h-2.828l-1.293-1.293a1 1 0 0 1 0-1.414ZM12.414 6 9.707 3.293a1 1 0 0 0-1.414 0L5.586 6h6.828ZM4.586 7l-.056.055A2 2 0 0 0 3 9v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2h-4a5 5 0 0 1 0-10h4a2 2 0 0 0-1.53-1.945L17.414 7H4.586Z"
+					      clip-rule="evenodd"></path>
+				</svg>
+				<span class="sr-only">Wallet</span>
+			</a>
+			<div id="tooltip-wallet" role="tooltip"
+			     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+				Wallet
+				<div class="tooltip-arrow" data-popper-arrow></div>
+			</div>
+
+			<div class="flex items-center justify-center">
+				<a href="{% url 'couriers:available_delivery_tasks' %}" data-tooltip-target="tooltip-new" type="button"
+				   class="inline-flex items-center justify-center w-10 h-10 font-medium
+				   group focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800">
+					<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+					     viewBox="0 0 24 24">
+						<path fill-rule="evenodd"
+						      d="M4 4a2 2 0 0 0-2 2v9a1 1 0 0 0 1 1h.535a3.5 3.5 0 1 0 6.93 0h3.07a3.5 3.5 0 1 0 6.93 0H21a1 1 0 0 0 1-1v-4a.999.999 0 0 0-.106-.447l-2-4A1 1 0 0 0 19 6h-5a2 2 0 0 0-2-2H4Zm14.192 11.59.016.02a1.5 1.5 0 1 1-.016-.021Zm-10 0 .016.02a1.5 1.5 0 1 1-.016-.021Zm5.806-5.572v-2.02h4.396l1 2.02h-5.396Z"
+						      clip-rule="evenodd"></path>
+					</svg>
+					<span class="sr-only">Delivery</span>
+				</a>
+			</div>
+			<div id="tooltip-new" role="tooltip"
+			     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white
+			     transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+				Delivery
+				<div class="tooltip-arrow" data-popper-arrow></div>
+			</div>
+
+			<a href="{% url 'accounts:user_settings' %}" data-tooltip-target="tooltip-profile" type="button"
+			   class="inline-flex flex-col items-center justify-center px-5 rounded-e-full
+			        hover:bg-gray-50 dark:hover:bg-gray-800 group">
+				<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+				     viewBox="0 0 24 24">
+					<path fill-rule="evenodd"
+					      d="M17 10v1.126c.367.095.714.24 1.032.428l.796-.797 1.415 1.415-.797.796c.188.318.333.665.428 1.032H21v2h-1.126c-.095.367-.24.714-.428 1.032l.797.796-1.415 1.415-.796-.797a3.979 3.979 0 0 1-1.032.428V20h-2v-1.126a3.977 3.977 0 0 1-1.032-.428l-.796.797-1.415-1.415.797-.796A3.975 3.975 0 0 1 12.126 16H11v-2h1.126c.095-.367.24-.714.428-1.032l-.797-.796 1.415-1.415.796.797A3.977 3.977 0 0 1 15 11.126V10h2Zm.406 3.578.016.016c.354.358.574.85.578 1.392v.028a2 2 0 0 1-3.409 1.406l-.01-.012a2 2 0 0 1 2.826-2.83ZM5 8a4 4 0 1 1 7.938.703 7.029 7.029 0 0 0-3.235 3.235A4 4 0 0 1 5 8Zm4.29 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h6.101A6.979 6.979 0 0 1 9 15c0-.695.101-1.366.29-2Z"
+					      clip-rule="evenodd"></path>
+				</svg>
+				<span class="sr-only">Profile</span>
+			</a>
+			<div id="tooltip-profile" role="tooltip"
+			     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+				Profile
+				<div class="tooltip-arrow" data-popper-arrow></div>
+			</div>
+
+
+			<a href="{% url 'accounts:signout' %}" data-tooltip-target="tooltip-settings" type="button"
+			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+				<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+					      d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"></path>
+				</svg>
+				<span class="sr-only">Sign Out</span>
+			</a>
+			<div id="tooltip-settings" role="tooltip"
+			     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+				Sign Out
+				<div class="tooltip-arrow" data-popper-arrow></div>
+			</div>
+		</div>
+	</div>
+{% endif %}

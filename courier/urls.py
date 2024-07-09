@@ -13,7 +13,7 @@ urlpatterns = [
 
     path('deliveries/tasks/', views.CourierDeliveryTasksView.as_view(), name='available_delivery_tasks'),
 
-    path('deliveries/task/<id>', views.CourierOrderDetailView.as_view(), name='shipment_order_details'),
+    path('deliveries/tasks/<id>/', views.CourierDeliveryTaskView.as_view(), name='available_delivery_task'),
 
     # path('shipments/order/', views.CourierShipmentsView.as_view(), name='shipment_order'),
 

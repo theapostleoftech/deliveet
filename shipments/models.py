@@ -94,10 +94,10 @@ class Delivery(BaseModel):
     )
     photo = VersatileImageField(
         'Photo',
-        upload_to='images/delivery',
+        upload_to='media/delivery',
         null=True,
         blank=True,
-        default='images/deliveries/photo.jpg'
+        default='static/images/photo.jpg'
 
     )
     quantity = models.PositiveIntegerField(
@@ -121,10 +121,10 @@ class Delivery(BaseModel):
     )
     pickup_photo = VersatileImageField(
         'Pickup',
-        upload_to='images/delivery/pickup',
+        upload_to='media/delivery/pickup',
         null=True,
         blank=True,
-        default='images/deliveries/pickup.jpg'
+        default='static/images/pickup.jpg'
 
     )
     sender_name = models.CharField(
@@ -161,10 +161,10 @@ class Delivery(BaseModel):
     )
     delivery_photo = VersatileImageField(
         'Delivery',
-        upload_to='images/delivery/delivery',
+        upload_to='media/delivery/delivery',
         null=True,
         blank=True,
-        default='images/deliveries/delivery.jpg'
+        default='static/images/delivery.jpg'
     )
     duration = models.IntegerField(
         default=0

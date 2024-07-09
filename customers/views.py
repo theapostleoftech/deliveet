@@ -14,7 +14,7 @@ from shipments.models import Delivery
 @method_decorator(customer_required, name='dispatch')
 class CustomerDashboardView(ListView):
     """
-    This lists the ongoing delivery of the user
+    This is the customers dashboard view
     """
     template_name = 'customers/customers_dashboard.html'
     context_object_name = 'deliveries'
@@ -65,18 +65,10 @@ class CustomerDashboardView(ListView):
         return context
 
 
-# @method_decorator(customer_required, name='dispatch')
-# class CustomerDashboardView(TemplateView):
-#     """
-#     This view displays the customers dashboard.
-#     """
-#     template_name = 'customers/customers_dashboard.html'
-
-
 @method_decorator(customer_required, name='dispatch')
-class CustomerDeliveriesView(ListView):
+class CustomerDeliveryTasksView(ListView):
     """
-    This view displays the customers shipment orders.
+    This view displays the customers delivery orders.
     """
     template_name = 'customers/customer_shipments.html'
     context_object_name = 'delivery_tasks'
@@ -92,8 +84,8 @@ class CustomerDeliveriesView(ListView):
         )
 
 
-class CustomerCompletedShipmentsView(ListView):
-    template_name = 'customers/customer_completed_shipment.html'
+class CustomerCompletedDeliveryTask(ListView):
+    template_name = 'customers/customer_completed_delivery_task.html'
     context_object_name = 'delivery_task'
 
     def get_queryset(self):
@@ -107,7 +99,7 @@ class CustomerCompletedShipmentsView(ListView):
 
 
 @method_decorator(customer_required, name='dispatch')
-class CustomerShipmentDetailView(DetailView):
+class CustomerDeliveryTaskDetailView(DetailView):
     """
     This view displays the customer's current order
     """

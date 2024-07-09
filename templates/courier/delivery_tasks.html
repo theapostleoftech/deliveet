@@ -2,9 +2,9 @@
 {% load static %}
 {% block title %}Delivery Tasks{% endblock title %}
 {% block head_js %}
-	<script
-			src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=places&v=weekly"
-			defer></script>
+
+	<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=marker,places&v=weekly"
+	        async defer></script>
 
 	<script>
         function initMap() {
@@ -13,122 +13,113 @@
                 center: {lat: 6.585787, lng: 3.363888},
             });
 
-            // Get available jobs via API
             fetch("{% url 'couriers:courier_delivery_tasks_api' %}")
                 .then(response => response.json())
                 .then(json => {
                     console.log(json);
 
-                    // Create a new viewpoint bound
-                    var bounds = new google.maps.LatLngBounds();
+                    const bounds = new google.maps.LatLngBounds();
 
-                    for (let i = 0; i < json.delivery_tasks.length; i++) {
-                        const delivery_task = json.delivery_tasks[i];
+                    json.delivery_tasks.forEach(delivery_task => {
                         const position = {lat: delivery_task.pickup_latitude, lng: delivery_task.pickup_longitude};
                         const marker = new google.maps.Marker({
-                            position,
                             map,
+                            position,
+                            title: delivery_task.task_name
                         });
 
-                        // Increase the bounds to take this point
                         bounds.extend(position);
 
                         new google.maps.InfoWindow({
-                            content: "<small><b>" + delivery_task.name + "</b></small><br/><small>" + delivery_task.distance + " Km</small>"
+                            content: `<small class="font-normal">${delivery_task.task_name}</small><br/><small class="font-normal">${delivery_task.distance} Km</small>`
                         }).open(map, marker);
 
-                        // Click event for each job
                         marker.addListener("click", () => {
                             showJobDetails(delivery_task);
                         });
+                    });
 
-                        // Fit these bounds to the map
-                        map.fitBounds(bounds);
-                    }
-                })
+                    map.fitBounds(bounds);
+                });
         }
 
         function showJobDetails(delivery_task) {
-            $("#job-details").css("display", "block");
-            $("#job-name").html(delivery_task.item_name);
+            const jobDetails = document.getElementById("job-details");
+            jobDetails.classList.remove("hidden");
 
-            $("#job-photo").attr('src', "/media/" + delivery_task.photo);
-            $("#pickup-address").html(delivery_task.pickup_address);
-            $("#delivery-address").html(delivery_task.delivery_address);
-            $("#duration").html(delivery_task.duration);
-            $("#distance").html(delivery_task.distance);
-            $("#price").html(delivery_task.price);
+            document.getElementById("job-name").textContent = delivery_task.item_name;
+            document.getElementById("job-photo").src = "/media/" + delivery_task.photo;
+            document.getElementById("pickup-address").textContent = delivery_task.pickup_address;
+            document.getElementById("delivery-address").textContent = delivery_task.delivery_address;
+            document.getElementById("duration").textContent = delivery_task.duration;
+            document.getElementById("distance").textContent = delivery_task.distance;
+            document.getElementById("price").textContent = delivery_task.price;
 
-            $("#job-details").on("click", function () {
-                window.location.href = "{% url 'couriers:available_delivery_tasks' %}" + delivery_task.id + "/";
-            })
-
+            jobDetails.addEventListener("click", function () {
+                window.location.href = "/courier/deliveries/tasks/" + delivery_task.id + "/";
+            });
         }
 
         messaging.onMessage((payload) => {
+            console.log('Message received. ', payload);
             window.location.reload();
-        })
+        });
 	</script>
 
 	<style>
 		.gm-ui-hover-effect {
 			display: none !important;
 			}
-
-		#map {
-			flex: 1;
-			}
-
-		small {
-			font-size: 12px;
-			line-height: 1.2rem;
-			}
-
-		.card {
-			border: none;
-			}
-
-		#job-details {
-			display: none;
-			}
 	</style>
 {% endblock head_js %}
+
 {% block content %}
-
-	<div class="d-flex flex-column h-100" style="padding-bottom: 60px">
+	<div class="flex flex-col h-full pb-15">
 		<div id="map" style="height: 500px; width: 100%;"></div>
-		<div id="job-details" class="flex items-start gap-2.5">
-			<div class="flex items-start gap-2.5">
-				<div class="media">
-					<img id="job-photo" class="w-8 h-8 rounded-full" width="50px" height="50px">
-					<div class="flex flex-col w-full max-w-[320px] leading-1.5">
-						<b id="job-name"></b>
-						<div class="d-flex">
-							<div class="flex-grow-1 mr-2">
-
-								<small class="text-success">
-									<i class="fas fa-car"></i> <span id="distance"></span> km
-									<i class="far fa-clock ml-2"></i> <span id="duration"></span> mins
-								</small>
-
-								<div class="d-flex align-items-center mt-2">
-									<i class="fas fa-map-marker-alt"></i>
-									<small id="pickup-address" class="text-secondary ml-2"></small>
-								</div>
-
-								<div class="d-flex align-items-center mt-2">
-									<i class="fas fa-flag-checkered"></i>
-									<small id="delivery-address" class="text-secondary ml-2"></small>
-								</div>
-
+		<div id="job-details" class="hidden mt-4 p-4 bg-white rounded-lg shadow">
+			<div class="flex items-start gap-4">
+				<img id="job-photo" class="w-12 h-12 rounded-full" width="50" height="50">
+				<div class="flex flex-col w-full max-w-sm leading-tight">
+					<h3 id="job-name" class="font-bold text-lg"></h3>
+					<div class="flex justify-between items-center mt-2">
+						<div>
+							<p class="text-green-600 text-sm">
+								<svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+								     xmlns="http://www.w3.org/2000/svg">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+								</svg>
+								<span id="distance"></span> km
+								<svg class="w-4 h-4 inline-block ml-2" fill="none" stroke="currentColor"
+								     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+								</svg>
+								<span id="duration"></span> mins
+							</p>
+							<div class="flex items-center mt-2">
+								<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+								     xmlns="http://www.w3.org/2000/svg">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+								</svg>
+								<small id="pickup-address" class="text-gray-600 ml-2"></small>
 							</div>
-							$<h3 id="price"></h3>
-
+							<div class="flex items-center mt-2">
+								<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+								     xmlns="http://www.w3.org/2000/svg">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									      d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
+								</svg>
+								<small id="delivery-address" class="text-gray-600 ml-2"></small>
+							</div>
 						</div>
+						<h3 id="price" class="text-2xl font-bold"></h3>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
 {% endblock content %}

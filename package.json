@@ -32,6 +32,7 @@
     "tailwindcss": "^3.3.2"
   },
   "dependencies": {
+    "firebase": "^10.12.3",
     "flowbite": "^2.4.1",
     "jquery": "^3.7.1"
   }

@@ -1,6 +1,8 @@
 """
 URL configuration for deliveet project.
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
@@ -27,8 +29,9 @@ urlpatterns = [
 ]
 
 websocket_urlpatterns = [
-    # path('ws/shipments/<delivery_task_id>/', consumers.ShipmentOrderConsumer.as_asgi())
-    re_path(r'ws/shipments/(?P<delivery_task_id>[\w-]+)/$', consumers.ShipmentOrderConsumer.as_asgi()),
+                            # path('ws/shipments/<delivery_task_id>/', consumers.ShipmentOrderConsumer.as_asgi())
+                            re_path(r'ws/shipments/(?P<delivery_task_id>[\w-]+)/$',
+                                    consumers.ShipmentOrderConsumer.as_asgi()),
 
-    re_path(r'ws/test/$', test_consumer.TestConsumer.as_asgi()),
-]
+                            re_path(r'ws/test/$', test_consumer.TestConsumer.as_asgi()),
+                        ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

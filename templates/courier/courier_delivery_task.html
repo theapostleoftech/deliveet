@@ -1,0 +1,66 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+
+{% block head %}
+    <!-- No additional styles needed as we're using Tailwind -->
+{% endblock %}
+
+{% block content %}
+
+<div class="fixed top-0 left-0 right-0 h-16 flex items-center px-5 bg-yellow-400 shadow-md">
+    <a href="{% url 'couriers:available_delivery_tasks' %}" class="mr-2">
+        <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 1 1.3 6.326a.91.91 0 0 0 0 1.348L7 13"></path>
+        </svg>
+    </a>
+    <h5 class="text-lg font-semibold">Available Delivery Tasks</h5>
+</div>
+
+<div class="container mx-auto pt-20 px-4">
+    <div class="flex items-start">
+        <img src="{{ delivery_task.photo.url }}" class="rounded-lg mr-4 w-24 h-24 object-cover" alt="">
+        <div>
+            <h4 class="text-xl font-bold">{{ delivery_task.name }}</h4>
+            <span class="block">{{ delivery_task.get_size_display }} Size</span>
+            <span class="block">{{ delivery_task.quantity }} Item(s)</span>
+            <span class="block">${{ delivery_task.price }}</span>
+        </div>
+    </div>
+    <hr class="my-4" />
+
+    <div class="flex items-center text-gray-600 mb-3">
+        <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+            <path d="M8 0a7.992 7.992 0 0 0-6.583 12.535 1 1 0 0 0 .12.183l.12.146c.112.145.227.285.326.4l5.245 6.374a1 1 0 0 0 1.545-.003l5.092-6.205c.206-.222.4-.455.578-.7l.127-.155a.934.934 0 0 0 .122-.192A8.001 8.001 0 0 0 8 0Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"></path>
+        </svg>
+        <span class="ml-2">{{ delivery_task.pickup_address }}</span>
+    </div>
+
+    <div class="flex items-center text-gray-600 mb-3">
+        <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+            <path d="M7.362 3.321l-6.486 8.753a1 1 0 0 0 .799 1.593h14.65a1 1 0 0 0 .799-1.593L10.638 3.322a1.001 1.001 0 0 0-1.6 0l-1.676 2.263ZM16 2a1 1 0 0 1 1 1v6h-1V3a1 1 0 0 0-1-1H3.5L2.28.684A1 1 0 0 0 1 1.684V9H0V1.684a2 2 0 0 1 2.56-1.938L4.08 1H16Z"></path>
+        </svg>
+        <span class="ml-2">{{ delivery_task.delivery_address }}</span>
+    </div>
+    <hr class="my-4" />
+
+    <b class="text-gray-600">CUSTOMER</b>
+    <div class="flex items-center mt-2">
+        <img src="{% if delivery_task.customer.avatar %}{{ delivery_task.customer.avatar.url }}{% else %}{% static 'img/avatar.png' %}{% endif %}"
+             class="rounded-full mr-4 w-16 h-16 object-cover">
+        <div>
+            <h5 class="text-yellow-500 font-bold">{{ delivery_task.customer.user.get_full_name }}</h5>
+            <span>{{ delivery_task.customer.phone_number }}</span>
+        </div>
+    </div>
+    <hr class="my-4" />
+
+    <form method="POST">
+        {% csrf_token %}
+        <button class="w-full bg-secondary-500 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded">
+            Accept
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}

@@ -26,10 +26,35 @@ class CourierDashboardView(TemplateView):
             courier=self.request.user.courier_account,
             status=Delivery.StatusChoices.COMPLETED
         )
+        deliveries_in_progress = Delivery.objects.filter(
+            courier=self.request.user.courier_account,
+            status__in=[
+                Delivery.StatusChoices.PROCESSING,
+                Delivery.StatusChoices.PICKUP_IN_PROGRESS,
+                Delivery.StatusChoices.DELIVERY_IN_PROGRESS,
+            ]
+        ).count()
+
+        deliveries_canceled = Delivery.objects.filter(
+            courier=self.request.user.courier_account,
+            status__in=[
+                Delivery.StatusChoices.CANCELED,
+            ]
+        ).count()
+
+        deliveries_completed = Delivery.objects.filter(
+            courier=self.request.user.courier_account,
+            status__in=[
+                Delivery.StatusChoices.COMPLETED,
+            ]
+        ).count()
 
         context['total_earnings'] = round(sum(delivery_task.price for delivery_task in delivery_tasks) * 0.9, 2)
         context['total_delivery_tasks'] = len(delivery_tasks)
         context['total_km'] = sum(delivery_task.distance for delivery_task in delivery_tasks)
+        context['deliveries_in_progress'] = deliveries_in_progress
+        context['deliveries_canceled'] = deliveries_canceled
+        context['deliveries_completed'] = deliveries_completed
         return context
 
 
@@ -52,12 +77,12 @@ class CourierShipmentsView(RedirectView):
     """
     This view displays the deliveries available to the courier
     """
-    url = reverse_lazy('couriers:shipment_orders')
+    url = reverse_lazy('couriers:available_delivery_tasks')
 
 
 @method_decorator(courier_required, name='dispatch')
-class CourierOrderDetailView(View):
-    template_name = 'courier/shipment_orders.html'
+class CourierDeliveryTaskView(View):
+    template_name = 'courier/courier_delivery_task.html'
 
     def get_delivery_task(self, id):
         """
@@ -73,14 +98,8 @@ class CourierOrderDetailView(View):
         """
         delivery_task = self.get_delivery_task(id)
         if not delivery_task:
-            return redirect(reverse('couriers:shipment_orders'))
-        return render(
-            request,
-            self.template_name,
-            {
-                "delivery_task": delivery_task
-            }
-        )
+            return redirect(reverse('couriers:available_delivery_tasks'))
+        return render(request, self.template_name, {'delivery_task': delivery_task, })
 
     def post(self, request, id):
         """
@@ -88,7 +107,7 @@ class CourierOrderDetailView(View):
         """
         delivery_task = self.get_delivery_task(id)
         if not delivery_task:
-            return redirect(reverse('couriers:shipment_orders'))
+            return redirect(reverse('couriers:available_delivery_tasks'))
 
         delivery_task.courier = request.user.courier_account
         delivery_task.status = Delivery.StatusChoices.PICKUP_IN_PROGRESS
@@ -106,7 +125,7 @@ class CourierOrderDetailView(View):
         except:
             pass
 
-        return redirect(reverse('couriers:delivery_tasks'))
+        return redirect(reverse('couriers:available_delivery_tasks'))
 
 
 @method_decorator(courier_required, name='dispatch')
