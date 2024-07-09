@@ -7,7 +7,6 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
-from deliveet import test_consumer
 from deliveet.utils import consumers
 
 urlpatterns = [
@@ -33,5 +32,4 @@ websocket_urlpatterns = [
                             re_path(r'ws/shipments/(?P<delivery_task_id>[\w-]+)/$',
                                     consumers.ShipmentOrderConsumer.as_asgi()),
 
-                            re_path(r'ws/test/$', test_consumer.TestConsumer.as_asgi()),
                         ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

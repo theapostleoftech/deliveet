@@ -37,7 +37,7 @@ AUTH_USER_MODEL = 'accounts.UserAccount'
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
+    # 'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'tailwind',
     'django_browser_reload',
     'versatileimagefield',
-
+    'channels',
 ]
 
 # Middlewares
@@ -199,13 +199,17 @@ NOTIFICATION_URL = 'localhost:8000'
 
 # Channels
 ASGI_APPLICATION = 'deliveet.asgi.application'
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": ['localhost', 6379],
+#         },
+#     },
+# }
+
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": ['localhost', 6379],
-        },
-    },
+    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
 }
 
 FIREBASE_CONFIG = {
@@ -218,6 +222,6 @@ FIREBASE_CONFIG = {
 }
 
 # Load Firebase secrets
-FIREBASE_SECRETS_PATH = config('FIREBASE_SECRETS_PATH')
+FIREBASE_SECRETS_PATH = config('FIREBASE_SECRETS_PATH', default=None)
 with open(FIREBASE_SECRETS_PATH) as firebase_secrets_file:
     FIREBASE_SECRETS = json.load(firebase_secrets_file)

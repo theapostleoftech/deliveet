@@ -76,14 +76,19 @@
             );
         }
 
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const host = window.location.host;
+        const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
         const deliveryTaskId = "{{ delivery_task.id }}";
-        const wsUrl = `${protocol}//${host}/ws/shipments/${deliveryTaskId}/`;
+        const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/shipments/${deliveryTaskId}/`;
+        const socket = new WebSocket(wsEndpoint);
 
-        console.log('Attempting to connect to WebSocket:', wsUrl);
+        {#const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';#}
+        {#const host = window.location.host;#}
+        {#const deliveryTaskId = "{{ delivery_task.id }}";#}
+        {#const wsUrl = `${protocol}//${host}/ws/shipments/${deliveryTaskId}/`;#}
 
-        const jobSocket = new WebSocket(wsUrl);
+        console.log('Attempting to connect to WebSocket:', wsEndpoint);
+
+        const jobSocket = new WebSocket(wsEndpoint);
         {#const jobSocket = new WebSocket(#}
         {#    "ws{% if request.get_host != 'localhost:8000' %}#}
         {#    s{% endif %}://" + window.location.host + "/ws/shipments/{{ delivery_task.id }}/"#}

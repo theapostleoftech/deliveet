@@ -35,9 +35,9 @@ class ShipmentOrderConsumer(WebsocketConsumer):
         print("Delivery", delivery_task)
 
         if delivery_task.get('courier_latitude') and delivery_task.get('courier_longitude'):
-            self.scope['user'].courier.courier_latitude = delivery_task['courier_latitude']
-            self.scope['user'].courier.courier_longitude = delivery_task['courier_longitude']
-            self.scope['user'].courier.save()
+            self.scope['user'].courier_account.courier_latitude = delivery_task['courier_latitude']
+            self.scope['user'].courier_account.courier_longitude = delivery_task['courier_longitude']
+            self.scope['user'].courier_account.save()
 
         # Send message to job group
         async_to_sync(self.channel_layer.group_send)(

@@ -11,7 +11,7 @@ CacheControl==0.14.0
 cachetools==5.3.3
 certifi==2024.6.2
 cffi==1.16.0
-channels==3.0.3
+channels==4.0.0
 channels-redis==4.2.0
 chardet==5.2.0
 charset-normalizer==3.3.2
