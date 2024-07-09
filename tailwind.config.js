@@ -131,7 +131,6 @@ module.exports = {
              */
             require('flowbite/plugin'),
             require('flowbite-typography'),
-            require('preline/plugin'),
         ],
     }
 }
