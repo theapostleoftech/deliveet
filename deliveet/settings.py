@@ -222,6 +222,6 @@ FIREBASE_CONFIG = {
 }
 
 # Load Firebase secrets
-FIREBASE_SECRETS_PATH = config('FIREBASE_SECRETS_PATH', default=None)
-with open(FIREBASE_SECRETS_PATH) as firebase_secrets_file:
-    FIREBASE_SECRETS = json.load(firebase_secrets_file)
+# FIREBASE_SECRETS_PATH = config('FIREBASE_SECRETS_PATH', default=None)
+# with open(FIREBASE_SECRETS_PATH) as firebase_secrets_file:
+#     FIREBASE_SECRETS = json.load(firebase_secrets_file)
