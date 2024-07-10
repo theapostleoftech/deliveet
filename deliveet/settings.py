@@ -30,8 +30,7 @@ DEVELOPMENT_MODE = env.bool('DEVELOPMENT_MODE', default=False)
 DEBUG = env.bool('DJANGO_DEBUG', )
 
 # Hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com', '192.168.37.226',
-                 '105.112.214.101', '172.20.10.5', '172.17.0.1', '172.20.10.11 ']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com']
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
