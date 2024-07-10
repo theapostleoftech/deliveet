@@ -211,28 +211,28 @@ CHANNEL_LAYERS = {
 }
 
 FIREBASE_CONFIG = {
-    'API_KEY': env('FIREBASE_API_KEY'),
-    'AUTH_DOMAIN': env('FIREBASE_AUTH_DOMAIN'),
-    'PROJECT_ID': env('FIREBASE_PROJECT_ID'),
-    'STORAGE_BUCKET': env('FIREBASE_STORAGE_BUCKET'),
-    'MESSAGING_SENDER_ID': env('FIREBASE_MESSAGING_SENDER_ID'),
-    'APP_ID': env('FIREBASE_APP_ID'),
+    'API_KEY': env('FIREBASE_API_KEY', default='None'),
+    'AUTH_DOMAIN': env('FIREBASE_AUTH_DOMAIN', default='None'),
+    'PROJECT_ID': env('FIREBASE_PROJECT_ID', default='None'),
+    'STORAGE_BUCKET': env('FIREBASE_STORAGE_BUCKET', default='None'),
+    'MESSAGING_SENDER_ID': env('FIREBASE_MESSAGING_SENDER_ID', default='None'),
+    'APP_ID': env('FIREBASE_APP_ID', default='None'),
     'FIREBASE_TOKEN': env('FIREBASE_TOKEN', default='None'),
 }
 
 FIREBASE_SECRETS = {
     "type": config('FIREBASE_TYPE', default="service_account"),
-    "project_id": config('FIREBASE_PROJECT_ID'),
-    "private_key_id": config('FIREBASE_PRIVATE_KEY_ID'),
+    "project_id": config('FIREBASE_PROJECT_ID', default='None'),
+    "private_key_id": config('FIREBASE_PRIVATE_KEY_ID', default='None'),
     "private_key": config('FIREBASE_PRIVATE_KEY').replace('\\n', '\n'),
-    "client_email": config('FIREBASE_CLIENT_EMAIL'),
-    "client_id": config('FIREBASE_CLIENT_ID'),
+    "client_email": config('FIREBASE_CLIENT_EMAIL', default='None'),
+    "client_id": config('FIREBASE_CLIENT_ID', default='None'),
     "auth_uri": config('FIREBASE_AUTH_URI', default="https://accounts.google.com/o/oauth2/auth"),
     "token_uri": config('FIREBASE_TOKEN_URI', default="https://oauth2.googleapis.com/token"),
     "auth_provider_x509_cert_url": config('FIREBASE_AUTH_PROVIDER_X509_CERT_URL', default="https://www.googleapis.com"
                                                                                           "/oauth2/v1/certs"),
-    "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL'),
-    "universe_domain": config('UNIVERSAL_DOMAIN')
+    "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL', default='None'),
+    "universe_domain": config('UNIVERSAL_DOMAIN', default='None')
 }
 
 
