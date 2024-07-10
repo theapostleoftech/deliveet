@@ -217,7 +217,7 @@ FIREBASE_CONFIG = {
     'STORAGE_BUCKET': env('FIREBASE_STORAGE_BUCKET'),
     'MESSAGING_SENDER_ID': env('FIREBASE_MESSAGING_SENDER_ID'),
     'APP_ID': env('FIREBASE_APP_ID'),
-    'FIREBASE_TOKEN': env('FIREBASE_TOKEN'),
+    'FIREBASE_TOKEN': env('FIREBASE_TOKEN', default='None'),
 }
 
 FIREBASE_SECRETS = {
@@ -234,3 +234,5 @@ FIREBASE_SECRETS = {
     "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL'),
     "universe_domain": config('UNIVERSAL_DOMAIN')
 }
+
+
