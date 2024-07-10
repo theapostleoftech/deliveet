@@ -197,7 +197,7 @@ GOOGLE_MAP_API_KEY = env('GOOGLE_MAP_API_KEY')
 
 FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/delivit-1d2d5-firebase.json")
 
-NOTIFICATION_URL = 'localhost:8000'
+NOTIFICATION_URL = env('NOTIFICATION_URL', default='localhost:8000')
 
 # Channels
 
@@ -205,7 +205,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')]
         },
     },
 }
