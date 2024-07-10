@@ -195,7 +195,7 @@ LOGOUT_REDIRECT_URL = 'pages:app_home'
 # Google Map
 GOOGLE_MAP_API_KEY = env('GOOGLE_MAP_API_KEY')
 
-FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/delivit-1d2d5-firebase.json")
+# FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/delivit-1d2d5-firebase.json")
 
 NOTIFICATION_URL = env('NOTIFICATION_URL', default='localhost:8000')
 
