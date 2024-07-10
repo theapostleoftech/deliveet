@@ -19,7 +19,8 @@
 		<div class="w-full px-4 border-b border-slate-100 border-opacity-75 py-4">
 			<div class="px-4 py-2 flex flex-col justify-center items-center text-center space-y-4">
 				<div class="w-16 h-16 rounded-full bg-slate-100 flex justify-center items-center text-center"><p
-						class="font-extrabold uppercase text-xl tracking-tighter">{{ user.get_full_name|get_initials }}</p></div>
+						class="font-extrabold uppercase text-xl tracking-tighter">{{ user.get_full_name|get_initials }}</p>
+				</div>
 				<div class="space-y-0.5"><p
 						class="line-clamp-1 text-gray-200 font-bold capitalize">{{ user.get_full_name }}</p>
 					<p class="text-xs lowercase text-slate-400">{{ user.email }}</p></div>
@@ -55,6 +56,24 @@
 						<span class="flex-1 ms-3 whitespace-nowrap">My Deliveries</span>
 					</a>
 				</li>
+
+				{% if delivery_task %}
+					<li>
+						<a href="{% url 'customers:customer_shipment_detail' delivery_task_id %}"
+						   class="flex items-center p-2 text-primary-200 rounded-lg dark:text-white hover:bg-primary-600 dark:hover:bg-gray-700 group">
+							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg"
+							     width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+								<path fill-rule="evenodd"
+								      d="M14 7h-4v3a1 1 0 0 1-2 0V7H6a1 1 0 0 0-.997.923l-.917 11.924A2 2 0 0 0 6.08 22h11.84a2 2 0 0 0 1.994-2.153l-.917-11.924A1 1 0 0 0 18 7h-2v3a1 1 0 1 1-2 0V7Zm-2-3a2 2 0 0 0-2 2v1H8V6a4 4 0 0 1 8 0v1h-2V6a2 2 0 0 0-2-2Z"
+								      clip-rule="evenodd"></path>
+							</svg>
+
+							<span class="flex-1 ms-3 whitespace-nowrap">Ongoing Deliveries</span>
+						</a>
+					</li>
+				{% endif %}
+
 				<li>
 					<a href="{% url 'finance:wallet' %}"
 					   class="flex items-center p-2 text-gray-300 rounded-lg dark:text-white hover:bg-primary-600 dark:hover:bg-gray-700 group">
@@ -72,6 +91,7 @@
 						<span class="flex-1 ms-3 whitespace-nowrap">Wallet</span>
 					</a>
 				</li>
+
 				<li>
 					<a href="{% url 'accounts:user_settings' %}"
 					   class="flex items-center p-2 text-gray-300 rounded-lg dark:text-white hover:bg-primary-600 dark:hover:bg-gray-700 group">
@@ -84,6 +104,21 @@
 						</svg>
 
 						<span class="flex-1 ms-3 whitespace-nowrap">Profile</span>
+					</a>
+				</li>
+				<li>
+					<a href="{% url 'accounts:user_settings' %}"
+					   class="flex items-center p-2 text-gray-300 rounded-lg dark:text-white hover:bg-primary-600 dark:hover:bg-gray-700 group">
+						<svg class="w-6 h-6 text-primary-200 dark:text-white" aria-hidden="true"
+						     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+						     viewBox="0 0 24 24">
+							<path fill-rule="evenodd"
+							      d="M9.586 2.586A2 2 0 0 1 11 2h2a2 2 0 0 1 2 2v.089l.473.196.063-.063a2.002 2.002 0 0 1 2.828 0l1.414 1.414a2 2 0 0 1 0 2.827l-.063.064.196.473H20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-.089l-.196.473.063.063a2.002 2.002 0 0 1 0 2.828l-1.414 1.414a2 2 0 0 1-2.828 0l-.063-.063-.473.196V20a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-.089l-.473-.196-.063.063a2.002 2.002 0 0 1-2.828 0l-1.414-1.414a2 2 0 0 1 0-2.827l.063-.064L4.089 15H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h.09l.195-.473-.063-.063a2 2 0 0 1 0-2.828l1.414-1.414a2 2 0 0 1 2.827 0l.064.063L9 4.089V4a2 2 0 0 1 .586-1.414ZM8 12a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z"
+							      clip-rule="evenodd"></path>
+						</svg>
+
+
+						<span class="flex-1 ms-3 whitespace-nowrap">Settings</span>
 					</a>
 				</li>
 				<li>
@@ -178,10 +213,10 @@
 </aside>
 
 {% if user.is_authenticated and user.is_customer %}
-	<div class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2  bg-[#F4F9FF] border border-gray-200 bottom-0 left-1/2 dark:bg-gray-700 dark:border-gray-600 md:hidden">
+	<div class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2  bg-tertiary-600 border border-gray-200 bottom-0 left-1/2 dark:bg-gray-700 dark:border-gray-600 md:hidden">
 		<div class="grid h-full max-w-lg grid-cols-5 mx-auto">
 			<a href="{% url 'customers:customer_dashboard' %}" data-tooltip-target="tooltip-home" type="button"
-			   class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 group">
+			   class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-primary-600 group">
 				<svg class="w-6 h-6 text-primary-200 dark:text-white" aria-hidden="true"
 				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
 				     viewBox="0 0 24 24">
@@ -198,7 +233,7 @@
 			</div>
 
 			<a href="{% url 'finance:wallet' %}" data-tooltip-target="tooltip-wallet" type="button"
-			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-600 dark:hover:bg-gray-800 group">
 				<svg class="w-6 h-6 text-primary-200 dark:text-white" aria-hidden="true"
 				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
 				     viewBox="0 0 24 24">
@@ -240,7 +275,7 @@
 
 			<a href="{% url 'accounts:user_settings' %}" data-tooltip-target="tooltip-profile" type="button"
 			   class="inline-flex flex-col items-center justify-center px-5 rounded-e-full
-			        hover:bg-gray-50 dark:hover:bg-gray-800 group">
+			        hover:bg-primary-600 dark:hover:bg-gray-800 group">
 				<svg class="w-6 h-6 text-primary-200 dark:text-white" aria-hidden="true"
 				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
 				     viewBox="0 0 24 24">
@@ -258,7 +293,7 @@
 
 
 			<a href="{% url 'accounts:signout' %}" data-tooltip-target="tooltip-settings" type="button"
-			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-600 dark:hover:bg-gray-800 group">
 				<svg class="w-6 h-6 text-primary-200 dark:text-white" aria-hidden="true"
 				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
 					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -277,7 +312,7 @@
 	<div class="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2  bg-[#F4F9FF] border border-gray-200 bottom-0 left-1/2 dark:bg-gray-700 dark:border-gray-600 md:hidden">
 		<div class="grid h-full max-w-lg grid-cols-5 mx-auto">
 			<a href="{% url 'couriers:courier_dashboard' %}" data-tooltip-target="tooltip-home" type="button"
-			   class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 group">
+			   class="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-primary-600 group">
 				<svg class="w-6 h-6 text-primary-200 dark:text-white" aria-hidden="true"
 				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
 				     viewBox="0 0 24 24">
@@ -294,7 +329,7 @@
 			</div>
 
 			<a href="{% url 'finance:wallet' %}" data-tooltip-target="tooltip-wallet" type="button"
-			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-600 dark:hover:bg-gray-800 group">
 				<svg class="w-6 h-6 text-primary-200 dark:text-white" aria-hidden="true"
 				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
 				     viewBox="0 0 24 24">
@@ -336,7 +371,7 @@
 
 			<a href="{% url 'accounts:user_settings' %}" data-tooltip-target="tooltip-profile" type="button"
 			   class="inline-flex flex-col items-center justify-center px-5 rounded-e-full
-			        hover:bg-gray-50 dark:hover:bg-gray-800 group">
+			        hover:bg-primary-600 dark:hover:bg-gray-800 group">
 				<svg class="w-6 h-6 text-primary-200 dark:text-white" aria-hidden="true"
 				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
 				     viewBox="0 0 24 24">
@@ -354,7 +389,7 @@
 
 
 			<a href="{% url 'accounts:signout' %}" data-tooltip-target="tooltip-settings" type="button"
-			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
+			   class="inline-flex flex-col items-center justify-center px-5 hover:bg-primary-600 dark:hover:bg-gray-800 group">
 				<svg class="w-6 h-6 text-primary-200 dark:text-white" aria-hidden="true"
 				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
 					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
