@@ -59,9 +59,9 @@
 
 				{% if delivery_task %}
 					<li>
-						<a href="{% url 'customers:customer_shipment_detail' delivery_task_id %}"
-						   class="flex items-center p-2 text-primary-200 rounded-lg dark:text-white hover:bg-primary-600 dark:hover:bg-gray-700 group">
-							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+						<a href="{% url 'customers:customer_shipment_detail' delivery_task.id %}"
+						   class="flex items-center p-2 text-gray-300 rounded-lg dark:text-white hover:bg-primary-600 dark:hover:bg-gray-700 group">
+							<svg class="w-6 h-6 text-primary-200 dark:text-white" aria-hidden="true"
 							     xmlns="http://www.w3.org/2000/svg"
 							     width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
 								<path fill-rule="evenodd"

@@ -6,19 +6,19 @@
 
 
 
-		<div class="pb-4 ">
-			<div class="bg-tertiary-700 flex flex-col justify-between items-start space-y-12 p-6
+	<div class="pb-4 mb-8 ">
+		<div class="bg-tertiary-600 flex flex-col justify-between items-start space-y-12 p-6
 				border border-gray-200 rounded-lg shadow">
-				<div class="w-full space-y-2">
-					<p class="mt-0 max-w-2xl text-sm leading-6 text-gray-300">BALANCE</p>
-					<p class="text-5xl lg:text-6xl md:text-5xl sm:text-3xl text-white
+			<div class="w-full space-y-2">
+				<p class="mt-0 max-w-2xl text-sm leading-6 text-gray-300">BALANCE</p>
+				<p class="text-5xl lg:text-6xl md:text-5xl sm:text-3xl text-white
 				 font-extrabold tracking-tight mb-4">
-						{{ wallet_balance }} <span
-							class="text-sm tracking-wide font-medium text-gray-400 uppercase">NGN</span>
-					</p>
-				</div>
-				<div class="flex flex-row justify-start items-start space-x-2">
-					<a href="{% url 'finance:initiate_transaction' %}">
+					{{ wallet_balance }} <span
+						class="text-sm tracking-wide font-medium text-gray-400 uppercase">NGN</span>
+				</p>
+			</div>
+			<div class="flex flex-row justify-start items-start space-x-2">
+				<a href="{% url 'finance:initiate_transaction' %}">
 						<span class=" text-white border-primary rounded
 							ring-transparent focus:outline-none hover:ring-2 hover:ring-offset-1 hover:ring-primary
 							hover:border-primary hover:text-white whitespace-nowrap border cursor-pointer inline-flex
@@ -26,9 +26,9 @@
 							uppercase text-xs tracking-wide font-bold
 							transition-all duration-200 !bg-white !border-opacity-10 !bg-opacity-20">Add Money
 						</span>
-					</a>
-					<div class="flex flex-row justify-start items-start space-x-2">
-						<a href="{% url 'finance:initiate_transaction' %}">
+				</a>
+				<div class="flex flex-row justify-start items-start space-x-2">
+					<a href="">
 						<span class="bg-primary-700 text-white border-primary rounded
 							ring-transparent focus:outline-none hover:ring-2 hover:ring-offset-1 hover:ring-primary
 							hover:border-primary hover:text-white whitespace-nowrap border cursor-pointer inline-flex
@@ -36,15 +36,16 @@
 							transition-all duration-200 !border-opacity-10 !hover:bg-black
 							!hover:text-white">Withdraw
 						</span>
-						</a>
-					</div>
+					</a>
 				</div>
 			</div>
 		</div>
+	</div>
+	<hr class="border border-slate-300"/>
 
 
 
-	<div class="w-full divide-y divide-slate-100 py-6">
+	<div class="w-full divide-y mb-8 divide-slate-100 py-6">
 		<div class="py-4 flex flex-row justify-between items-center">
 			<div class="w-full"><p class="font-bold text-xs tracking-wider uppercase text-primary">Payment Methods</p>
 			</div>
@@ -64,6 +65,8 @@
 			</div>
 		</div>
 	</div>
+
+	<hr class="border border-slate-300"/>
 
 
 	<div class="w-full divide-y divide-slate-100 py-6">

@@ -3,18 +3,19 @@
 {% load widget_tweaks %}
 {% block title %}Fund Wallet{% endblock %}
 {% block content %}
+	{% block head_js %}
+	{% endblock head_js %}
 
+	<div class="py-4 flex flex-row justify-between items-center">
+		<div class="w-full space-y-1"><p class="text-xl font-bold tracking-tight">Add funds to your account</p>
+			<p class="text-sm text-slate-400 w-full max-w-lg leading-relaxed">
+				Add money into your wallet to begin booking deliveries.</p>
+		</div>
+	</div>
 	<div class="space-y-8 w-full">
 		<div class="w-full">
-
-			<form class="flex flex-col w-full" method="POST">
-
+			<form class="flex flex-col" method="POST">
 				{% csrf_token %}
-				<div class="col-span-full py-4 border-b border-gray-100">
-					<p class="font-bold text-xl tracking-tight">
-						Add Funds to your account
-					</p>
-				</div>
 
 				<div class="w-full grid grid-cols-2 md:grid-cols-6 gap-4 gap-y-6 py-8">
 					{% for hidden in form.hidden_fields %}

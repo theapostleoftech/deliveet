@@ -14,19 +14,23 @@
 	        async defer></script>
 {% endblock head_js %}
 {% block content %}
+	<div class="py-4 flex flex-row justify-between mb-4 items-center">
+		<div class="w-full space-y-1"><p class="text-xl font-bold tracking-tight">Book Delivery</p>
+			<p class="text-sm text-slate-400 w-full max-w-lg leading-relaxed">
+				Enter item details, pickup and delivery details to book delivery.</p>
+		</div>
+	</div>
+	<div class="flex flex-wrap">
 
-	<div class="container mx-auto flex flex-wrap">
-		<!-- Left side -->
-		<!-- Right side -->
 		<div class="w-full mb-4">
 			<!-- Progress tabs -->
-			<div class="bg-white shadow-md rounded-lg overflow-hidden mb-8">
-				<div class="p-4">
+			<div class="overflow-hidden mb-8">
+				<div class="bg-tertiary-600 rounded-lg p-4">
 					<ul class="flex justify-between items-center" id="default-styled-tab"
 					    data-tabs-toggle="#default-styled-tab-content" role="tablist">
 						<li class="flex-1 text-center">
 							<button href="{% url 'shipments:create_delivery' %}?step=1"
-							        class="{% if step == 1 %}text-primary-700 font-semibold{% else %}text-gray-600{% endif %}"
+							        class="{% if step == 1 %}text-primary-200 font-semibold{% else %}text-gray-300{% endif %}"
 							        id="item-info" data-tabs-target="#item-info" type="button" role="tab"
 							        aria-controls="item-info" aria-selected="false">
 								Item Info
@@ -34,32 +38,30 @@
 						</li>
 						<li class="flex-1 text-center">
 							<a href="{% url 'shipments:create_delivery' %}?step=2"
-							   class="{% if step == 2 %}text-primary-700 font-semibold{% else %}text-gray-600{% endif %}">Pickup</a>
+							   class="{% if step == 2 %}text-primary-200 font-semibold{% else %}text-gray-300{% endif %}">Pickup</a>
 						</li>
 						<li class="flex-1 text-center">
 							<a href="{% url 'shipments:create_delivery' %}?step=3"
-							   class="{% if step == 3 %}text-primary-700 font-semibold{% else %}text-gray-600{% endif %}">Delivery</a>
+							   class="{% if step == 3 %}text-primary-200 font-semibold{% else %}text-gray-300{% endif %}">Delivery</a>
 						</li>
 						<li class="flex-1 text-center">
 							<a href="{% url 'shipments:create_delivery' %}?step=4"
-							   class="{% if step == 4 %}text-primary-700 font-semibold{% else %}text-gray-600{% endif %}">Payment</a>
+							   class="{% if step == 4 %}text-primary-200 font-semibold{% else %}text-gray-300{% endif %}">Payment</a>
 						</li>
 					</ul>
 				</div>
 
 				{% if step == 1 %}
 					<form method="POST" enctype="multipart/form-data"
-					      class="bg-white shadow-md rounded-lg overflow-hidden">
+					      class="shadow-md rounded-lg overflow-hidden">
 						{% csrf_token %}
 						<div class="p-4">
-							<h3 class="text-lg font-semibold mb-4">Item Information</h3>
-
 							<div class="mb-4">
 								<label for="{{ item_form.item_name.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ item_form.item_name.label }}
 								</label>
-								{% render_field item_form.item_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field item_form.item_name class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if item_form.item_name.errors %}
 									<p class="text-red-500 text-xs italic">{{ item_form.item_name.errors.0 }}</p>
 								{% endif %}
@@ -67,10 +69,10 @@
 
 							<div class="mb-4">
 								<label for="{{ item_form.photo.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ item_form.photo.label }}
 								</label>
-								{% render_field item_form.photo class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field item_form.photo class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if item_form.photo.errors %}
 									<p class="text-red-500 text-xs italic">{{ item_form.photo.errors.0 }}</p>
 								{% endif %}
@@ -78,10 +80,10 @@
 
 							<div class="mb-4">
 								<label for="{{ item_form.item_type.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ item_form.item_type.label }}
 								</label>
-								{% render_field item_form.item_type class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field item_form.item_type class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if item_form.item_type.errors %}
 									<p class="text-red-500 text-xs italic">{{ item_form.item_type.errors.0 }}</p>
 								{% endif %}
@@ -89,10 +91,10 @@
 
 							<div class="mb-4">
 								<label for="{{ item_form.size.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ item_form.size.label }}
 								</label>
-								{% render_field item_form.size class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field item_form.size class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if item_form.size.errors %}
 									<p class="text-red-500 text-xs italic">{{ item_form.size.errors.0 }}</p>
 								{% endif %}
@@ -100,19 +102,19 @@
 
 							<div class="mb-4">
 								<label for="{{ item_form.quantity.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ item_form.quantity.label }}
 								</label>
-								{% render_field item_form.quantity class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field item_form.quantity class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if item_form.quantity.errors %}
 									<p class="text-red-500 text-xs italic">{{ item_form.quantity.errors.0 }}</p>
 								{% endif %}
 							</div>
 						</div>
-						<div class="bg-gray-100 px-4 py-3 text-right">
+						<div class="px-4 py-3 text-right">
 							<input type="hidden" name="step" value="1">
 							<button type="submit"
-							        class="bg-primary-700 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+							        class="bg-primary-700 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded">
 								Next
 							</button>
 						</div>
@@ -127,10 +129,10 @@
 
 							<div class="mb-4">
 								<label for="{{ pickup_form.pickup_address.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ pickup_form.pickup_address.label }}
 								</label>
-								{% render_field pickup_form.pickup_address class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field pickup_form.pickup_address class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if pickup_form.pickup_address.errors %}
 									<p class="text-red-500 text-xs italic">{{ pickup_form.pickup_address.errors.0 }}</p>
 								{% endif %}
@@ -138,10 +140,10 @@
 
 							<div class="mb-4">
 								<label for="{{ pickup_form.sender_name.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ pickup_form.sender_name.label }}
 								</label>
-								{% render_field pickup_form.sender_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field pickup_form.sender_name class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if pickup_form.sender_name.errors %}
 									<p class="text-red-500 text-xs italic">{{ pickup_form.sender_name.errors.0 }}</p>
 								{% endif %}
@@ -149,10 +151,10 @@
 
 							<div class="mb-4">
 								<label for="{{ pickup_form.sender_phone.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ pickup_form.sender_phone.label }}
 								</label>
-								{% render_field pickup_form.sender_phone class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field pickup_form.sender_phone class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if pickup_form.sender_phone.errors %}
 									<p class="text-red-500 text-xs italic">{{ pickup_form.sender_phone.errors.0 }}</p>
 								{% endif %}
@@ -191,10 +193,10 @@
 
 							<div class="mb-4">
 								<label for="{{ delivery_form.delivery_address.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ delivery_form.delivery_address.label }}
 								</label>
-								{% render_field delivery_form.delivery_address class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field delivery_form.delivery_address class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if delivery_form.delivery_address.errors %}
 									<p class="text-red-500 text-xs italic">{{ delivery_form.delivery_address.errors.0 }}</p>
 								{% endif %}
@@ -202,10 +204,10 @@
 
 							<div class="mb-4">
 								<label for="{{ delivery_form.recipient_name.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ delivery_form.recipient_name.label }}
 								</label>
-								{% render_field delivery_form.recipient_name class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field delivery_form.recipient_name class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if delivery_form.recipient_name.errors %}
 									<p class="text-red-500 text-xs italic">{{ delivery_form.recipient_name.errors.0 }}</p>
 								{% endif %}
@@ -213,10 +215,10 @@
 
 							<div class="mb-4">
 								<label for="{{ delivery_form.recipient_phone.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ delivery_form.recipient_phone.label }}
 								</label>
-								{% render_field delivery_form.recipient_phone class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field delivery_form.recipient_phone class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if delivery_form.recipient_phone.errors %}
 									<p class="text-red-500 text-xs italic">{{ delivery_form.recipient_phone.errors.0 }}</p>
 								{% endif %}
@@ -256,17 +258,17 @@
 
 							<div class="mb-4">
 								<label for="{{ payment_form.payment_method.id_for_label }}"
-								       class="block text-gray-700 font-bold mb-2">
+								       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 									{{ payment_form.payment_method.label }}
 								</label>
-								{% render_field payment_form.payment_method class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-orange-500" %}
+								{% render_field payment_form.payment_method class="bg-[#F4F9FF] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
 								{% if payment_form.payment_method.errors %}
 									<p class="text-red-500 text-xs italic">{{ payment_form.payment_method.errors.0 }}</p>
 								{% endif %}
 							</div>
 
 							<div class="mb-4">
-								<label class="block text-gray-700 font-bold mb-2">Price</label>
+								<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
 								<input class="w-full px-3 py-2 text-gray-700 border rounded-lg bg-gray-100"
 								       value="₦{{ delivery_task.price }}" disabled>
 							</div>
@@ -289,9 +291,9 @@
 		</div>
 
 		<div class="w-full mb-4">
-			<div class="bg-white shadow-md rounded-lg overflow-hidden">
-				<div class="bg-gray-100 px-4 py-3 border-b">
-					<h2 class="text-lg font-semibold">Delivery Summary</h2>
+			<div class="overflow-hidden">
+				<div class="bg-tertiary-600 rounded-lg px-4 py-3">
+					<h2 class="text-lg text-primary-200 font-semibold">Delivery Summary</h2>
 				</div>
 				<div class="p-4">
 					{% if not delivery_task %}
