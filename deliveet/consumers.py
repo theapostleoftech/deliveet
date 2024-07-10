@@ -1,17 +1,12 @@
 import json
-import logging
-
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-logger = logging.getLogger(__name__)
 
 
-class ShipmentOrderConsumer(WebsocketConsumer):
-
+class DeliveryTaskConsumer(WebsocketConsumer):
     def connect(self):
-        logger.info(f"Attempting to connect: {self.scope['url_route']['kwargs']['delivery_task_id']}")
         self.delivery_task_id = self.scope['url_route']['kwargs']['delivery_task_id']
-        self.delivery_task_group_name = 'delivery_task%s' % self.delivery_task_id
+        self.delivery_task_group_name = 'delivery_task_%s' % self.delivery_task_id
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -32,14 +27,12 @@ class ShipmentOrderConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         delivery_task = text_data_json['delivery_task']
 
-        print("Delivery", delivery_task)
-
         if delivery_task.get('courier_latitude') and delivery_task.get('courier_longitude'):
             self.scope['user'].courier_account.courier_latitude = delivery_task['courier_latitude']
             self.scope['user'].courier_account.courier_longitude = delivery_task['courier_longitude']
             self.scope['user'].courier_account.save()
 
-        # Send message to job group
+        # Send message to delivery_task group
         async_to_sync(self.channel_layer.group_send)(
             self.delivery_task_group_name,
             {
@@ -48,7 +41,7 @@ class ShipmentOrderConsumer(WebsocketConsumer):
             }
         )
 
-    # Receive message from job group
+    # Receive message from delivery_task group
     def delivery_task_update(self, event):
         delivery_task = event['delivery_task']
 

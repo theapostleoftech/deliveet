@@ -25,7 +25,7 @@ from accounts.models import UserAccount, Customer, Courier
 
 UserModel = get_user_model()
 
-config = credentials.Certificate(settings.FIREBASE_ADMIN_CREDENTIAL)
+config = credentials.Certificate(settings.FIREBASE_SECRETS)
 firebase_admin.initialize_app(config)
 
 

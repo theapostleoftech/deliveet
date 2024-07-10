@@ -31,7 +31,7 @@ def delivery_task_status_api(request, id):
         ]
     ).last()
 
-    if Delivery.status == Delivery.StatusChoices.PICKUP_IN_PROGRESS:
+    if delivery_task.status == Delivery.StatusChoices.PICKUP_IN_PROGRESS:
         delivery_task.pickup_photo = request.FILES['pickup_photo']
         delivery_task.pickedup_at = timezone.now()
         delivery_task.status = Delivery.StatusChoices.DELIVERY_IN_PROGRESS
@@ -42,7 +42,7 @@ def delivery_task_status_api(request, id):
         try:
             layer = get_channel_layer()
             async_to_sync(layer.group_send)("delivery_task_" + str(delivery_task.id), {
-                'type': 'delivery_task_status_update',
+                'type': 'delivery_task_update',
                 'delivery_task': {
                     'status': delivery_task.get_status_display(),
                     'pickup_photo': delivery_task.pickup_photo.url,
@@ -60,8 +60,8 @@ def delivery_task_status_api(request, id):
         try:
             layer = get_channel_layer()
             async_to_sync(layer.group_send)("delivery_task_" + str(delivery_task.id), {
-                'type': 'delivery_task_status_update',
-                'job': {
+                'type': 'delivery_task_update',
+                'delivery_task': {
                     'status': delivery_task.get_status_display(),
                     'delivery_photo': delivery_task.delivery_photo.url,
                 }

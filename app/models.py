@@ -4,7 +4,6 @@ This contains miscellaneous and core models for the deliveet app
 import uuid
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-from versatileimagefield.fields import VersatileImageField
 
 from deliveet.utils.validators import phone_number_validator
 
@@ -41,7 +40,7 @@ class ProfileBaseModel(models.Model):
     """
     This is the base model for all user profiles
     """
-    avatar = VersatileImageField(
+    avatar = models.ImageField(
         'Image',
         upload_to='images/profile',
         null=True,

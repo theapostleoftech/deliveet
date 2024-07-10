@@ -1,0 +1,292 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+{% block title %}Ongoing Delivery Task{% endblock title %}
+
+{% block head_js %}
+
+	<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=marker,places&v=weekly"
+	        async defer></script>
+
+	<script>
+        var pickupLat = parseFloat("{{ delivery_task.pickup_latitude }}");
+        var pickupLng = parseFloat("{{ delivery_task.pickup_longitude }}");
+        var deliveryLat = parseFloat("{{ delivery_task.delivery_latitude }}");
+        var deliveryLng = parseFloat("{{ delivery_task.delivery_longitude }}");
+
+        let delivery_taskSocket;
+        let isWebSocketOpen = false;
+
+        function initWebSocket() {
+            const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+            const deliveryTaskId = "{{ delivery_task.id }}";
+            const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/delivery/${deliveryTaskId}/`;
+
+            delivery_taskSocket = new WebSocket(wsEndpoint);
+
+            delivery_taskSocket.addEventListener('open', (event) => {
+                console.log('WebSocket connection opened');
+                isWebSocketOpen = true;
+            });
+
+            delivery_taskSocket.addEventListener('close', (event) => {
+                console.log('WebSocket connection closed');
+                isWebSocketOpen = false;
+            });
+        }
+
+        function initMap() {
+            if (!document.getElementById("map")) {
+                return;
+            }
+
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer();
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 13,
+                center: {lat: 6.585787, lng: 3.363888},
+            });
+            directionsRenderer.setMap(map);
+
+            initWebSocket();
+            calculateAndDisplayRoute(map, directionsService, directionsRenderer);
+        }
+
+        function calculateAndDisplayRoute(map, directionsService, directionsRenderer) {
+            directionsService.route(
+                {
+                    origin: new google.maps.LatLng(pickupLat, pickupLng),
+                    destination: new google.maps.LatLng(deliveryLat, deliveryLng),
+                    travelMode: google.maps.TravelMode.DRIVING,
+                },
+                (response, status) => {
+                    if (status === "OK") {
+                        new google.maps.DirectionsRenderer({
+                            map: map,
+                            directions: response,
+                            suppressMarkers: true,
+                            polylineOptions: {
+                                strokeColor: "#1371d9",
+                                strokeWeight: 5,
+                                strokeOpacity: 0.8
+                            }
+                        });
+
+                        var leg = response.routes[0].legs[0];
+                        new google.maps.Marker({
+                            position: leg.start_location,
+                            map: map,
+                            icon: "{% static 'static/images/start.png' %}"
+                        });
+
+                        new google.maps.Marker({
+                            position: leg.end_location,
+                            map: map,
+                            icon: "{% static 'static/images/end.png' %}"
+                        });
+
+                        updateCourierPosition(map);
+                    } else {
+                        window.alert("Directions request failed due to " + status);
+                    }
+                }
+            );
+        }
+
+        function updateCourierPosition(map) {
+            navigator.geolocation.watchPosition(
+                pos => {
+                    var courierPosition = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+
+                    if (!window.courierMarker) {
+                        window.courierMarker = new google.maps.Marker({
+                            position: courierPosition,
+                            map,
+                            icon: "{% static 'static/images/courier.png' %}"
+                        });
+                    } else {
+                        window.courierMarker.setPosition(courierPosition);
+                    }
+
+                    map.panTo(courierPosition);
+
+                    if (isWebSocketOpen) {
+                        try {
+                            delivery_taskSocket.send(JSON.stringify({
+                                delivery_task: {
+                                    courier_latitude: pos.coords.latitude,
+                                    courier_longitude: pos.coords.longitude,
+                                }
+                            }));
+                        } catch (error) {
+                            console.log('Error sending WebSocket message:', error);
+                        }
+                    } else {
+                        console.log('WebSocket not ready. Message not sent.');
+                    }
+                },
+                pos => console.log('Geolocation error:', pos)
+            );
+        }
+
+        // Make sure to call initMap when the page loads
+        window.addEventListener('load', initMap);
+	</script>
+
+{% endblock %}
+
+{% block content %}
+
+
+	{% if delivery_task %}
+		<div class="w-full p-4 mb-4 border border-gray-200 rounded-lg shadow sm:p-8">
+			<div class="flex items-center justify-between mb-4">
+				<h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">
+					Ongoing Delivery Task
+				</h5>
+				<a href="{% url 'couriers:delivery_task_photo' delivery_task.id %}"
+				   class="bg-primary-700 hover:bg-primary-800 text-white font-bold py-2 px-4 rounded-lg">
+					{% if delivery_task.status == 'pickup_in_progress' %}Pickup{% else %}Drop off{% endif %}
+				</a>
+			</div>
+			<div class="flow-root">
+				<ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+					<li class="py-2 sm:py-2">
+						<div class="flex items-center">
+							<div class="flex-shrink-0">
+								{% if delivery_task.photo %}
+									<img src="{{ delivery_task.photo.url }}" class="rounded-lg mr-3 h-12 w-12"
+									     alt="Delivery Task Photo">
+								{% else %}
+									<img src="{% static 'static/images/delivery/photo.jpg' %}"
+									     class="rounded-lg mr-3 h-12 w-12"
+									     alt="">
+								{% endif %}
+
+							</div>
+							<div class="flex-1 min-w-0 ms-4">
+								<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+									Item
+								</p>
+								<p class="text-sm text-gray-500 truncate dark:text-gray-400">
+									{{ delivery_task.item_name }}
+								</p>
+							</div>
+							<div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+								{{ delivery_task.price }}
+							</div>
+						</div>
+					</li>
+
+					<li class="py-2 sm:py-2">
+						<div class="flex items-center">
+							<div class="flex-shrink-0">
+								<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+								     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+								     viewBox="0 0 24 24">
+									<path fill-rule="evenodd"
+									      d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z"
+									      clip-rule="evenodd"></path>
+								</svg>
+
+							</div>
+							<div class="flex-1 min-w-0 ms-4">
+								<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+									Pickup address
+								</p>
+								<p class="text-sm text-gray-500 truncate dark:text-gray-400">
+									{{ delivery_task.pickup_address }}
+								</p>
+							</div>
+						</div>
+					</li>
+
+					<li class="py-2 sm:py-2">
+						<div class="flex items-center">
+							<div class="flex-shrink-0">
+
+								<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+								     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+								     viewBox="0 0 24 24">
+									<path fill-rule="evenodd"
+									      d="M5 9a7 7 0 1 1 8 6.93V21a1 1 0 1 1-2 0v-5.07A7.001 7.001 0 0 1 5 9Zm5.94-1.06A1.5 1.5 0 0 1 12 7.5a1 1 0 1 0 0-2A3.5 3.5 0 0 0 8.5 9a1 1 0 0 0 2 0c0-.398.158-.78.44-1.06Z"
+									      clip-rule="evenodd"></path>
+								</svg>
+							</div>
+							<div class="flex-1 min-w-0 ms-4">
+								<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+									Delivery address
+								</p>
+								<p class="text-sm text-gray-500 truncate dark:text-gray-400">
+									{{ delivery_task.delivery_address }}
+								</p>
+							</div>
+						</div>
+					</li>
+
+					<li class="py-2 sm:py-2">
+						<div class="flex items-center">
+							<div class="flex-shrink-0">
+
+								<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+								     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+								     viewBox="0 0 24 24">
+									<path fill-rule="evenodd"
+									      d="M8.64 4.737A7.97 7.97 0 0 1 12 4a7.997 7.997 0 0 1 6.933 4.006h-.738c-.65 0-1.177.25-1.177.9 0 .33 0 2.04-2.026 2.008-1.972 0-1.972-1.732-1.972-2.008 0-1.429-.787-1.65-1.752-1.923-.374-.105-.774-.218-1.166-.411-1.004-.497-1.347-1.183-1.461-1.835ZM6 4a10.06 10.06 0 0 0-2.812 3.27A9.956 9.956 0 0 0 2 12c0 5.289 4.106 9.619 9.304 9.976l.054.004a10.12 10.12 0 0 0 1.155.007h.002a10.024 10.024 0 0 0 1.5-.19 9.925 9.925 0 0 0 2.259-.754 10.041 10.041 0 0 0 4.987-5.263A9.917 9.917 0 0 0 22 12a10.025 10.025 0 0 0-.315-2.5A10.001 10.001 0 0 0 12 2a9.964 9.964 0 0 0-6 2Zm13.372 11.113a2.575 2.575 0 0 0-.75-.112h-.217A3.405 3.405 0 0 0 15 18.405v1.014a8.027 8.027 0 0 0 4.372-4.307ZM12.114 20H12A8 8 0 0 1 5.1 7.95c.95.541 1.421 1.537 1.835 2.415.209.441.403.853.637 1.162.54.712 1.063 1.019 1.591 1.328.52.305 1.047.613 1.6 1.316 1.44 1.825 1.419 4.366 1.35 5.828Z"
+									      clip-rule="evenodd"></path>
+								</svg>
+							</div>
+							<div class="flex-1 min-w-0 ms-4">
+								<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+									Distance
+								</p>
+								<p class="text-sm text-gray-500 truncate dark:text-gray-400">
+									{{ delivery_task.distance }} Kilometres
+								</p>
+							</div>
+
+						</div>
+					</li>
+
+					<li class="py-2 sm:py-2">
+						<div class="flex items-center">
+							<div class="flex-shrink-0">
+								<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+								     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+								     viewBox="0 0 24 24">
+									<path fill-rule="evenodd"
+									      d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+									      clip-rule="evenodd"></path>
+								</svg>
+
+							</div>
+							<div class="flex-1 min-w-0 ms-4">
+								<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+									Duration
+								</p>
+								<p class="text-sm text-gray-500 truncate dark:text-gray-400">
+									{{ delivery_task.duration }} Minutes
+								</p>
+							</div>
+
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="shadow rounded-lg border-gray-300 mb-4">
+			<div id="map" style="height: 500px; width: 100%;"></div>
+		</div>
+
+	{% else %}
+		<div id="main" class="w-full p-4 border border-gray-200 rounded-lg shadow sm:p-8">
+			<div class="flow-root">
+				<div class="flex-1 min-w-0 ms-4">
+					<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+						You have no delivery_task now. Let's pick a new one.
+					</p>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+{% block title %}Delivery Task Completed{% endblock title %}
+{% block head_js %}
+{% endblock %}
+
+{% block content %}
+	<div class="h-100 d-flex flex-column align-items-center justify-content-center">
+		<img src="{% static 'static/images/track.jpg' %}" class="mb-3" width="200" height="200" alt="">
+		<p>Your Delivery Task was completed! Well done.</p>
+
+		<a href="{% url 'couriers:available_delivery_tasks' %}"
+		   class="bg-primary-700 hover:bg-primary-800 text-white font-bold py-2 px-4 rounded-lg">Check available
+		                                                                                         tasks</a>
+	</div>
+{% endblock %}

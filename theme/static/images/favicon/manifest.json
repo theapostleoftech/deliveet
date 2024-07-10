@@ -1,0 +1,14 @@
+{
+  "short_name": "DELIVEET",
+  "name": "Welcome to DELIVEET",
+  "description": "Delivering convenience, one package at a time",
+  "icons": [
+    {
+      "src": "/static/img/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/home/",
+  "display": "standalone"
+}

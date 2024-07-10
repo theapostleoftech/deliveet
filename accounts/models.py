@@ -8,7 +8,6 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
-from versatileimagefield.fields import VersatileImageField
 
 from accounts.managers import UserAccountManager
 from app.models import PhoneField, ProfileBaseModel
@@ -58,13 +57,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     )
     phone_number_verified = models.BooleanField(
         default=False,
-    )
-    avatar = VersatileImageField(
-        'Avatar',
-        upload_to='media/avatars/',
-        null=True,
-        blank=True,
-        default=''
     )
     is_active = models.BooleanField(
         default=True,

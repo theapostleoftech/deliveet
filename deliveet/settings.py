@@ -30,7 +30,8 @@ DEVELOPMENT_MODE = env.bool('DEVELOPMENT_MODE', default=False)
 DEBUG = env.bool('DJANGO_DEBUG', )
 
 # Hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com', '192.168.37.226',
+                 '105.112.214.101']
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
@@ -56,7 +57,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'tailwind',
     'django_browser_reload',
-    'versatileimagefield',
     'channels',
 ]
 
@@ -90,6 +90,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'deliveet.utils.firebase_context_processor.firebase_config',
             ],
         },
     },
@@ -97,6 +98,8 @@ TEMPLATES = [
 
 # WSGI/SERVER
 WSGI_APPLICATION = 'deliveet.wsgi.application'
+
+ASGI_APPLICATION = 'deliveet.asgi.application'
 
 # Database
 DATABASE_URL = env('DATABASE_URL', default=None)
@@ -151,7 +154,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'theme/static'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = [os.path.join(BASE_DIR, 'media')]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'theme')]
 
@@ -198,18 +201,14 @@ FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/delivit-1
 NOTIFICATION_URL = 'localhost:8000'
 
 # Channels
-ASGI_APPLICATION = 'deliveet.asgi.application'
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             "hosts": ['localhost', 6379],
-#         },
-#     },
-# }
 
 CHANNEL_LAYERS = {
-    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
 }
 
 FIREBASE_CONFIG = {
@@ -219,9 +218,20 @@ FIREBASE_CONFIG = {
     'STORAGE_BUCKET': env('FIREBASE_STORAGE_BUCKET'),
     'MESSAGING_SENDER_ID': env('FIREBASE_MESSAGING_SENDER_ID'),
     'APP_ID': env('FIREBASE_APP_ID'),
+    'FIREBASE_TOKEN': env('FIREBASE_TOKEN'),
 }
 
-# Load Firebase secrets
-# FIREBASE_SECRETS_PATH = config('FIREBASE_SECRETS_PATH', default=None)
-# with open(FIREBASE_SECRETS_PATH) as firebase_secrets_file:
-#     FIREBASE_SECRETS = json.load(firebase_secrets_file)
+FIREBASE_SECRETS = {
+    "type": config('FIREBASE_TYPE', default="service_account"),
+    "project_id": config('FIREBASE_PROJECT_ID'),
+    "private_key_id": config('FIREBASE_PRIVATE_KEY_ID'),
+    "private_key": config('FIREBASE_PRIVATE_KEY').replace('\\n', '\n'),
+    "client_email": config('FIREBASE_CLIENT_EMAIL'),
+    "client_id": config('FIREBASE_CLIENT_ID'),
+    "auth_uri": config('FIREBASE_AUTH_URI', default="https://accounts.google.com/o/oauth2/auth"),
+    "token_uri": config('FIREBASE_TOKEN_URI', default="https://oauth2.googleapis.com/token"),
+    "auth_provider_x509_cert_url": config('FIREBASE_AUTH_PROVIDER_X509_CERT_URL', default="https://www.googleapis.com"
+                                                                                          "/oauth2/v1/certs"),
+    "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL'),
+    "universe_domain": config('UNIVERSAL_DOMAIN')
+}

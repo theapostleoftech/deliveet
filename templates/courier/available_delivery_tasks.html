@@ -1,0 +1,271 @@
+{% extends 'bases/_base.html' %}
+{% load static %}
+{% block title %}Available Delivery Tasks{% endblock title %}
+{% block head_js %}
+	<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAP_API_KEY }}&callback=initMap&libraries=marker,places&v=weekly"
+	        async defer></script>
+
+	<script>
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 13,
+                center: {lat: 6.585787, lng: 3.363888},
+            });
+
+            fetch("{% url 'couriers:courier_delivery_tasks_api' %}")
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json);
+
+                    const bounds = new google.maps.LatLngBounds();
+
+                    json.delivery_tasks.forEach(delivery_task => {
+                        const position = {lat: delivery_task.pickup_latitude, lng: delivery_task.pickup_longitude};
+                        const marker = new google.maps.Marker({
+                            map,
+                            position,
+                            title: delivery_task.item_name
+                        });
+
+                        bounds.extend(position);
+
+                        new google.maps.InfoWindow({
+                            content: `<small class="font-normal">${delivery_task.item_name}</small><br/><small class="font-normal">${delivery_task.distance} Km</small><br/> <small class="font-normal">${delivery_task.duration} minutes</small>`
+
+                        }).open(map, marker);
+
+                        marker.addListener("click", () => {
+                            showJobDetails(delivery_task);
+                        });
+                    });
+
+                    map.fitBounds(bounds);
+                });
+        }
+
+        function showJobDetails(delivery_task) {
+            const jobDetails = document.getElementById("job-details");
+            jobDetails.classList.remove("hidden");
+
+            document.getElementById("job-name").textContent = delivery_task.item_name;
+            document.getElementById("job-photo").src = "/media/" + delivery_task.photo;
+            document.getElementById("pickup-address").textContent = delivery_task.pickup_address;
+            document.getElementById("delivery-address").textContent = delivery_task.delivery_address;
+            document.getElementById("duration").textContent = delivery_task.duration;
+            document.getElementById("distance").textContent = delivery_task.distance;
+            document.getElementById("price").textContent = delivery_task.price;
+
+            jobDetails.addEventListener("click", function () {
+                window.location.href = "/courier/deliveries/tasks/" + delivery_task.id + "/";
+            });
+        }
+
+        messaging.onMessage((payload) => {
+            console.log('Message received. ', payload);
+            window.location.reload();
+        });
+	</script>
+
+	<style>
+		.gm-ui-hover-effect {
+			display: none !important;
+			}
+	</style>
+{% endblock head_js %}
+
+{% block content %}
+	<div id="job-details" class=" hidden w-full p-4 mb-4 border border-gray-200 rounded-lg shadow ">
+		<div class="flex items-center justify-between mb-4">
+			<h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Delivery Task</h5>
+		</div>
+		<div class="flow-root">
+			<ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+				<li class="py-2 sm:py-2">
+					<div class="flex items-center">
+						<div class="flex-shrink-0">
+							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+							     viewBox="0 0 24 24">
+								<path fill-rule="evenodd"
+								      d="M10 2a3 3 0 0 0-3 3v1H5a3 3 0 0 0-3 3v2.382l1.447.723.005.003.027.013.12.056c.108.05.272.123.486.212.429.177 1.056.416 1.834.655C7.481 13.524 9.63 14 12 14c2.372 0 4.52-.475 6.08-.956.78-.24 1.406-.478 1.835-.655a14.028 14.028 0 0 0 .606-.268l.027-.013.005-.002L22 11.381V9a3 3 0 0 0-3-3h-2V5a3 3 0 0 0-3-3h-4Zm5 4V5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v1h6Zm6.447 7.894.553-.276V19a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-5.382l.553.276.002.002.004.002.013.006.041.02.151.07c.13.06.318.144.557.242.478.198 1.163.46 2.01.72C7.019 15.476 9.37 16 12 16c2.628 0 4.98-.525 6.67-1.044a22.95 22.95 0 0 0 2.01-.72 15.994 15.994 0 0 0 .707-.312l.041-.02.013-.006.004-.002.001-.001-.431-.866.432.865ZM12 10a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H12Z"
+								      clip-rule="evenodd"></path>
+							</svg>
+
+						</div>
+						<div class="flex-1 min-w-0 ms-4">
+							<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+								Item
+							</p>
+							<p class="text-sm text-gray-500 truncate dark:text-gray-400" id="job-name">
+
+							</p>
+						</div>
+						<div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+							₦<h5 id="price" class="text-2xl font-bold"></h5>
+						</div>
+					</div>
+				</li>
+				<li class="py-2 sm:py-2">
+					<div class="flex items-center ">
+						<div class="flex-shrink-0">
+							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+							     viewBox="0 0 24 24">
+								<path fill-rule="evenodd"
+								      d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z"
+								      clip-rule="evenodd"></path>
+							</svg>
+						</div>
+						<div class="flex-1 min-w-0 ms-4">
+							<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+								Pickup address
+							</p>
+							<p class="text-sm text-gray-500 truncate dark:text-gray-400" id="pickup-address">
+
+							</p>
+						</div>
+
+					</div>
+				</li>
+				<li class="py-2 sm:py-2">
+					<div class="flex items-center">
+						<div class="flex-shrink-0">
+							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+							     viewBox="0 0 24 24">
+								<path fill-rule="evenodd"
+								      d="M5 9a7 7 0 1 1 8 6.93V21a1 1 0 1 1-2 0v-5.07A7.001 7.001 0 0 1 5 9Zm5.94-1.06A1.5 1.5 0 0 1 12 7.5a1 1 0 1 0 0-2A3.5 3.5 0 0 0 8.5 9a1 1 0 0 0 2 0c0-.398.158-.78.44-1.06Z"
+								      clip-rule="evenodd"></path>
+							</svg>
+						</div>
+						<div class="flex-1 min-w-0 ms-4">
+							<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+								Delivery address
+							</p>
+							<p class="text-sm text-gray-500 truncate dark:text-gray-400" id="delivery-address">
+
+							</p>
+						</div>
+
+					</div>
+				</li>
+				<li class="py-2 sm:py-2">
+					<div class="flex items-center ">
+						<div class="flex-shrink-0">
+							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+							     viewBox="0 0 24 24">
+								<path fill-rule="evenodd"
+								      d="M8.64 4.737A7.97 7.97 0 0 1 12 4a7.997 7.997 0 0 1 6.933 4.006h-.738c-.65 0-1.177.25-1.177.9 0 .33 0 2.04-2.026 2.008-1.972 0-1.972-1.732-1.972-2.008 0-1.429-.787-1.65-1.752-1.923-.374-.105-.774-.218-1.166-.411-1.004-.497-1.347-1.183-1.461-1.835ZM6 4a10.06 10.06 0 0 0-2.812 3.27A9.956 9.956 0 0 0 2 12c0 5.289 4.106 9.619 9.304 9.976l.054.004a10.12 10.12 0 0 0 1.155.007h.002a10.024 10.024 0 0 0 1.5-.19 9.925 9.925 0 0 0 2.259-.754 10.041 10.041 0 0 0 4.987-5.263A9.917 9.917 0 0 0 22 12a10.025 10.025 0 0 0-.315-2.5A10.001 10.001 0 0 0 12 2a9.964 9.964 0 0 0-6 2Zm13.372 11.113a2.575 2.575 0 0 0-.75-.112h-.217A3.405 3.405 0 0 0 15 18.405v1.014a8.027 8.027 0 0 0 4.372-4.307ZM12.114 20H12A8 8 0 0 1 5.1 7.95c.95.541 1.421 1.537 1.835 2.415.209.441.403.853.637 1.162.54.712 1.063 1.019 1.591 1.328.52.305 1.047.613 1.6 1.316 1.44 1.825 1.419 4.366 1.35 5.828Z"
+								      clip-rule="evenodd"></path>
+							</svg>
+						</div>
+						<div class="flex-1 min-w-0 ms-4">
+							<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+								Distance in Kilometre
+							</p>
+							<p class="text-sm text-gray-500 truncate dark:text-gray-400" id="distance">
+
+							</p>
+						</div>
+
+					</div>
+				</li>
+				<li class="pt-3 pb-0 sm:pt-4">
+					<div class="flex items-center ">
+						<div class="flex-shrink-0">
+							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+							     viewBox="0 0 24 24">
+								<path fill-rule="evenodd"
+								      d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+								      clip-rule="evenodd"></path>
+							</svg>
+						</div>
+						<div class="flex-1 min-w-0 ms-4">
+							<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+								Duration in Minutes
+							</p>
+							<p class="text-sm text-gray-500 truncate dark:text-gray-400" id="duration">
+
+							</p>
+						</div>
+
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+
+	<div id="job-details" class="hidden p-4 mb-4 rounded-lg ">
+		<div class="flex items-start gap-4">
+			{% if delivery_task.photo %}
+				<img id="job-photo" src="{{ delivery_task.photo.url }}" class="w-12 h-12 rounded-full" width="50"
+				     height="50" alt="">
+			{% else %}
+				<img id="job-photo" src="{% static 'static/images/delivery/photo.jpg' %}" class="w-12 h-12 rounded-full"
+				     width="50" height="50" alt="">
+
+			{% endif %}
+			<div class="flex flex-col w-full max-w-sm leading-tight">
+				<h3 id="job-name" class="font-bold text-lg"></h3>
+				<div class="flex justify-between items-center mt-2">
+					<div>
+						<p class="text-green-600 text-sm">
+							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+							     viewBox="0 0 24 24">
+								<path fill-rule="evenodd"
+								      d="M8.64 4.737A7.97 7.97 0 0 1 12 4a7.997 7.997 0 0 1 6.933 4.006h-.738c-.65 0-1.177.25-1.177.9 0 .33 0 2.04-2.026 2.008-1.972 0-1.972-1.732-1.972-2.008 0-1.429-.787-1.65-1.752-1.923-.374-.105-.774-.218-1.166-.411-1.004-.497-1.347-1.183-1.461-1.835ZM6 4a10.06 10.06 0 0 0-2.812 3.27A9.956 9.956 0 0 0 2 12c0 5.289 4.106 9.619 9.304 9.976l.054.004a10.12 10.12 0 0 0 1.155.007h.002a10.024 10.024 0 0 0 1.5-.19 9.925 9.925 0 0 0 2.259-.754 10.041 10.041 0 0 0 4.987-5.263A9.917 9.917 0 0 0 22 12a10.025 10.025 0 0 0-.315-2.5A10.001 10.001 0 0 0 12 2a9.964 9.964 0 0 0-6 2Zm13.372 11.113a2.575 2.575 0 0 0-.75-.112h-.217A3.405 3.405 0 0 0 15 18.405v1.014a8.027 8.027 0 0 0 4.372-4.307ZM12.114 20H12A8 8 0 0 1 5.1 7.95c.95.541 1.421 1.537 1.835 2.415.209.441.403.853.637 1.162.54.712 1.063 1.019 1.591 1.328.52.305 1.047.613 1.6 1.316 1.44 1.825 1.419 4.366 1.35 5.828Z"
+								      clip-rule="evenodd"></path>
+							</svg>
+
+							<span id="distance"></span> kilometre
+							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+							     viewBox="0 0 24 24">
+								<path fill-rule="evenodd"
+								      d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+								      clip-rule="evenodd"></path>
+							</svg>
+
+							<span id="duration"></span> minutes
+						</p>
+						<div class="flex items-center mt-2">
+							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+							     viewBox="0 0 24 24">
+								<path fill-rule="evenodd"
+								      d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z"
+								      clip-rule="evenodd"></path>
+							</svg>
+
+							<small id="pickup-address" class="text-gray-600 ml-2"></small>
+						</div>
+						<div class="flex items-center mt-2">
+							<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+							     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+							     viewBox="0 0 24 24">
+								<path fill-rule="evenodd"
+								      d="M5 9a7 7 0 1 1 8 6.93V21a1 1 0 1 1-2 0v-5.07A7.001 7.001 0 0 1 5 9Zm5.94-1.06A1.5 1.5 0 0 1 12 7.5a1 1 0 1 0 0-2A3.5 3.5 0 0 0 8.5 9a1 1 0 0 0 2 0c0-.398.158-.78.44-1.06Z"
+								      clip-rule="evenodd"></path>
+							</svg>
+
+							<small id="delivery-address" class="text-gray-600 ml-2"></small>
+						</div>
+					</div>
+					<h3 id="price" class="text-2xl font-bold"></h3>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="shadow rounded-lg border-gray-300 mb-4">
+		<div id="map" style="height: 500px; width: 100%;"></div>
+	</div>
+
+
+
+{% endblock content %}

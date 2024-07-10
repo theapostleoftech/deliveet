@@ -20,7 +20,6 @@
             const directionsRenderer = new google.maps.DirectionsRenderer();
             const map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 12,
-
                 center: {
                     lat: (pickupLat + deliveryLat) / 2,
                     lng: (pickupLng + deliveryLng) / 2
@@ -67,8 +66,8 @@
                         window.courierMarker = new google.maps.Marker({
                             position: new google.maps.LatLng(courierLat, courierLng),
                             map,
-                            icon: '/static/img/courier.png',
-                        })
+                            icon: '/static/images/courier.png',
+                        });
                     } else {
                         window.alert("Directions request failed due to " + status);
                     }
@@ -78,24 +77,19 @@
 
         const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
         const deliveryTaskId = "{{ delivery_task.id }}";
-        const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/shipments/${deliveryTaskId}/`;
+        const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/delivery/${deliveryTaskId}/`;
+
         const socket = new WebSocket(wsEndpoint);
 
-        {#const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';#}
-        {#const host = window.location.host;#}
-        {#const deliveryTaskId = "{{ delivery_task.id }}";#}
-        {#const wsUrl = `${protocol}//${host}/ws/shipments/${deliveryTaskId}/`;#}
+        socket.onopen = function (e) {
+            console.log("WebSocket connection established");
+        };
 
-        console.log('Attempting to connect to WebSocket:', wsEndpoint);
+        socket.onerror = function (error) {
+            console.log("WebSocket error: ", error);
+        };
 
-        const jobSocket = new WebSocket(wsEndpoint);
-        {#const jobSocket = new WebSocket(#}
-        {#    "ws{% if request.get_host != 'localhost:8000' %}#}
-        {#    s{% endif %}://" + window.location.host + "/ws/shipments/{{ delivery_task.id }}/"#}
-        {#);#}
-
-        // Execute this function whenever this page receives an event from Job Consumer via WebSocket
-        jobSocket.onmessage = function (e) {
+        socket.onmessage = function (e) {
             var data = JSON.parse(e.data);
             var delivery_task = data.delivery_task;
             console.log(delivery_task);
@@ -106,26 +100,27 @@
             }
 
             if (delivery_task.status) {
-                $("#job_status").html(delivery_task.status);
-                $("form").css("display", "none");
+                document.getElementById("delivery_task_status").innerHTML = delivery_task.status;
             }
 
             if (delivery_task.pickup_photo) {
-                $("#pickup_photo").html('<img src="' + delivery_task.pickup_photo + '" class="rounded-lg photo" width="130" height="130">');
+                document.getElementById("pickup_photo").innerHTML = '<img src="' + delivery_task.pickup_photo + '" class="rounded-lg photo" width="130" height="130">';
             }
 
             if (delivery_task.delivery_photo) {
-                $("#delivery_photo").html('<img src="' + delivery_task.delivery_photo + '" class="rounded-lg photo" width="130" height="130">');
+                document.getElementById("delivery_photo").innerHTML = '<img src="' + delivery_task.delivery_photo + '" class="rounded-lg photo" width="130" height="130">';
             }
+        };
 
-        }
+        socket.onclose = function (e) {
+            console.log("WebSocket connection closed");
+        };
 
 	</script>
 
 {% endblock head_js %}
 
 {% block content %}
-
 
 	<div class="w-full mb-4 px-4 2xl:px-0">
 		<div class="mt-2 sm:mt-2 md:gap-6 lg:flex lg:items-start xl:gap-8">
@@ -135,85 +130,70 @@
 						<div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
 							<a href="" class="shrink-0 md:order-1">
 								{% if delivery_task.photo %}
-
 									<img class="rounded-lg mr-6 w-40 h-40 object-cover"
-									     src="{{ delivery_task.photo.url }}"
-									     alt=""/>
-
+									     src="{{ delivery_task.photo.url }}" alt=""/>
 								{% else %}
 									<img class="rounded-lg mr-6 w-40 h-40 object-cover"
-									     src="{% static 'static/images/delivery/photo.jpg' %}"
-									     alt=""/>
+									     src="{% static 'static/images/delivery/photo.jpg' %}" alt=""/>
 								{% endif %}
 							</a>
-
 							<label for="counter-input" class="sr-only">Choose quantity:</label>
-
-
 							<div class="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
 								<a href="" class="text-base font-medium text-gray-900 hover:underline dark:text-white">
 									{{ delivery_task.item_name }}
 								</a>
-
-
 								<div class="space-y-4">
 									<div class="space-y-2">
 										<dl class="flex items-center justify-between gap-4">
-											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Category
+											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">
+												Category
 											</dt>
 											<dd class="text-base font-medium text-gray-900 dark:text-white">{{ delivery_task.get_item_type_display }}</dd>
 										</dl>
-
 										<dl class="flex items-center justify-between gap-4">
-											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Size
-											</dt>
-											<dd class="text-base font-medium text-green-600">
-												{{ delivery_task.get_size_display }}</dd>
+											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Size</dt>
+											<dd class="text-base font-medium text-green-600">{{ delivery_task.get_size_display }}</dd>
 										</dl>
-
 										<dl class="flex items-center justify-between gap-4">
-											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Quantity
+											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">
+												Quantity
 											</dt>
 											<dd class="text-base font-medium text-gray-900 dark:text-white">{{ delivery_task.quantity }}</dd>
 										</dl>
-
 										<dl class="flex items-center justify-between gap-4">
-											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Distance
+											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">
+												Distance
 											</dt>
 											<dd class="text-base font-medium text-gray-900 dark:text-white">{{ delivery_task.distance }}
 												Kilometre
 											</dd>
 										</dl>
-
 										<dl class="flex items-center justify-between gap-4">
-											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Duration
+											<dt class="text-base font-normal text-gray-500 dark:text-gray-400">
+												Duration
 											</dt>
 											<dd class="text-base font-medium text-gray-900 dark:text-white">{{ delivery_task.duration }}
 												Minutes
 											</dd>
 										</dl>
-
 										<dl class="flex items-center justify-between gap-4">
-											<dt class="text-base font-bold text-gray-500 dark:text-gray-400">Price
-											</dt>
+											<dt class="text-base font-bold text-gray-500 dark:text-gray-400">Price</dt>
 											<dd class="text-base font-bold text-gray-900 dark:text-white">
 												₦{{ delivery_task.price }}</dd>
 										</dl>
 									</div>
 								</div>
-
-								<a href=""
-								   class="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5
-								   py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none
-								   focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700
-								   dark:focus:ring-primary-800">Cancel Delivery</a>
-
+								{% if delivery_task.status == 'processing' %}
+									<form method="POST">
+										{% csrf_token %}
+										<button type="submit" class="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">Cancel Delivery</button>
+									</form>
+								{% endif %}
 
 							</div>
 						</div>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -238,8 +218,7 @@
 						     alt="Pickup Photo">
 					{% else %}
 						<img class="rounded-lg mr-6 w-40 h-40 object-cover"
-						     src="{% static 'static/images/delivery/pickup.jpg.jpg' %}"
-						     alt=""/>
+						     src="{% static 'static/images/delivery/pickup.jpg' %}" alt=""/>
 					{% endif %}
 				</div>
 			</div>
@@ -262,13 +241,13 @@
 						     alt="Delivery Photo">
 					{% else %}
 						<img class="rounded-lg mr-6 w-40 h-40 object-cover"
-						     src="{% static 'static/images/delivery/delivery.jpg' %}"
-						     alt=""/>
+						     src="{% static 'static/images/delivery/delivery.jpg' %}" alt=""/>
 					{% endif %}
 				</div>
 			</div>
 		</div>
 	</div>
+
 	<div class="w-full px-4 2xl:px-0">
 		<div class="flex justify-between items-center mb-2">
 			<h6 class="text-gray-500 font-semibold">TRACK DELIVERY</h6>
@@ -280,4 +259,5 @@
 			<div id="map" style="height: 500px; width: 100%;"></div>
 		</div>
 	</div>
+
 {% endblock content %}

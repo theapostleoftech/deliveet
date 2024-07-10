@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, RedirectView, View
-
+from decimal import Decimal
 from deliveet.utils.decorators import courier_required
 from shipments.models import Delivery
 
@@ -49,7 +49,8 @@ class CourierDashboardView(TemplateView):
             ]
         ).count()
 
-        context['total_earnings'] = round(sum(delivery_task.price for delivery_task in delivery_tasks) * 0.9, 2)
+        total_price = sum(delivery_task.price for delivery_task in delivery_tasks)
+        context['total_earnings'] = (total_price * Decimal('0.9')).quantize(Decimal('0.01'))
         context['total_delivery_tasks'] = len(delivery_tasks)
         context['total_km'] = sum(delivery_task.distance for delivery_task in delivery_tasks)
         context['deliveries_in_progress'] = deliveries_in_progress
@@ -58,99 +59,117 @@ class CourierDashboardView(TemplateView):
         return context
 
 
-@method_decorator(courier_required, name='dispatch')
-class CourierDeliveryTasksView(TemplateView):
+def courier_available_delivery_tasks(request):
     """
-    This view displays the deliveries available to the courier
-    Allows the courier to accept deliveries
+    Renders the available delivery task page.
     """
-    template_name = 'courier/delivery_tasks.html'
+    template_name = 'courier/available_delivery_tasks.html'
+    GOOGLE_MAP_API_KEY = settings.GOOGLE_MAP_API_KEY
+    return render(
+        request,
+        template_name, {
+            'GOOGLE_MAP_API_KEY': GOOGLE_MAP_API_KEY,
+        })
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['GOOGLE_MAP_API_KEY'] = settings.GOOGLE_MAP_API_KEY
-        return context
 
-
-@method_decorator(courier_required, name='dispatch')
-class CourierShipmentsView(RedirectView):
+def courier_available_delivery_task(request, id):
     """
-    This view displays the deliveries available to the courier
+    Renders details of a specific available delivery task or redirects if not found.
+    Allows a courier to accept a delivery task.
     """
-    url = reverse_lazy('couriers:available_delivery_tasks')
+    template_name = 'courier/available_delivery_task.html'
+    delivery_task = Delivery.objects.filter(
+        id=id,
+        status=Delivery.StatusChoices.PROCESSING).last()
 
+    if not delivery_task:
+        return redirect(reverse('couriers:available_delivery_tasks'))
 
-@method_decorator(courier_required, name='dispatch')
-class CourierDeliveryTaskView(View):
-    template_name = 'courier/courier_delivery_task.html'
-
-    def get_delivery_task(self, id):
-        """
-        This function retrieves a delivery order by id
-        """
-        return Delivery.objects.filter(
-            id=id, status=Delivery.StatusChoices.PROCESSING
-        ).last()
-
-    def get(self, request, id):
-        """
-        This function displays the job details
-        """
-        delivery_task = self.get_delivery_task(id)
-        if not delivery_task:
-            return redirect(reverse('couriers:available_delivery_tasks'))
-        return render(request, self.template_name, {'delivery_task': delivery_task, })
-
-    def post(self, request, id):
-        """
-        Updates the delivery status, assigns courier and sends messages
-        """
-        delivery_task = self.get_delivery_task(id)
-        if not delivery_task:
-            return redirect(reverse('couriers:available_delivery_tasks'))
-
+    if request.method == 'POST':
         delivery_task.courier = request.user.courier_account
         delivery_task.status = Delivery.StatusChoices.PICKUP_IN_PROGRESS
         delivery_task.save()
 
         try:
             layer = get_channel_layer()
-            async_to_sync(layer.group_send)("delivery_task_" + str(delivery_task.id),
-                                            {
-                                                'type': 'delivery_task_update',
-                                                'delivery_task': {
-                                                    'status': delivery_task.get_status_display(),
-                                                }
-                                            })
+            async_to_sync(layer.group_send)("delivery_task_" + str(delivery_task.id), {
+                'type': 'delivery_task_update',
+                'delivery_task': {
+                    'status': delivery_task.get_status_display(),
+                }
+            })
         except:
             pass
 
-        return redirect(reverse('couriers:available_delivery_tasks'))
+        return redirect(reverse('couriers:delivery_task'))
+
+    return render(
+        request,
+        template_name, {
+            "delivery_task": delivery_task
+        })
 
 
-@method_decorator(courier_required, name='dispatch')
-class CourierOrderView(TemplateView):
+def courier_delivery_task(request):
     """
-    This view displays the current shipment order of a courier.
+    Renders details of the current delivery task being handled by the courier.
     """
-    template_name = 'courier/shipment_order.html'
+    template_name = 'courier/delivery_task.html'
+    GOOGLE_MAP_API_KEY = settings.GOOGLE_MAP_API_KEY
+    delivery_task = Delivery.objects.filter(
+        courier=request.user.courier_account,
+        status__in=[
+            Delivery.StatusChoices.PICKUP_IN_PROGRESS,
+            Delivery.StatusChoices.DELIVERY_IN_PROGRESS
+        ]
+    ).last()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['delivery_task'] = Delivery.objects.filter(
-            courier=self.request.user.courier_account,
-            status__in=[
-                Delivery.StatusChoices.PICKUP_IN_PROGRESS,
-                Delivery.StatusChoices.DELIVERY_IN_PROGRESS
-            ]
-        ).last()
-        context['GOOGLE_MAP_API_KEY'] = settings.GOOGLE_MAP_API_KEY
-        return context
+    return render(request, template_name, {
+        "delivery_task": delivery_task,
+        "GOOGLE_MAP_API_KEY": GOOGLE_MAP_API_KEY
+    })
 
 
-@method_decorator(courier_required, name='dispatch')
-class CourierOrderCompletedView(TemplateView):
+def courier_delivery_task_take_photo(request, id):
     """
-    View for the job completion page.
+    Renders the page for taking a photo of the current delivery in progress.
+    """
+    template_name = 'courier/delivery_task_take_photo.html'
+    delivery_task = Delivery.objects.filter(
+        id=id,
+        courier=request.user.courier_account,
+        status__in=[
+            Delivery.StatusChoices.PICKUP_IN_PROGRESS,
+            Delivery.StatusChoices.DELIVERY_IN_PROGRESS
+        ]
+    ).last()
+
+    if not delivery_task:
+        return redirect(reverse('courier:delivery_task'))
+
+    return render(request, template_name, {
+        "delivery_task": delivery_task
+    })
+
+
+def courier_delivery_task_completed(request):
+    """
+    Renders the delivery task completion page.
     """
     template_name = 'courier/delivery_task_complete.html'
+    return render(request, template_name)
+
+
+def courier_past_delivery_tasks(request):
+    """
+    Renders the past delivery_tasks page.
+    """
+    template_name = 'courier/past_delivery_tasks.html'
+    delivery_tasks = Delivery.objects.filter(
+        courier=request.user.courier_account,
+        status=Delivery.StatusChoices.COMPLETED
+    )
+
+    return render(request, template_name, {
+        "delivery_tasks": delivery_tasks
+    })

@@ -152,13 +152,6 @@ def handle_payment_form(request, creating_delivery_task):
 
             return redirect(reverse('customers:customer_shipments'))
 
-        elif creating_delivery_task.payment_method == Delivery.PaymentMethodChoices.CARD:
-            transaction = DeliveryTransaction.objects.create(
-                delivery=creating_delivery_task,
-                amount=creating_delivery_task.price
-            )
-            return redirect(reverse('finance:initiate_transaction'))
-
         elif creating_delivery_task.payment_method == Delivery.PaymentMethodChoices.WALLET:
             wallet = Wallet.objects.get(user=request.user)
             if wallet.balance >= creating_delivery_task.price:
@@ -175,7 +168,7 @@ def handle_payment_form(request, creating_delivery_task):
                 DeliveryTransaction.objects.create(
                     delivery=creating_delivery_task,
                     amount=creating_delivery_task.price,
-                    status='COMPLETED'
+                    transaction_status=DeliveryTransaction.PaymentStatus.PAID
                 )
 
                 creating_delivery_task.status = Delivery.StatusChoices.PROCESSING

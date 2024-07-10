@@ -3,10 +3,9 @@ This contains all models for the shipments app.
 """
 import secrets
 import uuid
+from decimal import Decimal
 
 from django.db import models
-from phonenumber_field.modelfields import PhoneNumberField
-from versatileimagefield.fields import VersatileImageField
 
 from accounts.models import Customer, Courier
 from app.models import BaseModel
@@ -92,13 +91,9 @@ class Delivery(BaseModel):
         default=SizeChoices.SMALL,
         help_text='Select the size of type to be delivered'
     )
-    photo = VersatileImageField(
-        'Photo',
-        upload_to='media/delivery',
+    photo = models.ImageField(
         null=True,
         blank=True,
-        default='static/images/photo.jpg'
-
     )
     quantity = models.PositiveIntegerField(
         default=1
@@ -119,13 +114,9 @@ class Delivery(BaseModel):
     pickup_longitude = models.FloatField(
         default=0
     )
-    pickup_photo = VersatileImageField(
-        'Pickup',
-        upload_to='media/delivery/pickup',
+    pickup_photo = models.ImageField(
         null=True,
         blank=True,
-        default='static/images/pickup.jpg'
-
     )
     sender_name = models.CharField(
         help_text='Name of the sender or the person to be picked up from',
@@ -159,12 +150,9 @@ class Delivery(BaseModel):
         max_length=14,
         null=True
     )
-    delivery_photo = VersatileImageField(
-        'Delivery',
-        upload_to='media/delivery/delivery',
+    delivery_photo = models.ImageField(
         null=True,
         blank=True,
-        default='static/images/delivery.jpg'
     )
     duration = models.IntegerField(
         default=0
@@ -172,8 +160,10 @@ class Delivery(BaseModel):
     distance = models.FloatField(
         default=0
     )
-    price = models.FloatField(
-        default=0
+    price = models.DecimalField(
+        default=Decimal('0.00'),
+        decimal_places=2,
+        max_digits=10
     )
 
     pickedup_at = models.DateTimeField(
@@ -221,7 +211,7 @@ class Delivery(BaseModel):
         This is the save method for the delivery model
         """
         while not self.tracking_number:
-            tracking_number = secrets.token_urlsafe(6)
+            tracking_number = secrets.token_urlsafe(8)
             existing_tracking_number = Delivery.objects.filter(
                 tracking_number=tracking_number
             ).first()
