@@ -31,9 +31,6 @@ DEVELOPMENT_MODE = env.bool('DEVELOPMENT_MODE', default=False)
 # Debug
 DEBUG = env.bool('DJANGO_DEBUG', )
 
-# Hosts
-CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS')
-
 # Ensure ALLOWED_HOSTS is also set correctly
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com', ]
 
