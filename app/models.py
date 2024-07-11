@@ -41,8 +41,6 @@ class ProfileBaseModel(models.Model):
     This is the base model for all user profiles
     """
     avatar = models.ImageField(
-        'Image',
-        upload_to='images/profile',
         null=True,
         blank=True,
         default='images/profile/avatar.jpg'
