@@ -221,14 +221,6 @@ FIREBASE_CONFIG = {
     'FIREBASE_TOKEN': env('FIREBASE_TOKEN', default='None'),
 }
 
-
-def get_firebase_private_key():
-    private_key_base64 = config('FIREBASE_PRIVATE_KEY', default=None)
-    if private_key_base64:
-        return base64.b64decode(private_key_base64).decode('utf-8').replace('\\n', '\n')
-    return None
-
-
 FIREBASE_PRIVATE_KEY_BASE64 = config('FIREBASE_PRIVATE_KEY', default=None)
 
 if FIREBASE_PRIVATE_KEY_BASE64:
@@ -250,18 +242,3 @@ FIREBASE_SECRETS = {
     "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL', default='None'),
     "universe_domain": config('UNIVERSAL_DOMAIN', default='None')
 }
-
-print(FIREBASE_PRIVATE_KEY)
-
-print(list(FIREBASE_PRIVATE_KEY_BASE64.encode('utf-8')))
-
-if not FIREBASE_PRIVATE_KEY_BASE64:
-    print("FIREBASE_PRIVATE_KEY_BASE64 is not set")
-else:
-    try:
-        FIREBASE_PRIVATE_KEY = base64.b64decode(FIREBASE_PRIVATE_KEY_BASE64).decode('unicode_escape')
-        print("Decoded Firebase private key successfully")
-    except UnicodeDecodeError as e:
-        print(f"Error decoding FIREBASE_PRIVATE_KEY_BASE64: {e}")
-    except Exception as e:
-        print(f"Unexpected error decoding FIREBASE_PRIVATE_KEY_BASE64: {e}")
