@@ -35,9 +35,7 @@ DEBUG = env.bool('DJANGO_DEBUG', )
 CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS')
 
 # Ensure ALLOWED_HOSTS is also set correctly
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['deliveet.live'])
-
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com', ]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com', ]
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
@@ -252,3 +250,10 @@ CSRF_COOKIE_SECURE = env.bool('CSRF_COOKIE_SECURE', )
 SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', )
 
 SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', )
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://deliveet.live',
+    'https://deliveet-e6f379edca9d.herokuapp.com',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
