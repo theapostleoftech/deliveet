@@ -232,7 +232,7 @@ def get_firebase_private_key():
 FIREBASE_PRIVATE_KEY_BASE64 = config('FIREBASE_PRIVATE_KEY', default=None)
 
 if FIREBASE_PRIVATE_KEY_BASE64:
-    FIREBASE_PRIVATE_KEY = base64.b64decode(FIREBASE_PRIVATE_KEY_BASE64).decode('utf-8')
+    FIREBASE_PRIVATE_KEY = base64.b64decode(FIREBASE_PRIVATE_KEY_BASE64).decode('unicode_escape')
 else:
     FIREBASE_PRIVATE_KEY = None
 
@@ -259,7 +259,7 @@ if not FIREBASE_PRIVATE_KEY_BASE64:
     print("FIREBASE_PRIVATE_KEY_BASE64 is not set")
 else:
     try:
-        FIREBASE_PRIVATE_KEY = base64.b64decode(FIREBASE_PRIVATE_KEY_BASE64).decode('utf-8')
+        FIREBASE_PRIVATE_KEY = base64.b64decode(FIREBASE_PRIVATE_KEY_BASE64).decode('unicode_escape')
         print("Decoded Firebase private key successfully")
     except UnicodeDecodeError as e:
         print(f"Error decoding FIREBASE_PRIVATE_KEY_BASE64: {e}")
