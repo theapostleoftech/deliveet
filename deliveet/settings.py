@@ -225,7 +225,7 @@ FIREBASE_SECRETS = {
     "type": config('FIREBASE_TYPE', default="service_account"),
     "project_id": config('FIREBASE_PROJECT_ID', default='None'),
     "private_key_id": config('FIREBASE_PRIVATE_KEY_ID', default='None'),
-    "private_key": config('FIREBASE_PRIVATE_KEY').replace('\\n', '\n'),
+    "private_key": config(('FIREBASE_PRIVATE_KEY').replace('\\n', '\n'),default='None'),
     "client_email": config('FIREBASE_CLIENT_EMAIL', default='None'),
     "client_id": config('FIREBASE_CLIENT_ID', default='None'),
     "auth_uri": config('FIREBASE_AUTH_URI', default="https://accounts.google.com/o/oauth2/auth"),
