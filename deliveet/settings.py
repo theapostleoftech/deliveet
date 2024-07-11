@@ -1,6 +1,7 @@
 """
 Django settings for deliveet project.
 """
+import base64
 import json
 import os
 from urllib.parse import urlparse
@@ -196,7 +197,12 @@ LOGOUT_REDIRECT_URL = 'pages:app_home'
 # Google Map
 GOOGLE_MAP_API_KEY = env('GOOGLE_MAP_API_KEY')
 
-# FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/delivit-1d2d5-firebase.json")
+FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/delivit-1d2d5-firebase.json")
+
+# Load Firebase secrets
+# FIREBASE_SECRETS_PATH = config('FIREBASE_SECRETS_PATH')
+# with open(FIREBASE_SECRETS_PATH) as firebase_secrets_file:
+#     FIREBASE_SECRETS = json.load(firebase_secrets_file)
 
 NOTIFICATION_URL = env('NOTIFICATION_URL', default='localhost:8000')
 
@@ -221,11 +227,15 @@ FIREBASE_CONFIG = {
     'FIREBASE_TOKEN': env('FIREBASE_TOKEN', default='None'),
 }
 
+private_key = config('FIREBASE_PRIVATE_KEY'.replace('\\n', '\n'), default='None')
+if private_key.startswith('-----BEGIN PRIVATE KEY-----'):
+    private_key = base64.b64encode(private_key.encode('utf-8')).decode('utf-8')
+
 FIREBASE_SECRETS = {
     "type": config('FIREBASE_TYPE', default="service_account"),
     "project_id": config('FIREBASE_PROJECT_ID', default='None'),
     "private_key_id": config('FIREBASE_PRIVATE_KEY_ID', default='None'),
-    "private_key": config(('FIREBASE_PRIVATE_KEY').replace('\\n', '\n'), default='None'),
+    "private_key": config('FIREBASE_PRIVATE_KEY'.replace('\\n', '\n'), default='None'),
     "client_email": config('FIREBASE_CLIENT_EMAIL', default='None'),
     "client_id": config('FIREBASE_CLIENT_ID', default='None'),
     "auth_uri": config('FIREBASE_AUTH_URI', default="https://accounts.google.com/o/oauth2/auth"),
@@ -235,3 +245,4 @@ FIREBASE_SECRETS = {
     "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL', default='None'),
     "universe_domain": config('UNIVERSAL_DOMAIN', default='None')
 }
+print("Private Key:", FIREBASE_SECRETS['private_key'])

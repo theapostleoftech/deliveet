@@ -22,10 +22,14 @@ from firebase_admin.exceptions import FirebaseError
 
 from accounts.forms import SignUpForm, SignInForm, ChangePasswordForm, UserAccountUpdateForm
 from accounts.models import UserAccount, Customer, Courier
+from deliveet.settings import DEBUG
 
 UserModel = get_user_model()
 
-config = credentials.Certificate(settings.FIREBASE_SECRETS)
+if DEBUG:
+    config = credentials.Certificate(settings.FIREBASE_ADMIN_CREDENTIAL)
+else:
+    config = credentials.Certificate(settings.FIREBASE_SECRETS)
 firebase_admin.initialize_app(config)
 
 
