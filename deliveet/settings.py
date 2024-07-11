@@ -32,8 +32,12 @@ DEVELOPMENT_MODE = env.bool('DEVELOPMENT_MODE', default=False)
 DEBUG = env.bool('DJANGO_DEBUG', )
 
 # Hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com',
-                 'deliveet-master-ad9bf6e46109.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS')
+
+# Ensure ALLOWED_HOSTS is also set correctly
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['deliveet.live'])
+
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com', ]
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
@@ -242,3 +246,15 @@ FIREBASE_SECRETS = {
     "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL', default='None'),
     "universe_domain": config('UNIVERSAL_DOMAIN', default='None')
 }
+
+CSRF_COOKIE_SECURE = env.bool('CSRF_COOKIE_SECURE', )
+
+SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', )
+
+SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', )
+
+SECURE_HSTS_SECONDS = env.int('SECURE_HSTS_SECONDS', default=31536000)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True)
+SECURE_HSTS_PRELOAD = env.bool('SECURE_HSTS_PRELOAD', default=True)
+SECURE_BROWSER_XSS_FILTER = env.bool('SECURE_BROWSER_XSS_FILTER', default=False)
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool('SECURE_CONTENT_TYPE_NOSNIFF', default=False)
