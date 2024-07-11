@@ -229,11 +229,18 @@ def get_firebase_private_key():
     return None
 
 
+FIREBASE_PRIVATE_KEY_BASE64 = config('FIREBASE_PRIVATE_KEY', default=None)
+
+if FIREBASE_PRIVATE_KEY_BASE64:
+    FIREBASE_PRIVATE_KEY = base64.b64decode(FIREBASE_PRIVATE_KEY_BASE64).decode('utf-8')
+else:
+    FIREBASE_PRIVATE_KEY = None
+
 FIREBASE_SECRETS = {
     "type": config('FIREBASE_TYPE', default="service_account"),
     "project_id": config('FIREBASE_PROJECT_ID', default='None'),
     "private_key_id": config('FIREBASE_PRIVATE_KEY_ID', default='None'),
-    "private_key": get_firebase_private_key(),
+    "private_key": FIREBASE_PRIVATE_KEY,
     "client_email": config('FIREBASE_CLIENT_EMAIL', default='None'),
     "client_id": config('FIREBASE_CLIENT_ID', default='None'),
     "auth_uri": config('FIREBASE_AUTH_URI', default="https://accounts.google.com/o/oauth2/auth"),
