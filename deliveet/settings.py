@@ -30,14 +30,15 @@ DEVELOPMENT_MODE = env.bool('DEVELOPMENT_MODE', default=False)
 DEBUG = env.bool('DJANGO_DEBUG', )
 
 # Hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com',
+                 'deliveet-master-ad9bf6e46109.herokuapp.com']
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
 # Application definition
 
 INSTALLED_APPS = [
-    # 'daphne',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -234,5 +235,3 @@ FIREBASE_SECRETS = {
     "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL', default='None'),
     "universe_domain": config('UNIVERSAL_DOMAIN', default='None')
 }
-
-

@@ -33,12 +33,21 @@ class Delivery(BaseModel):
         """
         This defines the type of item to be delivered
         """
-        CLOTHING = 'clothing', 'Clothing'
         FOOD = 'Food', 'Food'
         DOCUMENTS = 'documents', 'Documents'
-        PHARMACEUTICALS = 'pharmaceuticals', 'Pharmaceuticals'
-        ELECTRONICS = 'electronics', 'Electronics'
+        GADGETS = 'gadgets', 'Gadgets',
+        APPLIANCES = 'appliances', 'Appliances'
+        FURNITURE = 'furniture', 'Furniture'
+        CLOTHING_APPAREL = 'clothing_&_apparel', 'Clothing & Apparel'
+        HEALTH_BEAUTY = 'health_&_beauty', 'Health & Beauty'
+        SPORTS_OUTDOOR = 'sports_&_outdoor', 'Sports & Outdoor'
+        BEVERAGES = 'beverages', 'Beverages'
+        OFFICE_SUPPLIES = 'office_supplies', 'Office Supplies'
+        ELECTRICAL_INDUSTRIAL_EQUIPMENTS = 'electrical_&_industrial_equipments', 'Electrical & Industrial Equipments'
+        MEDICAL_SUPPLIES = 'medical_supplies', 'Medical Supplies'
+        PACKAGING_MATERIAL = 'packaging_material', 'Packaging Material'
         GOODS = 'goods', 'Goods'
+        OTHERS = 'others', 'Others'
 
     class SizeChoices(models.TextChoices):
         """
