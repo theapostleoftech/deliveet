@@ -4,15 +4,16 @@ Django settings for deliveet project.
 import base64
 import json
 import os
+from pathlib import Path
 from urllib.parse import urlparse
 
 import dj_database_url
+import requests
 from decouple import config
 from django.contrib import messages
 from django.core.management.utils import get_random_secret_key
 from django.template.context_processors import media
 from environ import Env
-from pathlib import Path
 
 # Path
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -197,13 +198,6 @@ LOGOUT_REDIRECT_URL = 'pages:app_home'
 # Google Map
 GOOGLE_MAP_API_KEY = env('GOOGLE_MAP_API_KEY')
 
-FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/delivit-1d2d5-firebase.json")
-
-# Load Firebase secrets
-# FIREBASE_SECRETS_PATH = config('FIREBASE_SECRETS_PATH')
-# with open(FIREBASE_SECRETS_PATH) as firebase_secrets_file:
-#     FIREBASE_SECRETS = json.load(firebase_secrets_file)
-
 NOTIFICATION_URL = env('NOTIFICATION_URL', default='localhost:8000')
 
 # Channels
@@ -227,15 +221,19 @@ FIREBASE_CONFIG = {
     'FIREBASE_TOKEN': env('FIREBASE_TOKEN', default='None'),
 }
 
-private_key = config('FIREBASE_PRIVATE_KEY'.replace('\\n', '\n'), default='None')
-if private_key.startswith('-----BEGIN PRIVATE KEY-----'):
-    private_key = base64.b64encode(private_key.encode('utf-8')).decode('utf-8')
+
+def get_firebase_private_key():
+    private_key_base64 = config('FIREBASE_PRIVATE_KEY', default=None)
+    if private_key_base64:
+        return base64.b64decode(private_key_base64).decode('utf-8').replace('\\n', '\n')
+    return None
+
 
 FIREBASE_SECRETS = {
     "type": config('FIREBASE_TYPE', default="service_account"),
     "project_id": config('FIREBASE_PROJECT_ID', default='None'),
     "private_key_id": config('FIREBASE_PRIVATE_KEY_ID', default='None'),
-    "private_key": private_key,
+    "private_key": get_firebase_private_key(),
     "client_email": config('FIREBASE_CLIENT_EMAIL', default='None'),
     "client_id": config('FIREBASE_CLIENT_ID', default='None'),
     "auth_uri": config('FIREBASE_AUTH_URI', default="https://accounts.google.com/o/oauth2/auth"),
@@ -245,4 +243,3 @@ FIREBASE_SECRETS = {
     "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL', default='None'),
     "universe_domain": config('UNIVERSAL_DOMAIN', default='None')
 }
-print("Private Key:", FIREBASE_SECRETS['private_key'])

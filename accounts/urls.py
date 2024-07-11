@@ -1,9 +1,9 @@
 """
 This contains url routes for the accounts app.
 """
-from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
-    PasswordResetCompleteView
+from django.contrib.auth.views import LogoutView
 from django.urls import path
+
 from . import views
 
 app_name = 'accounts'

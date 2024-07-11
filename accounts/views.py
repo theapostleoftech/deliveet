@@ -2,35 +2,30 @@
 This contains views for the accounts app.
 """
 import firebase_admin
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, get_user_model, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordResetDoneView, PasswordResetView, \
     PasswordResetCompleteView, PasswordResetConfirmView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites import requests
-from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
-from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, View, DetailView, UpdateView, FormView
-from firebase_admin import auth, credentials, messaging
-from firebase_admin.exceptions import FirebaseError
+from django.views.generic import CreateView, View, DetailView, FormView
+from firebase_admin import auth, credentials
 
 from accounts.forms import SignUpForm, SignInForm, ChangePasswordForm, UserAccountUpdateForm
-from accounts.models import UserAccount, Customer, Courier
-from deliveet.settings import DEBUG
+from accounts.models import UserAccount
+from deliveet.settings import FIREBASE_SECRETS
 
 UserModel = get_user_model()
 
-if DEBUG:
-    config = credentials.Certificate(settings.FIREBASE_ADMIN_CREDENTIAL)
-else:
-    config = credentials.Certificate(settings.FIREBASE_SECRETS)
-firebase_admin.initialize_app(config)
+try:
+    cred = credentials.Certificate(FIREBASE_SECRETS)
+    firebase_admin.initialize_app(cred)
+except ValueError as e:
+    raise ValueError("Failed to initialize Firebase credentials: {}".format(e))
 
 
 class SignUpView(CreateView):
