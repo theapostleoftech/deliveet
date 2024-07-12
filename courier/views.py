@@ -1,18 +1,20 @@
 """
 This contains views for courier app.
 """
+from decimal import Decimal
+
 from asgiref.sync import async_to_sync
 from django.conf import settings
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, RedirectView, View
-from decimal import Decimal
+from django.views.generic import TemplateView
+
 from deliveet.utils.decorators import courier_required
 from shipments.models import Delivery
 
 
-@method_decorator(courier_required, name='dispatch')
+@method_decorator([courier_required], name='dispatch')
 class CourierDashboardView(TemplateView):
     """
     This view handles the courier's dashboard
@@ -59,6 +61,7 @@ class CourierDashboardView(TemplateView):
         return context
 
 
+@courier_required
 def courier_available_delivery_tasks(request):
     """
     Renders the available delivery task page.
@@ -72,6 +75,7 @@ def courier_available_delivery_tasks(request):
         })
 
 
+@courier_required
 def courier_available_delivery_task(request, id):
     """
     Renders details of a specific available delivery task or redirects if not found.
@@ -110,6 +114,7 @@ def courier_available_delivery_task(request, id):
         })
 
 
+@courier_required
 def courier_delivery_task(request):
     """
     Renders details of the current delivery task being handled by the courier.
@@ -130,6 +135,7 @@ def courier_delivery_task(request):
     })
 
 
+@courier_required
 def courier_delivery_task_take_photo(request, id):
     """
     Renders the page for taking a photo of the current delivery in progress.
@@ -152,6 +158,7 @@ def courier_delivery_task_take_photo(request, id):
     })
 
 
+@courier_required
 def courier_delivery_task_completed(request):
     """
     Renders the delivery task completion page.
@@ -160,6 +167,7 @@ def courier_delivery_task_completed(request):
     return render(request, template_name)
 
 
+@courier_required
 def courier_past_delivery_tasks(request):
     """
     Renders the past delivery_tasks page.

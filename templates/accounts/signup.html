@@ -1,4 +1,4 @@
-{% extends 'bases/base.html' %}
+{% extends 'bases/app_base.html' %}
 {% load static %}
 {% load widget_tweaks %}
 {% block title %}Sign Up{% endblock title %}
@@ -17,8 +17,8 @@
 								<p class="text-sm text-gray-500 font-medium pt-4">
 									We're glad to serve you. To create your account, please provide the information
 									below. Already have an account? <a title=""
-									                                   class="font-bold text-primary hover:underline"
-									                                   href="/signin/">Sign in</a>
+									                                   class="font-bold text-primary-700 hover:underline"
+									                                   href="{% url 'accounts:signin' %}">Sign in</a>
 								</p>
 							</div>
 							<form class="w-full" method="POST">

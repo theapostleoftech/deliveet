@@ -3,50 +3,35 @@ This module contains modules for
 managing permissions in the deliveet app
 """
 
-from functools import wraps
-from django.shortcuts import redirect
-from django.contrib import messages
-
-from accounts.models import UserAccount
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth.decorators import user_passes_test
 
 
-def customer_required(view_func):
+def customer_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='accounts:signin'):
     """
-    This function checks to see if a user has a customer account
-    before granting access to a page
+    Decorator for views that checks that the logged-in user is a customer,
+    redirects to the log-in page if necessary.
     """
-
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        if request.user.is_authenticated:
-            if request.user.account_type == UserAccount.UserAccountType.CUSTOMER:
-                return view_func(request, *args, **kwargs)
-            else:
-                messages.error(request, "You must be a customer to access this page.")
-                return redirect('pages:app_home')
-        else:
-            messages.error(request, "You must be logged in to access this page.")
-            return redirect('accounts:signin')
-
-    return _wrapped_view
+    actual_decorator = user_passes_test(
+        lambda u: u.is_active and u.is_customer,
+        login_url=login_url,
+        redirect_field_name=redirect_field_name
+    )
+    if function:
+        return actual_decorator(function)
+    return actual_decorator
 
 
-def courier_required(view_func):
+def courier_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='accounts:signin'):
     """
-    This function checks to see if a user has a courier account
-    before granting access to a page
+     Decorator for views that checks that the logged-in user is a courier,
+     redirects to the log-in page if necessary.
     """
-
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        if request.user.is_authenticated:
-            if request.user.account_type == UserAccount.UserAccountType.COURIER:
-                return view_func(request, *args, **kwargs)
-            else:
-                messages.error(request, "You must be a courier to access this page.")
-                return redirect('pages:app_home')
-        else:
-            messages.error(request, "You must be logged in to access this page.")
-            return redirect('accounts:signin')
-
-    return _wrapped_view
+    actual_decorator = user_passes_test(
+        lambda u: u.is_active and u.is_courier,
+        login_url=login_url,
+        redirect_field_name=redirect_field_name
+    )
+    if function:
+        return actual_decorator(function)
+    return actual_decorator

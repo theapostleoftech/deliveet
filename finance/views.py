@@ -4,10 +4,10 @@ This contains all the views related to finance.
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from finance.forms import TransactionForm
@@ -17,7 +17,8 @@ from finance.models import WalletTransaction, Wallet
 _public_key = settings.PAYSTACK_PUBLIC_KEY
 
 
-class WalletView(LoginRequiredMixin, TemplateView):
+@method_decorator([login_required], name='dispatch')
+class WalletView(TemplateView):
     """
     This view displays the wallet info and transactions.
     """
@@ -72,6 +73,7 @@ def initiate_transaction(request: HttpRequest) -> HttpResponse:
     return render(request, 'finance/transaction.html', {'form': form})
 
 
+@login_required
 def verify_transaction(request, transaction_reference):
     """
     This view is used to verify a transaction.

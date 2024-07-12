@@ -2,16 +2,17 @@
 This contains views for customer app.
 """
 from django.conf import settings
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import ListView, DetailView
 
 from deliveet.utils.decorators import customer_required
 from shipments.models import Delivery
 
 
-@method_decorator(customer_required, name='dispatch')
+@method_decorator([customer_required], name='dispatch')
 class CustomerDashboardView(ListView):
     """
     This is the customers dashboard view
@@ -65,7 +66,7 @@ class CustomerDashboardView(ListView):
         return context
 
 
-@method_decorator(customer_required, name='dispatch')
+@method_decorator([customer_required], name='dispatch')
 class CustomerDeliveryTasksView(ListView):
     """
     This view displays the customers delivery orders.
@@ -84,6 +85,7 @@ class CustomerDeliveryTasksView(ListView):
         )
 
 
+@method_decorator([customer_required], name='dispatch')
 class CustomerCompletedDeliveryTask(ListView):
     template_name = 'customers/customer_completed_delivery_task.html'
     context_object_name = 'delivery_task'
@@ -98,7 +100,7 @@ class CustomerCompletedDeliveryTask(ListView):
         )
 
 
-@method_decorator(customer_required, name='dispatch')
+@method_decorator([customer_required], name='dispatch')
 class CustomerDeliveryTaskDetailView(DetailView):
     """
     This view displays the customer's current order
