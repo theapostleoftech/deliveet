@@ -92,6 +92,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'deliveet.utils.firebase_context_processor.firebase_config',
+                'deliveet.utils.remove_dark_classes.dark_mode_processor',
             ],
         },
     },

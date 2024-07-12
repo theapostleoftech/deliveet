@@ -1,5 +1,6 @@
 <!-- templates/_base.html -->
-{% load static tailwind_tags %}
+{% load static tailwind_tags remove_dark_mode_tag %}
+
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
 <head>
@@ -29,14 +30,18 @@
 </head>
 
 <body class="bg-[#F4F9FF]">
-{% include 'snippets/header.html' %}
 
-{% block content %}
+{% process_all_classes %}
 
-{% endblock content %}
 
-{% include 'snippets/footer.html' %}
-<script src="{% static 'static_src/node_modules/preline/dist/preline.js' %}"></script>
+	{% include 'snippets/header.html' %}
+
+	{% block content %}
+
+	{% endblock content %}
+
+	{% include 'snippets/footer.html' %}
+{% endprocess_all_classes %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 
 </body>
