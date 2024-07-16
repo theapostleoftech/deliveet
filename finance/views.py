@@ -10,6 +10,7 @@ from django.db import transaction
 from django.db.models import Sum
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
@@ -30,30 +31,57 @@ class WalletView(TemplateView):
 
     def get_context_data(self, **kwargs):
         """
-        This function helps to return the details of the wallet
+        This function helps to return the details of the wallet and updates it for couriers
         """
         context = super().get_context_data(**kwargs)
 
         # Get or create the user's wallet
         wallet, created = Wallet.objects.get_or_create(user=self.request.user)
 
+        # Check if the user is a courier
+        if self.request.user.account_type == 'courier':
+            self.update_courier_wallet(wallet)
+
         # Add wallet balance to context
         context['wallet_balance'] = wallet.balance
 
-        if hasattr(self.request.user, 'courier'):
-            delivery_tasks = Delivery.objects.filter(
-                courier_account=self.request.user.courier_account,
-                status=Delivery.StatusChoices.COMPLETED
-            )
-            total_price = delivery_tasks.aggregate(Sum('price'))['price__sum'] or Decimal('0')
-            courier_earnings = (total_price * Decimal(settings.COURIER_EARN_PERCENTAGE).quantize(Decimal('0.01')))
-
-            context['wallet_balance'] += courier_earnings
-            context['courier_earnings'] = courier_earnings
-
+        # Optionally, add recent transactions
         context['recent_transactions'] = WalletTransaction.objects.filter(wallet=wallet).order_by('-created_at')[:5]
 
         return context
+
+    @transaction.atomic
+    def update_courier_wallet(self, wallet):
+        """
+        Update the courier's wallet with their earnings
+        """
+        # Get the timestamp of the last earnings update
+        last_update = WalletTransaction.objects.filter(
+            wallet=wallet,
+        ).order_by('-created_at').first()
+
+        last_update_time = last_update.created_at if last_update else timezone.make_aware(timezone.datetime.min)
+
+        # Calculate courier's earnings
+        new_delivery_tasks = Delivery.objects.filter(
+            courier=self.request.user.courier_account,
+            status=Delivery.StatusChoices.COMPLETED,
+            delivered_at__gt=last_update_time,
+
+        )
+        total_price = new_delivery_tasks.aggregate(Sum('price'))['price__sum'] or Decimal('0')
+        courier_earnings = (total_price * Decimal('0.9')).quantize(Decimal('0.01'))
+
+        if courier_earnings > Decimal('0'):
+            # Create a transaction for the earnings
+            WalletTransaction.objects.create(
+                wallet=wallet,
+                amount=courier_earnings,
+            )
+
+            # Update wallet balance
+            wallet.balance += courier_earnings
+            wallet.save()
 
 
 @login_required
