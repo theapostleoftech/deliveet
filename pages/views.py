@@ -14,19 +14,12 @@ class IndexView(TemplateView):
     pass
 
 
-class DashboardView(TemplateView):
-    """
-    This is the view for customer dashboards
-    """
-    pass
+# class LandingPageView(TemplateView):
+#     template_name = 'pages/landing_page.html'
 
 
-class LandingPageView(TemplateView):
-    template_name = 'pages/landing_page.html'
-
-
-class HomeView(TemplateView):
+class AppView(TemplateView):
     """
     This is view for the app home page
     """
-    template_name = 'pages/home.html'
+    template_name = 'pages/app.html'

@@ -8,7 +8,7 @@ app_name = 'pages'
 urlpatterns = [
     path('', views.IndexView.as_view(), name='home'),
 
-    path('landing/', views.LandingPageView.as_view(), name='landing_page'),
+    # path('landing/', views.LandingPageView.as_view(), name='landing_page'),
 
-    path('app/', views.HomeView.as_view(), name='app_home'),
+    path('app/', views.AppView.as_view(), name='app_home'),
 ]

@@ -1,17 +1,19 @@
 """
 Django settings for deliveet project.
 """
+import base64
 import json
 import os
+from pathlib import Path
 from urllib.parse import urlparse
 
 import dj_database_url
+import requests
 from decouple import config
 from django.contrib import messages
 from django.core.management.utils import get_random_secret_key
 from django.template.context_processors import media
 from environ import Env
-from pathlib import Path
 
 # Path
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,15 +31,15 @@ DEVELOPMENT_MODE = env.bool('DEVELOPMENT_MODE', default=False)
 # Debug
 DEBUG = env.bool('DJANGO_DEBUG', )
 
-# Hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com']
+# Ensure ALLOWED_HOSTS is also set correctly
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'deliveet.live', 'deliveet-e6f379edca9d.herokuapp.com', ]
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
 # Application definition
 
 INSTALLED_APPS = [
-    # 'daphne',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -90,6 +92,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'deliveet.utils.firebase_context_processor.firebase_config',
+                'deliveet.utils.remove_dark_classes.dark_mode_processor',
             ],
         },
     },
@@ -152,8 +155,8 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'theme/static'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'theme')]
 
@@ -195,9 +198,7 @@ LOGOUT_REDIRECT_URL = 'pages:app_home'
 # Google Map
 GOOGLE_MAP_API_KEY = env('GOOGLE_MAP_API_KEY')
 
-FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "templates/snippets/delivit-1d2d5-firebase.json")
-
-NOTIFICATION_URL = 'localhost:8000'
+NOTIFICATION_URL = env('NOTIFICATION_URL', default='localhost:8000')
 
 # Channels
 
@@ -205,32 +206,54 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')]
         },
     },
 }
 
 FIREBASE_CONFIG = {
-    'API_KEY': env('FIREBASE_API_KEY'),
-    'AUTH_DOMAIN': env('FIREBASE_AUTH_DOMAIN'),
-    'PROJECT_ID': env('FIREBASE_PROJECT_ID'),
-    'STORAGE_BUCKET': env('FIREBASE_STORAGE_BUCKET'),
-    'MESSAGING_SENDER_ID': env('FIREBASE_MESSAGING_SENDER_ID'),
-    'APP_ID': env('FIREBASE_APP_ID'),
-    'FIREBASE_TOKEN': env('FIREBASE_TOKEN'),
+    'API_KEY': env('FIREBASE_API_KEY', default='None'),
+    'AUTH_DOMAIN': env('FIREBASE_AUTH_DOMAIN', default='None'),
+    'PROJECT_ID': env('FIREBASE_PROJECT_ID', default='None'),
+    'STORAGE_BUCKET': env('FIREBASE_STORAGE_BUCKET', default='None'),
+    'MESSAGING_SENDER_ID': env('FIREBASE_MESSAGING_SENDER_ID', default='None'),
+    'APP_ID': env('FIREBASE_APP_ID', default='None'),
+    'FIREBASE_TOKEN': env('FIREBASE_TOKEN', default='None'),
 }
+
+FIREBASE_PRIVATE_KEY_BASE64 = config('FIREBASE_PRIVATE_KEY', default=None)
+
+if FIREBASE_PRIVATE_KEY_BASE64:
+    FIREBASE_PRIVATE_KEY = base64.b64decode(FIREBASE_PRIVATE_KEY_BASE64).decode('unicode_escape')
+else:
+    FIREBASE_PRIVATE_KEY = None
 
 FIREBASE_SECRETS = {
     "type": config('FIREBASE_TYPE', default="service_account"),
-    "project_id": config('FIREBASE_PROJECT_ID'),
-    "private_key_id": config('FIREBASE_PRIVATE_KEY_ID'),
-    "private_key": config('FIREBASE_PRIVATE_KEY').replace('\\n', '\n'),
-    "client_email": config('FIREBASE_CLIENT_EMAIL'),
-    "client_id": config('FIREBASE_CLIENT_ID'),
+    "project_id": config('FIREBASE_PROJECT_ID', default='None'),
+    "private_key_id": config('FIREBASE_PRIVATE_KEY_ID', default='None'),
+    "private_key": FIREBASE_PRIVATE_KEY,
+    "client_email": config('FIREBASE_CLIENT_EMAIL', default='None'),
+    "client_id": config('FIREBASE_CLIENT_ID', default='None'),
     "auth_uri": config('FIREBASE_AUTH_URI', default="https://accounts.google.com/o/oauth2/auth"),
     "token_uri": config('FIREBASE_TOKEN_URI', default="https://oauth2.googleapis.com/token"),
     "auth_provider_x509_cert_url": config('FIREBASE_AUTH_PROVIDER_X509_CERT_URL', default="https://www.googleapis.com"
                                                                                           "/oauth2/v1/certs"),
-    "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL'),
-    "universe_domain": config('UNIVERSAL_DOMAIN')
+    "client_x509_cert_url": config('FIREBASE_CLIENT_X509_CERT_URL', default='None'),
+    "universe_domain": config('UNIVERSAL_DOMAIN', default='None')
 }
+
+CSRF_COOKIE_SECURE = env.bool('CSRF_COOKIE_SECURE', )
+
+# SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', )
+
+SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', )
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://deliveet.live',
+    'https://deliveet-e6f379edca9d.herokuapp.com',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
+
+COURIER_EARN_PERCENTAGE = '0.9'

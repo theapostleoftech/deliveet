@@ -3,159 +3,56 @@
 {% block title %}Dashboard{% endblock title %}
 {% block content %}
 
-
-	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-
-
-		<div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
-
-			<div class="p-4 md:p-5 flex justify-between gap-x-3">
-
-				<div>
-					<p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
-						Total
-					</p>
-					<div class="mt-1 flex items-center gap-x-2">
-						<h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-							{{ total_deliveries }}
-						</h3>
-					</div>
-				</div>
-				<div class="flex-shrink-0 flex justify-center items-center size-[46px] text-white ">
-					<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					     viewBox="0 0 24 24">
-						<path fill-rule="evenodd"
-						      d="M4 4a2 2 0 0 0-2 2v9a1 1 0 0 0 1 1h.535a3.5 3.5 0 1 0 6.93 0h3.07a3.5 3.5 0 1 0 6.93 0H21a1 1 0 0 0 1-1v-4a.999.999 0 0 0-.106-.447l-2-4A1 1 0 0 0 19 6h-5a2 2 0 0 0-2-2H4Zm14.192 11.59.016.02a1.5 1.5 0 1 1-.016-.021Zm-10 0 .016.02a1.5 1.5 0 1 1-.016-.021Zm5.806-5.572v-2.02h4.396l1 2.02h-5.396Z"
-						      clip-rule="evenodd"></path>
-					</svg>
-
-				</div>
+	<div class="w-full py-2 pb-4 lg:pb-0">
+		<div class="py-4 flex flex-row justify-between items-center">
+			<div class="w-full space-y-1"><p class="text-xl font-bold tracking-tight">Quick Actions</p>
+				<p class="text-sm text-slate-400 w-full max-w-lg leading-relaxed">
+					An overview of actions you can take immediately.</p>
 			</div>
-
-			<a class="py-3 px-4 md:px-5 inline-flex justify-between items-center text-sm text-gray-600 border-t border-gray-200 hover:bg-gray-50
-			rounded-b-xl dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800"
-			   href="{% url 'customers:customer_shipments' %}">
-				View Details
-				<svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-				     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-				     stroke-linejoin="round">
-					<path d="m9 18 6-6-6-6"></path>
-				</svg>
-			</a>
 		</div>
-
-		<div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
-			<div class="p-4 md:p-5 flex justify-between gap-x-3">
-				<div>
-					<p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
-						In Progress
-					</p>
-					<div class="mt-1 flex items-center gap-x-2">
-						<h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-							{{ deliveries_in_progress }}
-						</h3>
-					</div>
-				</div>
-				<div class="flex-shrink-0 flex justify-center items-center size-[46px] text-white">
-					<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					     viewBox="0 0 24 24">
-						<path fill-rule="evenodd"
-						      d="M4 4a2 2 0 0 0-2 2v9a1 1 0 0 0 1 1h.535a3.5 3.5 0 1 0 6.93 0h3.07a3.5 3.5 0 1 0 6.93 0H21a1 1 0 0 0 1-1v-4a.999.999 0 0 0-.106-.447l-2-4A1 1 0 0 0 19 6h-5a2 2 0 0 0-2-2H4Zm14.192 11.59.016.02a1.5 1.5 0 1 1-.016-.021Zm-10 0 .016.02a1.5 1.5 0 1 1-.016-.021Zm5.806-5.572v-2.02h4.396l1 2.02h-5.396Z"
-						      clip-rule="evenodd"></path>
-					</svg>
-				</div>
-			</div>
-			<a class="py-3 px-4 md:px-5 inline-flex justify-between items-center text-sm text-gray-600 border-t border-gray-200 hover:bg-gray-50 rounded-b-xl dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800"
-			   href="{% url 'customers:customer_shipments' %}">
-				View Details
-				<svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-				     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-				     stroke-linejoin="round">
-					<path d="m9 18 6-6-6-6"></path>
+		<div class="grid grid-cols-3 gap-4 mb-8">
+			<a href="{% url 'shipments:create_delivery' %}" class="flex flex-col items-center justify-center
+			p-4 h-36 rounded-xl hover:bg-primary-600 bg-tertiary-600">
+				<svg class="w-16 h-16 text-primary-200 mb-2 hover:animate-bounce" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+				     viewBox="0 0 24 24">
+					<path fill-rule="evenodd"
+					      d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1Z"
+					      clip-rule="evenodd"></path>
+					<path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z"></path>
 				</svg>
+				<p class="text-center font-bold text-gray-300">Book Delivery</p>
 			</a>
-		</div>
 
-		<div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
-			<div class="p-4 md:p-5 flex justify-between gap-x-3">
-				<div>
-					<p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
-						Completed
-					</p>
-					<div class="mt-1 flex items-center gap-x-2">
-						<h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-							{{ deliveries_completed }}
-						</h3>
-					</div>
-				</div>
-				<div class="flex-shrink-0 flex justify-center items-center size-[46px] text-white rounded-full ">
-					<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					     viewBox="0 0 24 24">
-						<path fill-rule="evenodd"
-						      d="M4 4a2 2 0 0 0-2 2v9a1 1 0 0 0 1 1h.535a3.5 3.5 0 1 0 6.93 0h3.07a3.5 3.5 0 1 0 6.93 0H21a1 1 0 0 0 1-1v-4a.999.999 0 0 0-.106-.447l-2-4A1 1 0 0 0 19 6h-5a2 2 0 0 0-2-2H4Zm14.192 11.59.016.02a1.5 1.5 0 1 1-.016-.021Zm-10 0 .016.02a1.5 1.5 0 1 1-.016-.021Zm5.806-5.572v-2.02h4.396l1 2.02h-5.396Z"
-						      clip-rule="evenodd"></path>
-					</svg>
-				</div>
-			</div>
-
-			<a class="py-3 px-4 md:px-5 inline-flex justify-between items-center text-sm text-gray-600 border-t border-gray-200 hover:bg-gray-50 rounded-b-xl dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800"
-			   href="">
-				View Details
-				<svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-				     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-				     stroke-linejoin="round">
-					<path d="m9 18 6-6-6-6"></path>
+			<a href="" class="flex flex-col items-center justify-center
+			p-4 h-36 rounded-xl hover:bg-primary-600 bg-tertiary-600">
+				<svg class="w-16 h-16 text-primary-200 mb-2 hover:animate-bounce" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+				     viewBox="0 0 24 24">
+					<path fill-rule="evenodd"
+					      d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1Z"
+					      clip-rule="evenodd"></path>
+					<path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z"></path>
 				</svg>
+				<p class="text-center font-bold text-gray-300">Track Delivery</p>
 			</a>
-		</div>
 
-		<div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
-			<div class="p-4 md:p-5 flex justify-between gap-x-3">
-				<div>
-					<p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
-						Canceled
-					</p>
-					<div class="mt-1 flex items-center gap-x-2">
-						<h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-							{{ deliveries_canceled }}
-						</h3>
-					</div>
-				</div>
-				<div class="flex-shrink-0 flex justify-center items-center size-[46px] text-white">
-					<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-					     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					     viewBox="0 0 24 24">
-						<path fill-rule="evenodd"
-						      d="M4 4a2 2 0 0 0-2 2v9a1 1 0 0 0 1 1h.535a3.5 3.5 0 1 0 6.93 0h3.07a3.5 3.5 0 1 0 6.93 0H21a1 1 0 0 0 1-1v-4a.999.999 0 0 0-.106-.447l-2-4A1 1 0 0 0 19 6h-5a2 2 0 0 0-2-2H4Zm14.192 11.59.016.02a1.5 1.5 0 1 1-.016-.021Zm-10 0 .016.02a1.5 1.5 0 1 1-.016-.021Zm5.806-5.572v-2.02h4.396l1 2.02h-5.396Z"
-						      clip-rule="evenodd"></path>
-					</svg>
-				</div>
-			</div>
-
-			<a class="py-3 px-4 md:px-5 inline-flex justify-between items-center text-sm text-gray-600 border-t border-gray-200 hover:bg-gray-50 rounded-b-xl dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800"
-			   href="{% url 'customers:customer_completed_shipments' %}">
-				View Details
-				<svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-				     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-				     stroke-linejoin="round">
-					<path d="m9 18 6-6-6-6"></path>
+			<a href="{% url 'finance:wallet' %}" class="flex flex-col items-center justify-center
+			p-4 h-36 rounded-xl hover:bg-primary-600 bg-tertiary-600">
+				<svg class="w-16 h-16 text-primary-200 mb-2 hover:animate-bounce" aria-hidden="true"
+				     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+				     viewBox="0 0 24 24">
+					<path fill-rule="evenodd"
+					      d="M20 10H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM9 13v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1Z"
+					      clip-rule="evenodd"></path>
+					<path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2Z"></path>
 				</svg>
+				<p class="text-center font-bold text-gray-300">Wallet</p>
 			</a>
+
 		</div>
+		<hr class="border border-slate-300"/>
 	</div>
-
-
-	<div class="grid grid-cols-2 gap-4 mb-4">
-	</div>
-	<div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-96 mb-4">
-
-	</div>
-
-
-
 
 	<div class="w-full py-6 pb-8 lg:pb-0">
 		<div class="py-4 flex flex-row justify-between items-center">
@@ -177,11 +74,11 @@
 						      clip-rule="evenodd"></path>
 					</svg>
 				</div>
-{#				<div class="flex flex-col justify-start items-start"><p#}
-{#						class="text-base tracking-normal font-semibold">You have no pending#}
-{#				                                                        shipments</p>#}
-{#					<p class="text-sm font-medium text-slate-400">Book a delivery to get#}
-{#					                                              started.</p></div>#}
+				{#				<div class="flex flex-col justify-start items-start"><p#}
+				{#						class="text-base tracking-normal font-semibold">You have no pending#}
+				{#				                                                        shipments</p>#}
+				{#					<p class="text-sm font-medium text-slate-400">Book a delivery to get#}
+				{#					                                              started.</p></div>#}
 			</div>
 		</div>
 	</div>

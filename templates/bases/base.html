@@ -1,5 +1,6 @@
 <!-- templates/_base.html -->
-{% load static tailwind_tags %}
+{% load static tailwind_tags remove_dark_mode_tag %}
+
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
 <head>
@@ -9,8 +10,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta property="og:title" content="DELIVEET - Delivering convenience one package at a time"/>
-	<meta property="og:description" content="Purchase food items in bulk with other individuals at wholesale prices, enjoy lower
-	costs, and increased food availability."/>
+	<meta property="og:description" content="Experience faster, more flexible package delivery right to your doorstep."/>
 	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'static/images/favicon/apple-touch-icon.png' %}">
 	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'static/images/favicon/favicon-32x32.png' %}">
 	<link rel="icon" type="image/png" sizes="16x16"
@@ -29,14 +29,18 @@
 </head>
 
 <body class="bg-[#F4F9FF]">
-{% include 'snippets/header.html' %}
 
-{% block content %}
+{% process_all_classes %}
 
-{% endblock content %}
 
-{% include 'snippets/footer.html' %}
-<script src="{% static 'static_src/node_modules/preline/dist/preline.js' %}"></script>
+	{% include 'snippets/header.html' %}
+
+	{% block content %}
+
+	{% endblock content %}
+
+	{% include 'snippets/footer.html' %}
+{% endprocess_all_classes %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 
 </body>

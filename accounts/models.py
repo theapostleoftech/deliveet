@@ -48,7 +48,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         max_length=255,
         help_text='Type in your email address',
     )
-    phone_number = PhoneNumberField(
+    phone_number = models.CharField(
         validators=[phone_number_validator],
         help_text='Type in your phone number',
         unique=True,

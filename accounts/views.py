@@ -2,31 +2,32 @@
 This contains views for the accounts app.
 """
 import firebase_admin
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordChangeView, PasswordResetDoneView, PasswordResetView, \
+from django.contrib.auth.views import PasswordResetDoneView, PasswordResetView, \
     PasswordResetCompleteView, PasswordResetConfirmView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites import requests
-from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, View, DetailView, UpdateView, FormView
-from firebase_admin import auth, credentials, messaging
-from firebase_admin.exceptions import FirebaseError
+from django.views.generic import CreateView, View, DetailView, FormView
+from firebase_admin import auth, credentials
 
 from accounts.forms import SignUpForm, SignInForm, ChangePasswordForm, UserAccountUpdateForm
-from accounts.models import UserAccount, Customer, Courier
+from accounts.models import UserAccount
+from deliveet.settings import FIREBASE_SECRETS
 
 UserModel = get_user_model()
 
-config = credentials.Certificate(settings.FIREBASE_SECRETS)
-firebase_admin.initialize_app(config)
+try:
+    cred = credentials.Certificate(FIREBASE_SECRETS)
+    firebase_admin.initialize_app(cred)
+except ValueError as e:
+    raise ValueError("Failed to initialize Firebase credentials: {}".format(e))
 
 
 class SignUpView(CreateView):
@@ -69,9 +70,12 @@ class SignInView(View):
 
     def get(self, request):
         form = self.form_class()
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and request.user.is_customer:
             messages.info(self.request, 'You are already logged in.')
             return redirect('customers:customer_dashboard')
+        elif request.user.is_authenticated and request.user.is_courier:
+            messages.info(self.request, 'You are already logged in.')
+            return redirect('couriers:courier_dashboard')
         return render(request, self.template_name, context={'form': form})
 
     def post(self, request):
@@ -96,32 +100,6 @@ class SignInView(View):
                 return render(request, self.template_name, context={'form': form, 'message': message})
 
 
-class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
-    """
-    This view is used to change the password.
-    """
-    template_name = 'accounts/password/password_change.html'
-    success_url = reverse_lazy('customers:customer_dashboard')
-
-    def form_valid(self, form):
-        """
-        This function is used to validate the form
-        :param form:
-        :return:
-        """
-        messages.success(self.request, 'Your password has been changed successfully.')
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        """
-        This function is used to check if the form is invalid
-        :param form:
-        :return:
-        """
-        messages.error(self.request, "There was an error changing your password. Please try again.")
-        return super().form_invalid(form)
-
-
 class UserAccountDetailView(LoginRequiredMixin, DetailView):
     """
     This view displays the details of the user account.
@@ -138,7 +116,8 @@ class UserAccountDetailView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-class UserAccountUpdateView(LoginRequiredMixin, FormView):
+@method_decorator([login_required], name='dispatch')
+class UserAccountUpdateView(FormView):
     """
     This view updates the user account records
     It updates the user password and the user details

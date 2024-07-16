@@ -45,7 +45,6 @@ module.exports = {
          * Flowbite settings
          */
         "./node_modules/flowbite/**/*.js",
-        "node_modules/preline/dist/*.js"
     ],
     theme: {
         extend: {

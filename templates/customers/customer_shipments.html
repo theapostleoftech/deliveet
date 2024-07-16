@@ -7,7 +7,72 @@
 
 {% block content %}
 	<!-- Card -->
+	<div class="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
 
+
+		<div class="flex flex-col bg-tertiary-600 border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+
+			<div class="p-4 md:p-5 flex justify-between gap-x-3">
+
+				<div>
+					<p class="text-xs uppercase tracking-wide text-gray-300 dark:text-neutral-500">
+						Total
+					</p>
+					<div class="mt-1 flex items-center gap-x-2">
+						<h3 class="text-xl sm:text-2xl font-medium text-gray-300 dark:text-neutral-200">
+							{{ total_deliveries }}
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="flex flex-col bg-tertiary-600 border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+			<div class="p-4 md:p-5 flex justify-between gap-x-3">
+				<div>
+					<p class="text-xs uppercase tracking-wide text-gray-300 dark:text-neutral-500">
+						In Progress
+					</p>
+					<div class="mt-1 flex items-center gap-x-2">
+						<h3 class="text-xl sm:text-2xl font-medium text-gray-300 dark:text-neutral-200">
+							{{ deliveries_in_progress }}
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="flex flex-col bg-tertiary-600 border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+			<div class="p-4 md:p-5 flex justify-between gap-x-3">
+				<div>
+					<p class="text-xs uppercase tracking-wide text-gray-300 dark:text-neutral-500">
+						Completed
+					</p>
+					<div class="mt-1 flex items-center gap-x-2">
+						<h3 class="text-xl sm:text-2xl font-medium text-gray-300 dark:text-neutral-200">
+							{{ deliveries_completed }}
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="flex flex-col bg-tertiary-600 border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+			<div class="p-4 md:p-5 flex justify-between gap-x-3">
+				<div>
+					<p class="text-xs uppercase tracking-wide text-gray-300 dark:text-neutral-500">
+						Canceled
+					</p>
+					<div class="mt-1 flex items-center gap-x-2">
+						<h3 class="text-xl sm:text-2xl font-medium text-gray-300 dark:text-neutral-200">
+							{{ deliveries_canceled }}
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<hr class="border border-slate-300"/>
 	<div class="py-4 flex flex-row justify-between items-center">
 		<div class="w-full space-y-1">
 			<div class="bg-white border border-gray-200 rounded-xl
@@ -40,19 +105,19 @@
 				</div>
 				<!-- Table -->
 				<table class="min-w-full divide-y divide-gray-200 ">
-					<thead class="bg-gray-50 text-gray-600 uppercase text-sm leading-normal">
+					<thead class="bg-gray-50 text-gray-900 uppercase text-sm leading-normal">
 					<tr>
 
 						<th scope="col" class="py-3 px-6 text-left">
 							<div class="flex items-center gap-x-2">
-                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-300 dark:text-neutral-200">
                         Tracking Number
                       </span>
 							</div>
 						</th>
 						<th scope="col" class="py-3 px-6 text-left">
 							<div class="flex items-center gap-x-2">
-                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-300 dark:text-neutral-200">
                         Item Name
                       </span>
 							</div>
@@ -60,7 +125,7 @@
 
 						<th scope="col" class="py-3 px-6 text-left">
 							<div class="flex items-center gap-x-2">
-                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-300 dark:text-neutral-200">
                         Status
                       </span>
 							</div>
@@ -82,7 +147,7 @@
 
 									<div class="flex items-center gap-x-3">
 										<div class="grow">
-											<span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ delivery_task.item_name }}</span>
+											<span class="block text-sm font-semibold text-gray-300 dark:text-neutral-200">{{ delivery_task.item_name }}</span>
 										</div>
 									</div>
 								</td>
