@@ -1,10 +1,13 @@
 """
 This contains all the views related to finance.
 """
+from decimal import Decimal
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.db.models import Sum
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
@@ -12,6 +15,7 @@ from django.views.generic import TemplateView
 
 from finance.forms import TransactionForm
 from finance.models import WalletTransaction, Wallet
+from shipments.models import Delivery
 
 # Paystack Variables
 _public_key = settings.PAYSTACK_PUBLIC_KEY
@@ -36,7 +40,17 @@ class WalletView(TemplateView):
         # Add wallet balance to context
         context['wallet_balance'] = wallet.balance
 
-        # Optionally, add recent transactions
+        if hasattr(self.request.user, 'courier'):
+            delivery_tasks = Delivery.objects.filter(
+                courier_account=self.request.user.courier_account,
+                status=Delivery.StatusChoices.COMPLETED
+            )
+            total_price = delivery_tasks.aggregate(Sum('price'))['price__sum'] or Decimal('0')
+            courier_earnings = (total_price * Decimal(settings.COURIER_EARN_PERCENTAGE).quantize(Decimal('0.01')))
+
+            context['wallet_balance'] += courier_earnings
+            context['courier_earnings'] = courier_earnings
+
         context['recent_transactions'] = WalletTransaction.objects.filter(wallet=wallet).order_by('-created_at')[:5]
 
         return context
