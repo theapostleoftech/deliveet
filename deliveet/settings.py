@@ -152,14 +152,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = BASE_DIR / 'theme/static'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-if DEBUG:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'theme')]
-else:
-    STATIC_ROOT = BASE_DIR / 'theme/static'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'theme')]
 
 TAILWIND_APP_NAME = 'theme'
 
