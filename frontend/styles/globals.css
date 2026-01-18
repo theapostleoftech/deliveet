@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply border-light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-dark;
+}
+
+/* Utility classes */
+.container-fluid {
+  @apply px-4 md:px-6 lg:px-8;
+}
+
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.flex-between {
+  @apply flex items-center justify-between;
+}
+
+.text-gradient {
+  @apply bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent;
+}
+
+.btn-base {
+  @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-primary {
+  @apply btn-base bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg;
+}
+
+.btn-secondary {
+  @apply btn-base bg-secondary-500 text-white hover:bg-secondary-600 shadow-md hover:shadow-lg;
+}
+
+.btn-outline {
+  @apply btn-base border-2 border-primary-500 text-primary-500 hover:bg-primary-50;
+}
+
+.btn-ghost {
+  @apply btn-base text-primary-500 hover:bg-primary-50;
+}
+
+.card {
+  @apply rounded-lg border border-light bg-white p-4 shadow-sm;
+}
+
+.input-field {
+  @apply w-full rounded-lg border border-light bg-white px-4 py-2 text-dark placeholder-gray-400 transition-all focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500;
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full px-3 py-1 text-tiny font-medium;
+}
+
+.badge-primary {
+  @apply badge bg-primary-100 text-primary-700;
+}
+
+.badge-secondary {
+  @apply badge bg-secondary-100 text-secondary-700;
+}
+
+.badge-success {
+  @apply badge bg-green-100 text-green-700;
+}
+
+.badge-warning {
+  @apply badge bg-yellow-100 text-yellow-700;
+}
+
+.badge-error {
+  @apply badge bg-red-100 text-red-700;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply animate-shimmer bg-gradient-to-r from-light via-gray-300 to-light;
+  background-size: 1000px 100%;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  @apply animate-[fadeIn_0.3s_ease-in-out];
+}
+
+.animate-slideInUp {
+  @apply animate-[slideInUp_0.3s_ease-in-out];
+}
