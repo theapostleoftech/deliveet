@@ -1,8 +1,8 @@
-import type { Config } from "tailwindcss";
-import forms from "@tailwindcss/forms";
-import typography from "@tailwindcss/typography";
+const forms = require("@tailwindcss/forms");
+const typography = require("@tailwindcss/typography");
 
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+const config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -16,7 +16,7 @@ const config: Config = {
           200: "#fed7aa",
           300: "#fdba74",
           400: "#fb923c",
-          500: "#f97316", // Primary orange
+          500: "#f97316",
           600: "#ea580c",
           700: "#c2410c",
           800: "#9a3412",
@@ -28,7 +28,7 @@ const config: Config = {
           200: "#bae6fd",
           300: "#7dd3fc",
           400: "#38bdf8",
-          500: "#0ea5e9", // Secondary blue
+          500: "#0ea5e9",
           600: "#0284c7",
           700: "#0369a1",
           800: "#075985",
@@ -99,4 +99,4 @@ const config: Config = {
   plugins: [forms, typography],
 };
 
-export default config;
+module.exports = config;
